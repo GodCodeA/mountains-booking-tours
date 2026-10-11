@@ -59,7 +59,7 @@ const stepLabels = ["Date", "Guests", "Details", "Review"];
 
 type Draft = {
   step: number;
-  departureId?: string;
+  departureId?: string | undefined;
   guests: number;
   name: string;
   email: string;
@@ -70,7 +70,7 @@ type Draft = {
 
 const draftKey = (slug: string) => `ala-too-booking-draft:${slug}`;
 
-function FieldError({ id, message }: { id: string; message?: string }) {
+function FieldError({ id, message }: { id: string; message?: string | undefined }) {
   if (!message) return null;
   return (
     <p id={id} role="alert" className="mt-1.5 text-xs font-medium text-destructive">
