@@ -63,14 +63,13 @@ function Confirmation() {
       </div>
 
       <p className="mt-4 text-muted-foreground">
-        A confirmation has been logged for {booking.customer_name}. Azamat can already see this
-        booking on his dashboard and will send a reminder the day before.
+        Your booking is confirmed. Your guide will send a reminder the day before departure.
       </p>
 
       <div className="surface-panel mt-8 overflow-hidden">
         <img
-          src={tourImage(booking.tours.image_key)}
-          alt={booking.tours.name}
+          src={tourImage(booking.image_key)}
+          alt={booking.tour_name}
           loading="lazy"
           width={1280}
           height={864}
@@ -78,7 +77,7 @@ function Confirmation() {
         />
         <div className="space-y-4 p-6">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-3xl">{booking.tours.name}</h2>
+            <h2 className="font-display text-3xl">{booking.tour_name}</h2>
             <span className="rounded-md bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
               {booking.reference}
             </span>
@@ -86,14 +85,14 @@ function Confirmation() {
           <div className="grid gap-3 text-sm sm:grid-cols-2">
             <span className="inline-flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
-              {formatDate(booking.departures.departure_date)}
+              {formatDate(booking.departure_date)}
             </span>
             <span className="inline-flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" /> {booking.guests}{" "}
               {booking.guests === 1 ? "guest" : "guests"}
             </span>
             <span className="inline-flex items-center gap-2 sm:col-span-2">
-              <MapPin className="h-4 w-4 text-primary" /> {booking.tours.meeting_point}
+              <MapPin className="h-4 w-4 text-primary" /> {booking.meeting_point}
             </span>
           </div>
           <div className="flex items-baseline justify-between border-t border-border pt-4">
@@ -109,12 +108,6 @@ function Confirmation() {
           className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
         >
           Browse more trips
-        </Link>
-        <Link
-          to="/dashboard"
-          className="rounded-md bg-secondary px-5 py-2.5 text-sm font-semibold text-secondary-foreground"
-        >
-          Owner view
         </Link>
       </div>
     </div>

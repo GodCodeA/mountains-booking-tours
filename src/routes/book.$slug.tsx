@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { CalendarDays, Check, ChevronLeft, Clock, Loader2, MapPin, Minus, Plus, Users } from "lucide-react";
 import { toast } from "sonner";
@@ -12,8 +13,6 @@ import {
   availabilityLabel,
   availabilityOf,
   createBooking,
-  NotEnoughSpotsError,
-  BookingValidationError,
   departuresQuery,
   formatDate,
   formatTime,
@@ -66,6 +65,7 @@ type Draft = {
   phone: string;
   whatsapp: string;
   notes: string;
+  website?: string;
 };
 
 const draftKey = (slug: string) => `ala-too-booking-draft:${slug}`;
@@ -84,6 +84,7 @@ function BookingFlow() {
   const { departure: presetDeparture } = Route.useSearch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const submitBooking = useServerFn(createBooking);
 
   const { data: tour, isLoading, isError } = useQuery(tourQuery(slug));
   const { data: departures, isLoading: loadingDates } = useQuery(departuresQuery(tour?.id));
@@ -96,6 +97,7 @@ function BookingFlow() {
   const [phone, setPhone] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [notes, setNotes] = useState("");
+  const [website, setWebsite] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<BookingField, string>>>({});
   const restored = useRef(false);
@@ -218,23 +220,31 @@ function BookingFlow() {
     if (!tour || !departure) return;
     setSubmitting(true);
     try {
-      const reference = await createBooking({ tour, departure, name, email, phone, whatsapp, guests, notes });
-      sessionStorage.removeItem(draftKey(slug));
-      void queryClient.invalidateQueries({ queryKey: ["departures"] });
-      void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
-      navigate({ to: "/booking/$reference", params: { reference } });
-    } catch (err) {
-      if (err instanceof NotEnoughSpotsError) {
+      const result = await submitBooking({
+        data: { departureId: departure.id, name, email, phone, whatsapp, guests, notes, website },
+      });
+      if (result.status === "full") {
         toast.error("Someone just booked those spots. Please pick another date or fewer guests.");
         await queryClient.invalidateQueries({ queryKey: ["departures"] });
         setStep(0);
-      } else if (err instanceof BookingValidationError) {
-        toast.error(err.message);
-      } else {
-        toast.error("We couldn't save that booking. Please try again.");
+        setSubmitting(false);
+        return;
       }
+      if (result.status === "invalid") {
+        toast.error(result.error);
+        setSubmitting(false);
+        return;
+      }
+      sessionStorage.removeItem(draftKey(slug));
+      void queryClient.invalidateQueries({ queryKey: ["departures"] });
+      void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
+      navigate({ to: "/booking/$reference", params: { reference: result.reference } });
+    } catch (err) {
+      toast.error("We couldn't save that booking. Please try again.");
       setSubmitting(false);
+      return;
     }
+    setSubmitting(false);
   }
 
   const inputProps = (field: BookingField) => ({
@@ -429,6 +439,16 @@ function BookingFlow() {
               }}
             >
               <h2 className="font-display text-3xl">Your details</h2>
+              <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                <Label htmlFor="website">Website</Label>
+                <Input
+                  id="website"
+                  value={website}
+                  onChange={(event) => setWebsite(event.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="name">Full name</Label>

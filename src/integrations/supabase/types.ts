@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           created_at: string
@@ -192,6 +207,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_booking_confirmation: {
+        Args: { _reference: string }
+        Returns: {
+          departure_date: string
+          guests: number
+          image_key: string
+          meeting_point: string
+          reference: string
+          total_price: number
+          tour_name: string
+        }[]
+      }
+      is_booking_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       claim_due_reminders: {
         Args: { _booking_id?: string }
         Returns: {

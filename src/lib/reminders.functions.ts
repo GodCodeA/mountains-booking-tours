@@ -1,11 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 // Manual "Send reminder" from the owner dashboard. Uses the same claim + send logic as the hourly job.
-// Note: prototype has no owner login yet, so this is callable without auth.
 export const sendReminderNow = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ bookingId: z.string().uuid() }).parse(d))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const { data: membership, error } = await context.supabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (error || !membership) throw new Error("Forbidden");
+
     const { processReminders } = await import("./reminders.server");
     const results = await processReminders(data.bookingId);
     if (results.length === 0) {

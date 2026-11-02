@@ -16,9 +16,14 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import {
-  dashboardBookingsQuery,
+  cancelBooking,
+  adminMembershipQuery,
+  bishkekToday,
   departuresQuery,
   formatDate,
+  formatBishkekDateTime,
+  listDashboardBookings,
+  rescheduleBooking,
   spotsLeft,
   type Booking,
   type Departure,
@@ -50,8 +55,84 @@ export const Route = createFileRoute("/dashboard")({
 const tabs = ["Today", "Upcoming", "All"] as const;
 
 function Dashboard() {
+  const [userId, setUserId] = useState<string>();
+  const [sessionChecked, setSessionChecked] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sendingLink, setSendingLink] = useState(false);
+  const membership = useQuery(adminMembershipQuery(userId));
+
+  useEffect(() => {
+    void (async () => {
+      const { data: userResult } = await supabase.auth.getUser();
+      setUserId(userResult.user?.id);
+      setSessionChecked(true);
+    })();
+  }, []);
+
+  async function sendMagicLink(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSendingLink(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+    });
+    if (error) toast.error("Couldn't send the sign-in link. Please try again.");
+    else toast.success("Check your email for the secure sign-in link.");
+    setSendingLink(false);
+  }
+
+  if (!sessionChecked || (userId && membership.isLoading)) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <Skeleton className="h-64 rounded-xl" />
+      </div>
+    );
+  }
+  if (membership.data) return <OwnerDashboard />;
+
+  return (
+    <div className="mx-auto max-w-md px-4 py-20 text-center">
+      <p className="text-eyebrow">Owner access</p>
+      <h1 className="mt-3 font-display text-5xl">Private dashboard</h1>
+      {userId ? (
+        <p className="mt-3 text-sm text-muted-foreground">
+          This account is not approved to access bookings.
+        </p>
+      ) : (
+        <form className="mt-6 space-y-3 text-left" onSubmit={sendMagicLink}>
+          <label className="block text-sm font-semibold" htmlFor="owner-email">
+            Owner email
+          </label>
+          <input
+            id="owner-email"
+            required
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="w-full rounded-md border border-border bg-background px-3 py-2"
+            placeholder="you@example.com"
+          />
+          <button
+            type="submit"
+            disabled={sendingLink}
+            className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-50"
+          >
+            {sendingLink ? "Sending…" : "Email me a sign-in link"}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+function OwnerDashboard() {
   const queryClient = useQueryClient();
-  const { data: bookings, isLoading, isError } = useQuery(dashboardBookingsQuery);
+  const fetchBookings = useServerFn(listDashboardBookings);
+  const runCancel = useServerFn(cancelBooking);
+  const { data: bookings, isLoading, isError } = useQuery({
+    queryKey: ["dashboard-bookings"],
+    queryFn: () => fetchBookings(),
+  });
   const [tab, setTab] = useState<(typeof tabs)[number]>("Upcoming");
   const [rescheduling, setRescheduling] = useState<Row | null>(null);
 
@@ -59,19 +140,6 @@ function Dashboard() {
     void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
     void queryClient.invalidateQueries({ queryKey: ["departures"] });
   };
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("dashboard-bookings")
-      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () =>
-        invalidate(),
-      )
-      .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const sendReminder = useServerFn(sendReminderNow);
   const remind = useMutation({
@@ -86,13 +154,7 @@ function Dashboard() {
   });
 
   const cancel = useMutation({
-    mutationFn: async (row: Row) => {
-      const { error } = await supabase
-        .from("bookings")
-        .update({ status: "cancelled" })
-        .eq("id", row.id);
-      if (error) throw error;
-    },
+    mutationFn: (row: Row) => runCancel({ data: { bookingId: row.id } }),
     onSuccess: () => {
       toast.success("Booking cancelled");
       invalidate();
@@ -100,7 +162,7 @@ function Dashboard() {
     onError: () => toast.error("Couldn't cancel that booking."),
   });
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = bishkekToday();
   const active = bookings?.filter((b) => b.status !== "cancelled") ?? [];
   const todays = active.filter((b) => b.departures.departure_date === today);
   const upcoming = active.filter((b) => b.departures.departure_date >= today);
@@ -235,7 +297,7 @@ function Dashboard() {
                 >
                   Reminder:{" "}
                   {row.reminder_status === "sent"
-                    ? `Sent${row.reminder_sent_at ? ` ${new Date(row.reminder_sent_at).toLocaleString("en-GB")}` : ""}`
+                    ? `Sent${row.reminder_sent_at ? ` ${formatBishkekDateTime(row.reminder_sent_at)}` : ""}`
                     : row.reminder_status === "failed"
                       ? "Failed"
                       : row.reminder_status === "sending"
@@ -290,27 +352,28 @@ function RescheduleDialog({
   onDone: () => void;
 }) {
   const { data: departures, isLoading } = useQuery(departuresQuery(row?.tour_id));
+  const runReschedule = useServerFn(rescheduleBooking);
   const [saving, setSaving] = useState(false);
 
   async function move(target: Departure) {
     if (!row) return;
     setSaving(true);
-    const { error } = await supabase
-      .from("bookings")
-      .update({ departure_id: target.id })
-      .eq("id", row.id);
-    if (error) {
-      toast.error(
-        error.message.includes("NOT_ENOUGH_SPOTS")
-          ? "That date no longer has enough spots."
-          : "Couldn't move that booking.",
-      );
-    } else {
-      toast.success(`Moved to ${formatDate(target.departure_date)}`);
-      onDone();
-      onClose();
+    try {
+      const result = await runReschedule({
+        data: { bookingId: row.id, departureId: target.id },
+      });
+      if (result.status === "full") {
+        toast.error("That date no longer has enough spots.");
+      } else {
+        toast.success(`Moved to ${formatDate(target.departure_date)}`);
+        onDone();
+        onClose();
+      }
+    } catch {
+      toast.error("Couldn't move that booking.");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   }
 
   return (
