@@ -150,12 +150,15 @@ async function assertBookingAdmin(context: { supabase: typeof supabase; userId: 
 
 /** Creates a booking from server-fetched tour and departure data only. */
 export const createBooking = createServerFn({ method: "POST" })
-  .inputValidator((data) => bookingInputSchema.parse(data))
+  .validator((data) => bookingInputSchema.parse(data))
   .handler(async ({ data }) => {
     // A field that real guests never see. Reject automated form fills without
     // exposing a useful signal to bots.
     if (data.website) {
-      return { status: "invalid" as const, error: "We couldn't save that booking. Please try again." };
+      return {
+        status: "invalid" as const,
+        error: "We couldn't save that booking. Please try again.",
+      };
     }
 
     const db = await databaseAdmin();
@@ -238,7 +241,7 @@ export const listDashboardBookings = createServerFn({ method: "GET" })
 
 export const cancelBooking = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ bookingId: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ bookingId: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertBookingAdmin(context);
     const db = await databaseAdmin();
@@ -251,7 +254,7 @@ export const cancelBooking = createServerFn({ method: "POST" })
 
 export const rescheduleBooking = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z.object({ bookingId: z.string().uuid(), departureId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data, context }) => {

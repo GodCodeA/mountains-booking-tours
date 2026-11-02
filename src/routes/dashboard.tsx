@@ -129,7 +129,11 @@ function OwnerDashboard() {
   const queryClient = useQueryClient();
   const fetchBookings = useServerFn(listDashboardBookings);
   const runCancel = useServerFn(cancelBooking);
-  const { data: bookings, isLoading, isError } = useQuery({
+  const {
+    data: bookings,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["dashboard-bookings"],
     queryFn: () => fetchBookings(),
   });

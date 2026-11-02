@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { validateBookingForm, validateField } from "./booking-validation";
+import { validateBookingForm, validateField } from "./booking-validation.ts";
 
 const validValues = {
   name: "Aida Osmonova",

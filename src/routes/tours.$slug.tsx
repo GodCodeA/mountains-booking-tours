@@ -13,7 +13,12 @@ import {
   X,
 } from "lucide-react";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { CANCELLATION_POLICY, tourExtras } from "@/lib/tour-content";
 import { faqs } from "@/lib/site-content";
 
@@ -123,14 +128,26 @@ function TourBody({
   const next = list.find((d) => availabilityOf(d) !== "full");
 
   const facts: [React.ReactNode, string, string][] = [
-    [<Clock key="c" className="h-4 w-4 text-primary" />, "Duration", `${tour.duration_days} ${tour.duration_days === 1 ? "day" : "days"}`],
+    [
+      <Clock key="c" className="h-4 w-4 text-primary" />,
+      "Duration",
+      `${tour.duration_days} ${tour.duration_days === 1 ? "day" : "days"}`,
+    ],
     [<Mountain key="m" className="h-4 w-4 text-primary" />, "Difficulty", tour.difficulty],
-    [<Users key="u" className="h-4 w-4 text-primary" />, "Group size", `Max ${tour.max_group_size}`],
+    [
+      <Users key="u" className="h-4 w-4 text-primary" />,
+      "Group size",
+      `Max ${tour.max_group_size}`,
+    ],
     [<MapPin key="p" className="h-4 w-4 text-primary" />, "Meeting point", tour.meeting_point],
     [
       <CalendarDays key="d" className="h-4 w-4 text-primary" />,
       "Next date",
-      loadingDates ? "Loading…" : next ? `${formatDate(next.departure_date)}, ${formatTime(next.departure_time)}` : "No open dates",
+      loadingDates
+        ? "Loading…"
+        : next
+          ? `${formatDate(next.departure_date)}, ${formatTime(next.departure_time)}`
+          : "No open dates",
     ],
   ];
 
@@ -163,7 +180,11 @@ function TourBody({
       <nav className="sticky top-16 z-20 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl gap-5 overflow-x-auto px-4 py-3 text-sm font-semibold sm:px-6">
           {SECTIONS.map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="whitespace-nowrap text-muted-foreground hover:text-foreground">
+            <a
+              key={id}
+              href={`#${id}`}
+              className="whitespace-nowrap text-muted-foreground hover:text-foreground"
+            >
               {label}
             </a>
           ))}
@@ -213,7 +234,14 @@ function TourBody({
                       : "overflow-hidden rounded-lg opacity-70 transition-opacity hover:opacity-100"
                   }
                 >
-                  <img src={src} alt="" loading="lazy" width={1280} height={864} className="aspect-[4/3] w-full object-cover" />
+                  <img
+                    src={src}
+                    alt=""
+                    loading="lazy"
+                    width={1280}
+                    height={864}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
                 </button>
               ))}
             </div>
@@ -312,7 +340,9 @@ function TourBody({
             </p>
             <div className="mt-4 space-y-2">
               {loadingDates
-                ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-lg" />)
+                ? Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-16 w-full rounded-lg" />
+                  ))
                 : null}
               {!loadingDates && openCount === 0 ? (
                 <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
@@ -334,11 +364,15 @@ function TourBody({
                       <CalendarDays className="h-5 w-5 text-primary" />
                       <div>
                         <p className="font-semibold">{formatDate(d.departure_date)}</p>
-                        <p className="text-xs text-muted-foreground">Starts {formatTime(d.departure_time)}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Starts {formatTime(d.departure_time)}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${stateStyles[state]}`}>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-bold ${stateStyles[state]}`}
+                      >
                         {availabilityLabel(d)}
                       </span>
                       {state === "full" ? (

@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // Manual "Send reminder" from the owner dashboard. Uses the same claim + send logic as the hourly job.
 export const sendReminderNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ bookingId: z.string().uuid() }).parse(d))
+  .validator((d) => z.object({ bookingId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: membership, error } = await context.supabase
       .from("admin_users")

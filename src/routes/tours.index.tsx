@@ -75,7 +75,15 @@ function matchesDuration(days: number, d: string) {
   return true;
 }
 
-function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Pill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
@@ -186,27 +194,40 @@ function ToursPage() {
     setFilters({ ...defaults, price: priceBounds });
     setQuery("");
   };
-  const set = <K extends keyof Filters>(k: K, v: Filters[K]) => setFilters((f) => ({ ...f, [k]: v }));
+  const set = <K extends keyof Filters>(k: K, v: Filters[K]) =>
+    setFilters((f) => ({ ...f, [k]: v }));
 
   const filterPanel = (
     <div className="space-y-7">
       <FilterGroup label="Difficulty">
-        <Pill active={filters.difficulty === "all"} onClick={() => set("difficulty", "all")}>All</Pill>
+        <Pill active={filters.difficulty === "all"} onClick={() => set("difficulty", "all")}>
+          All
+        </Pill>
         {DIFFICULTIES.map((d) => (
-          <Pill key={d} active={filters.difficulty === d} onClick={() => set("difficulty", d)}>{d}</Pill>
+          <Pill key={d} active={filters.difficulty === d} onClick={() => set("difficulty", d)}>
+            {d}
+          </Pill>
         ))}
       </FilterGroup>
       <FilterGroup label="Duration">
         {DURATIONS.map((d) => (
-          <Pill key={d.value} active={filters.duration === d.value} onClick={() => set("duration", d.value)}>
+          <Pill
+            key={d.value}
+            active={filters.duration === d.value}
+            onClick={() => set("duration", d.value)}
+          >
             {d.label}
           </Pill>
         ))}
       </FilterGroup>
       <FilterGroup label="Region">
-        <Pill active={filters.category === "all"} onClick={() => set("category", "all")}>All regions</Pill>
+        <Pill active={filters.category === "all"} onClick={() => set("category", "all")}>
+          All regions
+        </Pill>
         {categories.map((c) => (
-          <Pill key={c} active={filters.category === c} onClick={() => set("category", c)}>{c}</Pill>
+          <Pill key={c} active={filters.category === c} onClick={() => set("category", c)}>
+            {c}
+          </Pill>
         ))}
       </FilterGroup>
       {priceBounds[1] > priceBounds[0] ? (
@@ -225,8 +246,12 @@ function ToursPage() {
         </div>
       ) : null}
       <FilterGroup label="Availability">
-        <Pill active={!filters.availableOnly} onClick={() => set("availableOnly", false)}>All tours</Pill>
-        <Pill active={filters.availableOnly} onClick={() => set("availableOnly", true)}>Has open dates</Pill>
+        <Pill active={!filters.availableOnly} onClick={() => set("availableOnly", false)}>
+          All tours
+        </Pill>
+        <Pill active={filters.availableOnly} onClick={() => set("availableOnly", true)}>
+          Has open dates
+        </Pill>
       </FilterGroup>
     </div>
   );
@@ -272,7 +297,9 @@ function ToursPage() {
             </SelectTrigger>
             <SelectContent>
               {SORTS.map((s) => (
-                <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -280,7 +307,11 @@ function ToursPage() {
             <SheetTrigger asChild>
               <Button variant="outline" className="h-11 lg:hidden">
                 <SlidersHorizontal className="h-4 w-4" /> Filters
-                {activeCount ? <span className="ml-1 rounded-full bg-primary px-2 text-xs text-primary-foreground">{activeCount}</span> : null}
+                {activeCount ? (
+                  <span className="ml-1 rounded-full bg-primary px-2 text-xs text-primary-foreground">
+                    {activeCount}
+                  </span>
+                ) : null}
               </Button>
             </SheetTrigger>
             <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
@@ -289,7 +320,9 @@ function ToursPage() {
               </SheetHeader>
               <div className="px-4 py-2">{filterPanel}</div>
               <SheetFooter className="flex-row gap-3">
-                <Button variant="outline" className="flex-1" onClick={resetAll}>Reset</Button>
+                <Button variant="outline" className="flex-1" onClick={resetAll}>
+                  Reset
+                </Button>
                 <Button className="flex-1" onClick={() => setSheetOpen(false)}>
                   Show {visible.length} {visible.length === 1 ? "tour" : "tours"}
                 </Button>
@@ -304,7 +337,9 @@ function ToursPage() {
           <div className="sticky top-24">
             {filterPanel}
             {activeCount ? (
-              <Button variant="ghost" size="sm" className="mt-6" onClick={resetAll}>Reset filters</Button>
+              <Button variant="ghost" size="sm" className="mt-6" onClick={resetAll}>
+                Reset filters
+              </Button>
             ) : null}
           </div>
         </aside>
@@ -318,13 +353,16 @@ function ToursPage() {
 
           {noDatesAnywhere ? (
             <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-              No departure dates are open right now. New dates are added regularly — check back soon.
+              No departure dates are open right now. New dates are added regularly — check back
+              soon.
             </div>
           ) : null}
 
           <div className="grid gap-6 sm:grid-cols-2">
             {isLoading
-              ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[460px] rounded-xl" />)
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <Skeleton key={i} className="h-[460px] rounded-xl" />
+                ))
               : null}
             {visible.map((tour) => (
               <TourCard
@@ -346,14 +384,18 @@ function ToursPage() {
             <div className="flex flex-col items-center rounded-xl border border-dashed border-border px-6 py-14 text-center">
               <Mountain className="h-10 w-10 text-primary" />
               <h2 className="mt-4 font-display text-3xl">
-                {debounced && searched.length === 0 ? `Nothing found for "${query.trim()}"` : "No tours match"}
+                {debounced && searched.length === 0
+                  ? `Nothing found for "${query.trim()}"`
+                  : "No tours match"}
               </h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 {debounced && searched.length === 0
                   ? "Try a tour name, a region like Issyk-Kul, or a word like lake or yurt."
                   : "Try widening the price range or removing a filter."}
               </p>
-              <Button variant="outline" className="mt-6" onClick={resetAll}>Clear search & filters</Button>
+              <Button variant="outline" className="mt-6" onClick={resetAll}>
+                Clear search & filters
+              </Button>
             </div>
           ) : null}
         </div>

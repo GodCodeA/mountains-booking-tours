@@ -54,7 +54,8 @@ export function TourCard({
             <CalendarDays className="h-3.5 w-3.5 text-primary" />
             {nextDeparture ? (
               <span className="text-foreground">
-                Next: <span className="font-semibold">{formatDate(nextDeparture.departure_date)}</span>
+                Next:{" "}
+                <span className="font-semibold">{formatDate(nextDeparture.departure_date)}</span>
                 {left <= 3 ? (
                   <span className="ml-2 font-semibold text-accent">
                     {left} {left === 1 ? "spot" : "spots"} left

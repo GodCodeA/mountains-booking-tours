@@ -2,7 +2,17 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
-import { CalendarDays, Check, ChevronLeft, Clock, Loader2, MapPin, Minus, Plus, Users } from "lucide-react";
+import {
+  CalendarDays,
+  Check,
+  ChevronLeft,
+  Clock,
+  Loader2,
+  MapPin,
+  Minus,
+  Plus,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
@@ -147,7 +157,16 @@ function BookingFlow() {
     if (departure && guests > maxGuests) setGuests(Math.max(1, maxGuests));
   }, [departure, guests, maxGuests]);
 
-  const formErrors = validateBookingForm({ name, email, phone, whatsapp, notes, guests, departureId, maxGuests });
+  const formErrors = validateBookingForm({
+    name,
+    email,
+    phone,
+    whatsapp,
+    notes,
+    guests,
+    departureId,
+    maxGuests,
+  });
   const contactFields: BookingField[] = ["name", "email", "phone", "whatsapp", "notes"];
   const contactValid = contactFields.every((f) => !formErrors[f]);
   const guestsValid = !formErrors.guests;
@@ -208,8 +227,13 @@ function BookingFlow() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
         <h1 className="font-display text-5xl">Trip not found</h1>
-        <p className="mt-3 text-muted-foreground">We couldn&apos;t load this tour. Please try again.</p>
-        <Link to="/tours" className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground">
+        <p className="mt-3 text-muted-foreground">
+          We couldn&apos;t load this tour. Please try again.
+        </p>
+        <Link
+          to="/tours"
+          className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+        >
           See all tours
         </Link>
       </div>
@@ -250,7 +274,8 @@ function BookingFlow() {
   const inputProps = (field: BookingField) => ({
     id: field,
     value: values[field],
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => change(field, e.target.value),
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      change(field, e.target.value),
     onBlur: () => blur(field),
     "aria-invalid": Boolean(errors[field]),
     "aria-describedby": errors[field] ? `${field}-error` : undefined,
@@ -292,7 +317,11 @@ function BookingFlow() {
           const reachable = i < step;
           return (
             <li key={label} className="flex-1" aria-current={current ? "step" : undefined}>
-              <div className={i <= step ? "h-1 rounded-full bg-primary" : "h-1 rounded-full bg-secondary"} />
+              <div
+                className={
+                  i <= step ? "h-1 rounded-full bg-primary" : "h-1 rounded-full bg-secondary"
+                }
+              />
               <button
                 type="button"
                 disabled={!reachable}
@@ -334,7 +363,9 @@ function BookingFlow() {
               </p>
               <div className="mt-4 space-y-2">
                 {loadingDates
-                  ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-lg" />)
+                  ? Array.from({ length: 4 }).map((_, i) => (
+                      <Skeleton key={i} className="h-16 w-full rounded-lg" />
+                    ))
                   : null}
                 {!loadingDates && open.length === 0 ? (
                   <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
@@ -353,7 +384,9 @@ function BookingFlow() {
                       aria-pressed={selected}
                       onClick={() => {
                         setDepartureId(d.id);
-                        setGuests((g) => Math.max(1, Math.min(g, spotsLeft(d), tour.max_group_size)));
+                        setGuests((g) =>
+                          Math.max(1, Math.min(g, spotsLeft(d), tour.max_group_size)),
+                        );
                       }}
                       className={
                         full
@@ -366,10 +399,20 @@ function BookingFlow() {
                       <span className="flex items-center gap-3">
                         <CalendarDays className="h-5 w-5 text-primary" />
                         <span>
-                          <span className="block font-semibold">{formatDate(d.departure_date)}</span>
+                          <span className="block font-semibold">
+                            {formatDate(d.departure_date)}
+                          </span>
                           <span className="block text-xs text-muted-foreground">
                             Starts {formatTime(d.departure_time)} ·{" "}
-                            <span className={state === "few" ? "font-semibold text-accent" : state === "available" ? "text-success" : ""}>
+                            <span
+                              className={
+                                state === "few"
+                                  ? "font-semibold text-accent"
+                                  : state === "available"
+                                    ? "text-success"
+                                    : ""
+                              }
+                            >
                               {availabilityLabel(d)}
                             </span>
                           </span>
@@ -387,7 +430,8 @@ function BookingFlow() {
             <div>
               <h2 className="font-display text-3xl">How many guests?</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {formatDate(departure.departure_date)} at {formatTime(departure.departure_time)} · {availabilityLabel(departure)}
+                {formatDate(departure.departure_date)} at {formatTime(departure.departure_time)} ·{" "}
+                {availabilityLabel(departure)}
               </p>
               <div className="mt-6 flex items-center gap-6">
                 <button
@@ -399,7 +443,9 @@ function BookingFlow() {
                 >
                   <Minus className="h-4 w-4" />
                 </button>
-                <span className="font-display text-6xl" aria-live="polite">{guests}</span>
+                <span className="font-display text-6xl" aria-live="polite">
+                  {guests}
+                </span>
                 <button
                   type="button"
                   aria-label="More guests"
@@ -411,9 +457,13 @@ function BookingFlow() {
                 </button>
               </div>
               {guests >= maxGuests ? (
-                <p className="mt-3 text-xs text-muted-foreground">That&apos;s the most we can take on this date.</p>
+                <p className="mt-3 text-xs text-muted-foreground">
+                  That&apos;s the most we can take on this date.
+                </p>
               ) : null}
-              {formErrors.guests ? <FieldError id="guests-error" message={formErrors.guests} /> : null}
+              {formErrors.guests ? (
+                <FieldError id="guests-error" message={formErrors.guests} />
+              ) : null}
               <div className="mt-6 rounded-lg border border-border p-4 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>
@@ -439,7 +489,10 @@ function BookingFlow() {
               }}
             >
               <h2 className="font-display text-3xl">Your details</h2>
-              <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <div
+                className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
+                aria-hidden="true"
+              >
                 <Label htmlFor="website">Website</Label>
                 <Input
                   id="website"
@@ -457,28 +510,47 @@ function BookingFlow() {
                 </div>
                 <div>
                   <Label htmlFor="email">Email</Label>
-                  <Input {...inputProps("email")} type="email" autoComplete="email" placeholder="you@example.com" />
+                  <Input
+                    {...inputProps("email")}
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                  />
                   <FieldError id="email-error" message={errors.email} />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="phone">Phone</Label>
-                  <Input {...inputProps("phone")} type="tel" autoComplete="tel" placeholder="+996 555 000 000" />
+                  <Input
+                    {...inputProps("phone")}
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="+996 555 000 000"
+                  />
                   <FieldError id="phone-error" message={errors.phone} />
                 </div>
                 <div>
                   <Label htmlFor="whatsapp">WhatsApp (optional)</Label>
-                  <Input {...inputProps("whatsapp")} type="tel" placeholder="If different from your phone" />
+                  <Input
+                    {...inputProps("whatsapp")}
+                    type="tel"
+                    placeholder="If different from your phone"
+                  />
                   <FieldError id="whatsapp-error" message={errors.whatsapp} />
                 </div>
               </div>
               <div>
                 <Label htmlFor="notes">Anything we should know? (optional)</Label>
-                <Textarea {...inputProps("notes")} placeholder="Dietary needs, pickup address, experience level…" />
+                <Textarea
+                  {...inputProps("notes")}
+                  placeholder="Dietary needs, pickup address, experience level…"
+                />
                 <div className="flex justify-between">
                   <FieldError id="notes-error" message={errors.notes} />
-                  <span className="ml-auto mt-1.5 text-xs text-muted-foreground">{notes.length}/500</span>
+                  <span className="ml-auto mt-1.5 text-xs text-muted-foreground">
+                    {notes.length}/500
+                  </span>
                 </div>
               </div>
               <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
@@ -511,11 +583,16 @@ function BookingFlow() {
               <div className="mt-2 rounded-lg bg-primary/10 p-4">
                 <div className="flex items-baseline justify-between">
                   <span className="font-bold">
-                    Total <span className="font-normal text-muted-foreground">({guests} × ${tour.price_per_person})</span>
+                    Total{" "}
+                    <span className="font-normal text-muted-foreground">
+                      ({guests} × ${tour.price_per_person})
+                    </span>
                   </span>
                   <span className="font-display text-5xl">${total}</span>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">Paid on the day — no payment is taken now.</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Paid on the day — no payment is taken now.
+                </p>
               </div>
             </div>
           ) : null}
@@ -578,7 +655,9 @@ function BookingFlow() {
             </ul>
             <div className="mt-4 space-y-1 border-t border-border pt-3">
               <div className="flex justify-between text-muted-foreground">
-                <span>${tour.price_per_person} × {guests}</span>
+                <span>
+                  ${tour.price_per_person} × {guests}
+                </span>
                 <span>${total}</span>
               </div>
               <div className="flex items-baseline justify-between">
