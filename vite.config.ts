@@ -11,7 +11,13 @@ export default defineConfig({
   // Nitro; pinning its target prevents an accidental Node-oriented build.
   nitro: {
     preset: "cloudflare-module",
-    cloudflare: { nodeCompat: true, deployConfig: true },
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: true,
+      // Runtime Supabase secrets are read through process.env by the server
+      // client. Make the Workers binding available there explicitly.
+      wrangler: { compatibility_flags: ["nodejs_compat_populate_process_env"] },
+    } as never,
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).

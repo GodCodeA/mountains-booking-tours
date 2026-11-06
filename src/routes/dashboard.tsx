@@ -78,8 +78,7 @@ function Dashboard() {
     });
     if (error) {
       toast.error(error.message || "Couldn't send the sign-in link. Please try again.");
-    }
-    else toast.success("Check your email for the secure sign-in link.");
+    } else toast.success("Check your email for the secure sign-in link.");
     setSendingLink(false);
   }
 
