@@ -32,6 +32,17 @@ import {
 
 type Row = Booking & { tours: Tour; departures: Departure };
 
+/** Server functions cannot read the browser's localStorage session themselves. */
+async function ownerAuthHeaders() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.access_token) {
+    throw new Error("Your owner session has expired. Please sign in again.");
+  }
+  return { headers: { Authorization: `Bearer ${session.access_token}` } };
+}
+
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
@@ -136,7 +147,7 @@ function OwnerDashboard() {
     isError,
   } = useQuery({
     queryKey: ["dashboard-bookings"],
-    queryFn: () => fetchBookings(),
+    queryFn: async () => fetchBookings(await ownerAuthHeaders()),
   });
   const [tab, setTab] = useState<(typeof tabs)[number]>("Upcoming");
   const [rescheduling, setRescheduling] = useState<Row | null>(null);
@@ -148,7 +159,8 @@ function OwnerDashboard() {
 
   const sendReminder = useServerFn(sendReminderNow);
   const remind = useMutation({
-    mutationFn: (row: Row) => sendReminder({ data: { bookingId: row.id } }),
+    mutationFn: async (row: Row) =>
+      sendReminder({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
     onSuccess: (res, row) => {
       if (res.status === "sent") toast.success(`Reminder emailed to ${row.customer_name}`);
       else if (res.status === "skipped") toast.info(res.error ?? "Nothing to send.");
@@ -159,7 +171,8 @@ function OwnerDashboard() {
   });
 
   const cancel = useMutation({
-    mutationFn: (row: Row) => runCancel({ data: { bookingId: row.id } }),
+    mutationFn: async (row: Row) =>
+      runCancel({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
     onSuccess: () => {
       toast.success("Booking cancelled");
       invalidate();
@@ -366,6 +379,7 @@ function RescheduleDialog({
     try {
       const result = await runReschedule({
         data: { bookingId: row.id, departureId: target.id },
+        ...(await ownerAuthHeaders()),
       });
       if (result.status === "full") {
         toast.error("That date no longer has enough spots.");
