@@ -145,6 +145,7 @@ function OwnerDashboard() {
     data: bookings,
     isLoading,
     isError,
+    error: bookingsError,
   } = useQuery({
     queryKey: ["dashboard-bookings"],
     queryFn: async () => fetchBookings(await ownerAuthHeaders()),
@@ -227,7 +228,11 @@ function OwnerDashboard() {
           : null}
 
         {isError ? (
-          <p className="text-sm text-destructive">Couldn&apos;t load bookings. Please refresh.</p>
+          <p className="text-sm text-destructive">
+            {bookingsError instanceof Error
+              ? bookingsError.message
+              : "Couldn&apos;t load bookings."}
+          </p>
         ) : null}
 
         {!isLoading && visible.length === 0 ? (
