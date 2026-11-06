@@ -302,6 +302,12 @@ export function formatDate(value: string) {
   });
 }
 
+/** Keep bearer-token references readable without weakening their stored entropy. */
+export function displayBookingReference(reference: string) {
+  if (reference.length <= 14) return reference;
+  return `${reference.slice(0, 8)}…${reference.slice(-4)}`;
+}
+
 export function formatBishkekDateTime(value: string) {
   return new Date(value).toLocaleString("en-GB", {
     timeZone: BISHKEK_TIME_ZONE,

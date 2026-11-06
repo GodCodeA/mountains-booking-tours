@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, CalendarDays, MapPin, Users } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { bookingQuery, formatDate } from "@/lib/bookings";
+import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
 
 export const Route = createFileRoute("/booking/$reference")({
@@ -40,7 +40,7 @@ function Confirmation() {
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
         <h1 className="font-display text-5xl">Booking not found</h1>
         <p className="mt-3 text-muted-foreground">
-          We couldn&apos;t find a booking with reference {reference}.
+          We couldn&apos;t find that booking. Please check your confirmation link.
         </p>
         <Link
           to="/tours"
@@ -79,7 +79,7 @@ function Confirmation() {
           <div className="flex items-center justify-between">
             <h2 className="font-display text-3xl">{booking.tour_name}</h2>
             <span className="rounded-md bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
-              {booking.reference}
+              Ref {displayBookingReference(booking.reference)}
             </span>
           </div>
           <div className="grid gap-3 text-sm sm:grid-cols-2">

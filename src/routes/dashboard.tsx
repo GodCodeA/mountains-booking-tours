@@ -20,6 +20,7 @@ import {
   adminMembershipQuery,
   bishkekToday,
   departuresQuery,
+  displayBookingReference,
   formatDate,
   formatBishkekDateTime,
   listDashboardBookings,
@@ -254,7 +255,7 @@ function OwnerDashboard() {
                   <h2 className="font-display text-3xl">{row.tours.name}</h2>
                   <StatusBadge status={row.status} />
                   <span className="rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
-                    {row.reference}
+                    Ref {displayBookingReference(row.reference)}
                   </span>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
