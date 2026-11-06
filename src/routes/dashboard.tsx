@@ -76,7 +76,9 @@ function Dashboard() {
       email: email.trim(),
       options: { emailRedirectTo: `${window.location.origin}/dashboard` },
     });
-    if (error) toast.error("Couldn't send the sign-in link. Please try again.");
+    if (error) {
+      toast.error(error.message || "Couldn't send the sign-in link. Please try again.");
+    }
     else toast.success("Check your email for the secure sign-in link.");
     setSendingLink(false);
   }
