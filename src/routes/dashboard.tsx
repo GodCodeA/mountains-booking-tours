@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Bell, CalendarDays, Mail, Phone, Users, X, RefreshCw } from "lucide-react";
+import { Bell, CalendarDays, LogOut, Mail, Phone, Users, X, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { useServerFn } from "@tanstack/react-start";
@@ -140,6 +140,7 @@ function Dashboard() {
 
 function OwnerDashboard() {
   const queryClient = useQueryClient();
+  const [signingOut, setSigningOut] = useState(false);
   const fetchBookings = useServerFn(listDashboardBookings);
   const runCancel = useServerFn(cancelBooking);
   const {
@@ -190,13 +191,32 @@ function OwnerDashboard() {
 
   const visible = tab === "Today" ? todays : tab === "Upcoming" ? upcoming : (bookings ?? []);
 
+  async function signOut() {
+    setSigningOut(true);
+    await supabase.auth.signOut();
+    window.location.reload();
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <p className="text-eyebrow">Owner view · Azamat</p>
-      <h1 className="mt-3 font-display text-6xl">Today at a glance</h1>
-      <p className="mt-3 text-sm text-muted-foreground">
-        Demo data — bookings, guests and dates here are sample records.
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-eyebrow">Owner view</p>
+          <h1 className="mt-3 font-display text-6xl">Today at a glance</h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Demo data — bookings, guests and dates here are sample records.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => void signOut()}
+          disabled={signingOut}
+          className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+        >
+          <LogOut className="h-4 w-4" />
+          {signingOut ? "Signing out…" : "Sign out"}
+        </button>
+      </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <Stat label="Departures today" value={todays.length} />

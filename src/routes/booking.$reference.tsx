@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, CalendarDays, MapPin, Users } from "lucide-react";
+import { useState } from "react";
+import { Check, CheckCircle2, Copy, CalendarDays, MapPin, Users } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
@@ -25,6 +26,17 @@ export const Route = createFileRoute("/booking/$reference")({
 function Confirmation() {
   const { reference } = Route.useParams();
   const { data: booking, isLoading, isError } = useQuery(bookingQuery(reference));
+  const [copied, setCopied] = useState(false);
+
+  async function copyConfirmationLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard access can be disabled by the browser; the URL remains available in its address bar.
+    }
+  }
 
   if (isLoading) {
     return (
@@ -63,7 +75,7 @@ function Confirmation() {
       </div>
 
       <p className="mt-4 text-muted-foreground">
-        Your booking is confirmed. Your guide will send a reminder the day before departure.
+        Your booking is confirmed. Save this link so you can return to these trip details anytime.
       </p>
 
       <div className="surface-panel mt-8 overflow-hidden">
@@ -103,6 +115,14 @@ function Confirmation() {
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={copyConfirmationLink}
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {copied ? "Link copied" : "Copy confirmation link"}
+        </button>
         <Link
           to="/tours"
           className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
