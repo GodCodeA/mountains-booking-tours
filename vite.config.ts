@@ -16,7 +16,12 @@ export default defineConfig({
       deployConfig: true,
       // Runtime Supabase secrets are read through process.env by the server
       // client. Make the Workers binding available there explicitly.
-      wrangler: { compatibility_flags: ["nodejs_compat_populate_process_env"] },
+      wrangler: {
+        compatibility_flags: ["nodejs_compat_populate_process_env"],
+        // Runtime values are managed in the Cloudflare dashboard. Without this,
+        // `wrangler deploy` removes dashboard variables absent from this file.
+        keep_vars: true,
+      },
     } as never,
   },
   tanstackStart: {
