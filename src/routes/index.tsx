@@ -6,7 +6,8 @@ import heroImage from "@/assets/hero-mountains.jpg";
 import { TourCard } from "@/components/tour-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toursQuery, type Tour } from "@/lib/bookings";
-import { faqs, guides, reviews } from "@/lib/site-content";
+import { siteContent } from "@/lib/site-content";
+import { localizeTour } from "@/lib/tour-localization";
 import { tourImage } from "@/lib/tour-images";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -64,6 +65,34 @@ const benefits = [
   },
 ];
 
+const russianBenefits = [
+  {
+    icon: Users,
+    title: "Небольшие группы",
+    body: "В каждой поездке немного гостей: темп подходит группе, а у каждого есть время с гидом.",
+  },
+  {
+    icon: Map,
+    title: "Понятная программа",
+    body: "До бронирования в каждом туре указаны маршрут, время, что включено и что взять с собой.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Актуальные места онлайн",
+    body: "Сразу видно свободные даты и точное количество мест — не нужно ждать ответа.",
+  },
+  {
+    icon: MousePointerClick,
+    title: "Простое бронирование",
+    body: "Забронируйте за несколько минут и оплатите в день поездки. Без предоплаты и данных карты.",
+  },
+  {
+    icon: Compass,
+    title: "Знание местных гор",
+    body: "Маршруты планируют жители Бишкека, которые знают эти долины, сезоны и семьи.",
+  },
+];
+
 const howItWorks = [
   { n: "01", title: "Choose a tour", body: "Compare difficulty, duration and price." },
   { n: "02", title: "Pick a date and guests", body: "Only dates with open spots can be selected." },
@@ -71,6 +100,16 @@ const howItWorks = [
     n: "03",
     title: "Confirm your booking",
     body: "Add your contact details and get your reference instantly.",
+  },
+];
+
+const russianHowItWorks = [
+  { n: "01", title: "Выберите тур", body: "Сравните сложность, продолжительность и цену." },
+  { n: "02", title: "Выберите дату и гостей", body: "Доступны только даты со свободными местами." },
+  {
+    n: "03",
+    title: "Подтвердите бронирование",
+    body: "Оставьте контакты и сразу получите код бронирования.",
   },
 ];
 
@@ -108,6 +147,9 @@ function SectionHeading({
 function Home() {
   const { language } = useI18n();
   const ru = language === "ru";
+  const content = siteContent(language);
+  const localizedBenefits = ru ? russianBenefits : benefits;
+  const localizedSteps = ru ? russianHowItWorks : howItWorks;
   const { data: tours, isLoading, isError } = useQuery(toursQuery);
   const recommended = tours ? pickRecommended(tours) : [];
 
@@ -175,7 +217,9 @@ function Home() {
             : null}
           {isError ? (
             <p className="text-sm text-destructive">
-              We couldn&apos;t load the tours just now. Please refresh the page.
+              {ru
+                ? "Сейчас не удалось загрузить туры. Обновите страницу и попробуйте ещё раз."
+                : "We couldn't load the tours just now. Please refresh the page."}
             </p>
           ) : null}
           {tours?.slice(0, 3).map((tour) => (
@@ -191,7 +235,7 @@ function Home() {
             title={ru ? "Простые и честные поездки в горы" : "Simple, honest mountain trips"}
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {benefits.map((b) => (
+            {localizedBenefits.map((b) => (
               <div key={b.title} className="surface-panel p-6">
                 <b.icon className="h-6 w-6 text-primary" />
                 <h3 className="mt-4 font-bold">{b.title}</h3>
@@ -208,7 +252,7 @@ function Home() {
           title={ru ? "Бронирование за три шага" : "Booked in three steps"}
         />
         <ol className="mt-10 grid gap-6 sm:grid-cols-3">
-          {howItWorks.map((s) => (
+          {localizedSteps.map((s) => (
             <li key={s.n} className="border-t-2 border-primary pt-5">
               <span className="font-display text-5xl text-primary">{s.n}</span>
               <h3 className="mt-2 text-lg font-bold">{s.title}</h3>
@@ -234,7 +278,7 @@ function Home() {
               >
                 <img
                   src={tourImage(tour.image_key)}
-                  alt={tour.name}
+                  alt={localizeTour(tour, language).name}
                   loading="lazy"
                   className="h-24 w-24 shrink-0 rounded-lg object-cover"
                 />
@@ -248,7 +292,9 @@ function Home() {
                         }[label] ?? label)
                       : label}
                   </p>
-                  <p className="mt-1 font-bold group-hover:text-primary">{tour.name}</p>
+                  <p className="mt-1 font-bold group-hover:text-primary">
+                    {localizeTour(tour, language).name}
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {tour.duration_days}{" "}
                     {ru
@@ -258,7 +304,8 @@ function Home() {
                       : tour.duration_days === 1
                         ? "day"
                         : "days"}{" "}
-                    · {tour.difficulty} · {ru ? "от" : "from"} ${tour.price_per_person}
+                    · {localizeTour(tour, language).difficulty} · {ru ? "от" : "from"} $
+                    {tour.price_per_person}
                   </p>
                 </div>
               </Link>
@@ -278,7 +325,7 @@ function Home() {
               : "A small local team — you&apos;ll know who is leading your trip before you arrive."}
           </SectionHeading>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {guides.map((g) => (
+            {content.guides.map((g) => (
               <div key={g.name} className="surface-panel p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 font-display text-2xl text-primary">
                   {g.name[0]}
@@ -304,7 +351,7 @@ function Home() {
             : "Sample reviews for this demo — not verified customers."}
         </SectionHeading>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {reviews.map((r) => (
+          {content.reviews.map((r) => (
             <figure key={r.name} className="rounded-xl border border-border bg-card p-6">
               <blockquote className="text-sm leading-relaxed">&ldquo;{r.text}&rdquo;</blockquote>
               <figcaption className="mt-4 text-xs text-muted-foreground">
@@ -318,7 +365,7 @@ function Home() {
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
         <SectionHeading eyebrow="FAQ" title={ru ? "Полезно знать" : "Good to know"} />
         <Accordion type="single" collapsible className="mt-6">
-          {faqs.map((f) => (
+          {content.faqs.map((f) => (
             <AccordionItem key={f.q} value={f.q}>
               <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>

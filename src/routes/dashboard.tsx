@@ -31,6 +31,7 @@ import {
   type Departure,
   type Tour,
 } from "@/lib/bookings";
+import { localizeTour } from "@/lib/tour-localization";
 
 type Row = Booking & { tours: Tour; departures: Departure };
 
@@ -68,6 +69,8 @@ export const Route = createFileRoute("/dashboard")({
 const tabs = ["Today", "Upcoming", "All"] as const;
 
 function Dashboard() {
+  const { language } = useI18n();
+  const ru = language === "ru";
   const [userId, setUserId] = useState<string>();
   const [sessionChecked, setSessionChecked] = useState(false);
   const [email, setEmail] = useState("");
@@ -90,8 +93,18 @@ function Dashboard() {
       options: { emailRedirectTo: `${window.location.origin}/dashboard` },
     });
     if (error) {
-      toast.error(error.message || "Couldn't send the sign-in link. Please try again.");
-    } else toast.success("Check your email for the secure sign-in link.");
+      toast.error(
+        error.message ||
+          (ru
+            ? "Не удалось отправить ссылку для входа. Попробуйте ещё раз."
+            : "Couldn't send the sign-in link. Please try again."),
+      );
+    } else
+      toast.success(
+        ru
+          ? "Проверьте почту: туда отправлена защищённая ссылка для входа."
+          : "Check your email for the secure sign-in link.",
+      );
     setSendingLink(false);
   }
 
@@ -106,16 +119,20 @@ function Dashboard() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-20 text-center">
-      <p className="text-eyebrow">Owner access</p>
-      <h1 className="mt-3 font-display text-5xl">Private dashboard</h1>
+      <p className="text-eyebrow">{ru ? "Доступ владельца" : "Owner access"}</p>
+      <h1 className="mt-3 font-display text-5xl">
+        {ru ? "Закрытый кабинет" : "Private dashboard"}
+      </h1>
       {userId ? (
         <p className="mt-3 text-sm text-muted-foreground">
-          This account is not approved to access bookings.
+          {ru
+            ? "У этой учётной записи нет доступа к бронированиям."
+            : "This account is not approved to access bookings."}
         </p>
       ) : (
         <form className="mt-6 space-y-3 text-left" onSubmit={sendMagicLink}>
           <label className="block text-sm font-semibold" htmlFor="owner-email">
-            Owner email
+            {ru ? "Email владельца" : "Owner email"}
           </label>
           <input
             id="owner-email"
@@ -131,7 +148,13 @@ function Dashboard() {
             disabled={sendingLink}
             className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-50"
           >
-            {sendingLink ? "Sending…" : "Email me a sign-in link"}
+            {sendingLink
+              ? ru
+                ? "Отправляем…"
+                : "Sending…"
+              : ru
+                ? "Отправить ссылку для входа"
+                : "Email me a sign-in link"}
           </button>
         </form>
       )}
@@ -142,7 +165,8 @@ function Dashboard() {
 function OwnerDashboard() {
   const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const ru = language === "ru";
   const fetchBookings = useServerFn(listDashboardBookings);
   const runCancel = useServerFn(cancelBooking);
   const {
@@ -167,22 +191,35 @@ function OwnerDashboard() {
     mutationFn: async (row: Row) =>
       sendReminder({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
     onSuccess: (res, row) => {
-      if (res.status === "sent") toast.success(`Reminder emailed to ${row.customer_name}`);
-      else if (res.status === "skipped") toast.info(res.error ?? "Nothing to send.");
-      else toast.error(`Reminder failed: ${res.error ?? "unknown error"}`);
+      if (res.status === "sent")
+        toast.success(
+          ru
+            ? `Напоминание отправлено: ${row.customer_name}`
+            : `Reminder emailed to ${row.customer_name}`,
+        );
+      else if (res.status === "skipped")
+        toast.info(res.error ?? (ru ? "Отправлять нечего." : "Nothing to send."));
+      else
+        toast.error(
+          ru
+            ? `Ошибка напоминания: ${res.error ?? "неизвестная ошибка"}`
+            : `Reminder failed: ${res.error ?? "unknown error"}`,
+        );
       invalidate();
     },
-    onError: () => toast.error("Couldn't send that reminder."),
+    onError: () =>
+      toast.error(ru ? "Не удалось отправить напоминание." : "Couldn't send that reminder."),
   });
 
   const cancel = useMutation({
     mutationFn: async (row: Row) =>
       runCancel({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
     onSuccess: () => {
-      toast.success("Booking cancelled");
+      toast.success(ru ? "Бронирование отменено" : "Booking cancelled");
       invalidate();
     },
-    onError: () => toast.error("Couldn't cancel that booking."),
+    onError: () =>
+      toast.error(ru ? "Не удалось отменить бронирование." : "Couldn't cancel that booking."),
   });
 
   const today = bishkekToday();
@@ -204,9 +241,13 @@ function OwnerDashboard() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-eyebrow">{t("ownerView")}</p>
-          <h1 className="mt-3 font-display text-6xl">Today at a glance</h1>
+          <h1 className="mt-3 font-display text-6xl">
+            {ru ? "Коротко о сегодняшнем дне" : "Today at a glance"}
+          </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Demo data — bookings, guests and dates here are sample records.
+            {ru
+              ? "Демо-данные: бронирования, гости и даты здесь являются тестовыми записями."
+              : "Demo data — bookings, guests and dates here are sample records."}
           </p>
         </div>
         <button
@@ -221,9 +262,9 @@ function OwnerDashboard() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <Stat label="Departures today" value={todays.length} />
-        <Stat label="Upcoming bookings" value={upcoming.length} />
-        <Stat label="Guests booked ahead" value={guestsUpcoming} />
+        <Stat label={ru ? "Выезды сегодня" : "Departures today"} value={todays.length} />
+        <Stat label={ru ? "Ближайшие бронирования" : "Upcoming bookings"} value={upcoming.length} />
+        <Stat label={ru ? "Забронировано гостей" : "Guests booked ahead"} value={guestsUpcoming} />
       </div>
 
       <div className="mt-10 flex gap-2">
@@ -238,7 +279,7 @@ function OwnerDashboard() {
                 : "rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
             }
           >
-            {t}
+            {ru ? ({ Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t) : t}
           </button>
         ))}
       </div>
@@ -254,17 +295,23 @@ function OwnerDashboard() {
           <p className="text-sm text-destructive">
             {bookingsError instanceof Error
               ? bookingsError.message
-              : "Couldn&apos;t load bookings."}
+              : ru
+                ? "Не удалось загрузить бронирования."
+                : "Couldn't load bookings."}
           </p>
         ) : null}
 
         {!isLoading && visible.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border p-10 text-center">
-            <p className="font-semibold">Nothing here yet</p>
+            <p className="font-semibold">{ru ? "Пока здесь пусто" : "Nothing here yet"}</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {tab === "Today"
-                ? "No departures today — enjoy the morning."
-                : "New bookings will appear here as soon as they come in."}
+                ? ru
+                  ? "Сегодня выездов нет — можно спокойно начать утро."
+                  : "No departures today — enjoy the morning."
+                : ru
+                  ? "Новые бронирования появятся здесь сразу после оформления."
+                  : "New bookings will appear here as soon as they come in."}
             </p>
           </div>
         ) : null}
@@ -274,19 +321,22 @@ function OwnerDashboard() {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-display text-3xl">{row.tours.name}</h2>
+                  <h2 className="font-display text-3xl">
+                    {localizeTour(row.tours, language).name}
+                  </h2>
                   <StatusBadge status={row.status} />
                   <span className="rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
-                    Ref {displayBookingReference(row.reference)}
+                    {ru ? "Код" : "Ref"} {displayBookingReference(row.reference)}
                   </span>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
                   <span className="inline-flex items-center gap-1.5">
                     <CalendarDays className="h-4 w-4 text-primary" />
-                    {formatDate(row.departures.departure_date)}
+                    {formatDate(row.departures.departure_date, language)}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Users className="h-4 w-4 text-primary" /> {row.guests} guests
+                    <Users className="h-4 w-4 text-primary" /> {row.guests}{" "}
+                    {ru ? "гостей" : "guests"}
                   </span>
                   <span className="font-semibold text-foreground">${row.total_price}</span>
                 </div>
@@ -318,7 +368,7 @@ function OwnerDashboard() {
                 onClick={() => remind.mutate(row)}
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-40"
               >
-                <Bell className="h-4 w-4" /> Send reminder
+                <Bell className="h-4 w-4" /> {ru ? "Отправить напоминание" : "Send reminder"}
               </button>
               <button
                 type="button"
@@ -326,7 +376,7 @@ function OwnerDashboard() {
                 onClick={() => setRescheduling(row)}
                 className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-40"
               >
-                <RefreshCw className="h-4 w-4" /> Reschedule
+                <RefreshCw className="h-4 w-4" /> {ru ? "Перенести" : "Reschedule"}
               </button>
               <button
                 type="button"
@@ -334,21 +384,27 @@ function OwnerDashboard() {
                 onClick={() => cancel.mutate(row)}
                 className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-destructive disabled:opacity-40"
               >
-                <X className="h-4 w-4" /> Cancel
+                <X className="h-4 w-4" /> {ru ? "Отменить" : "Cancel"}
               </button>
               {row.status !== "cancelled" ? (
                 <span
                   className={`text-xs ${row.reminder_status === "failed" ? "text-destructive" : "text-muted-foreground"}`}
                   title={row.reminder_error ?? undefined}
                 >
-                  Reminder:{" "}
+                  {ru ? "Напоминание" : "Reminder"}:{" "}
                   {row.reminder_status === "sent"
-                    ? `Sent${row.reminder_sent_at ? ` ${formatBishkekDateTime(row.reminder_sent_at)}` : ""}`
+                    ? `${ru ? "Отправлено" : "Sent"}${row.reminder_sent_at ? ` ${formatBishkekDateTime(row.reminder_sent_at, language)}` : ""}`
                     : row.reminder_status === "failed"
-                      ? "Failed"
+                      ? ru
+                        ? "Ошибка"
+                        : "Failed"
                       : row.reminder_status === "sending"
-                        ? "Sending…"
-                        : "Pending"}
+                        ? ru
+                          ? "Отправляем…"
+                          : "Sending…"
+                        : ru
+                          ? "Ожидает"
+                          : "Pending"}
                 </span>
               ) : null}
             </div>
@@ -375,6 +431,7 @@ function Stat({ label, value }: { label: string; value: number }) {
 }
 
 function StatusBadge({ status }: { status: string }) {
+  const { language } = useI18n();
   const tone =
     status === "cancelled"
       ? "bg-destructive/15 text-destructive"
@@ -383,7 +440,10 @@ function StatusBadge({ status }: { status: string }) {
         : "bg-success/15 text-success";
   return (
     <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold capitalize ${tone}`}>
-      {status}
+      {language === "ru"
+        ? ({ confirmed: "подтверждено", pending: "ожидает", cancelled: "отменено" }[status] ??
+          status)
+        : status}
     </span>
   );
 }
@@ -397,6 +457,8 @@ function RescheduleDialog({
   onClose: () => void;
   onDone: () => void;
 }) {
+  const { language } = useI18n();
+  const ru = language === "ru";
   const { data: departures, isLoading } = useQuery(departuresQuery(row?.tour_id));
   const runReschedule = useServerFn(rescheduleBooking);
   const [saving, setSaving] = useState(false);
@@ -410,14 +472,20 @@ function RescheduleDialog({
         ...(await ownerAuthHeaders()),
       });
       if (result.status === "full") {
-        toast.error("That date no longer has enough spots.");
+        toast.error(
+          ru ? "На этой дате больше недостаточно мест." : "That date no longer has enough spots.",
+        );
       } else {
-        toast.success(`Moved to ${formatDate(target.departure_date)}`);
+        toast.success(
+          ru
+            ? `Перенесено на ${formatDate(target.departure_date, language)}`
+            : `Moved to ${formatDate(target.departure_date)}`,
+        );
         onDone();
         onClose();
       }
     } catch {
-      toast.error("Couldn't move that booking.");
+      toast.error(ru ? "Не удалось перенести это бронирование." : "Couldn't move that booking.");
     } finally {
       setSaving(false);
     }
@@ -427,7 +495,9 @@ function RescheduleDialog({
     <Dialog open={Boolean(row)} onOpenChange={(open) => (open ? null : onClose())}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-display text-3xl">Reschedule booking</DialogTitle>
+          <DialogTitle className="font-display text-3xl">
+            {ru ? "Перенести бронирование" : "Reschedule booking"}
+          </DialogTitle>
           <DialogDescription>
             {row ? `${row.customer_name} · ${row.guests} guests · ${row.tours.name}` : ""}
           </DialogDescription>
@@ -444,12 +514,18 @@ function RescheduleDialog({
                 onClick={() => move(d)}
                 className="flex w-full items-center justify-between rounded-lg border border-border p-4 text-left hover:border-primary/60 disabled:opacity-50"
               >
-                <span className="font-semibold">{formatDate(d.departure_date)}</span>
-                <span className="text-xs text-muted-foreground">{spotsLeft(d)} spots left</span>
+                <span className="font-semibold">{formatDate(d.departure_date, language)}</span>
+                <span className="text-xs text-muted-foreground">
+                  {spotsLeft(d)} {ru ? "мест осталось" : "spots left"}
+                </span>
               </button>
             ))}
           {!isLoading && departures?.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No other dates available for this trip.</p>
+            <p className="text-sm text-muted-foreground">
+              {ru
+                ? "Для этого тура нет других доступных дат."
+                : "No other dates available for this trip."}
+            </p>
           ) : null}
         </div>
       </DialogContent>

@@ -32,6 +32,8 @@ import {
 } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
 import { validateBookingForm, validateField, type BookingField } from "@/lib/booking-validation";
+import { useI18n } from "@/lib/i18n";
+import { localizeTour } from "@/lib/tour-localization";
 
 type Search = { departure?: string };
 
@@ -65,6 +67,7 @@ export const Route = createFileRoute("/book/$slug")({
 });
 
 const stepLabels = ["Date", "Guests", "Details", "Review"];
+const russianStepLabels = ["Дата", "Гости", "Контакты", "Проверка"];
 
 type Draft = {
   step: number;
@@ -90,6 +93,8 @@ function FieldError({ id, message }: { id: string; message?: string | undefined 
 }
 
 function BookingFlow() {
+  const { language } = useI18n();
+  const ru = language === "ru";
   const { slug } = Route.useParams();
   const { departure: presetDeparture } = Route.useSearch();
   const navigate = useNavigate();
@@ -166,6 +171,7 @@ function BookingFlow() {
     guests,
     departureId,
     maxGuests,
+    language,
   });
   const contactFields: BookingField[] = ["name", "email", "phone", "whatsapp", "notes"];
   const contactValid = contactFields.every((f) => !formErrors[f]);
@@ -184,7 +190,7 @@ function BookingFlow() {
     setters[field](value);
     setErrors((prev) => {
       if (!prev[field]) return prev;
-      const message = validateField(field, value);
+      const message = validateField(field, value, language);
       const next = { ...prev };
       if (message) next[field] = message;
       else delete next[field];
@@ -193,7 +199,7 @@ function BookingFlow() {
   }
 
   function blur(field: BookingField) {
-    const message = validateField(field, values[field]);
+    const message = validateField(field, values[field], language);
     setErrors((prev) => {
       const next = { ...prev };
       if (message) next[field] = message;
@@ -226,15 +232,17 @@ function BookingFlow() {
   if (isError || !tour) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="font-display text-5xl">Trip not found</h1>
+        <h1 className="font-display text-5xl">{ru ? "Тур не найден" : "Trip not found"}</h1>
         <p className="mt-3 text-muted-foreground">
-          We couldn&apos;t load this tour. Please try again.
+          {ru
+            ? "Не удалось загрузить этот тур. Попробуйте ещё раз."
+            : "We couldn't load this tour. Please try again."}
         </p>
         <Link
           to="/tours"
           className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
         >
-          See all tours
+          {ru ? "Все туры" : "See all tours"}
         </Link>
       </div>
     );
@@ -248,7 +256,11 @@ function BookingFlow() {
         data: { departureId: departure.id, name, email, phone, whatsapp, guests, notes, website },
       });
       if (result.status === "full") {
-        toast.error("Someone just booked those spots. Please pick another date or fewer guests.");
+        toast.error(
+          ru
+            ? "Кто-то только что забронировал эти места. Выберите другую дату или меньше гостей."
+            : "Someone just booked those spots. Please pick another date or fewer guests.",
+        );
         await queryClient.invalidateQueries({ queryKey: ["departures"] });
         setStep(0);
         setSubmitting(false);
@@ -264,7 +276,11 @@ function BookingFlow() {
       void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
       navigate({ to: "/booking/$reference", params: { reference: result.reference } });
     } catch (err) {
-      toast.error("We couldn't save that booking. Please try again.");
+      toast.error(
+        ru
+          ? "Не удалось сохранить бронирование. Попробуйте ещё раз."
+          : "We couldn't save that booking. Please try again.",
+      );
       setSubmitting(false);
       return;
     }
@@ -283,6 +299,8 @@ function BookingFlow() {
   });
 
   const nextDisabled = (step === 0 && !departure) || (step === 1 && !guestsValid);
+  const translatedTour = localizeTour(tour, language);
+  const labels = ru ? russianStepLabels : stepLabels;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
@@ -291,27 +309,27 @@ function BookingFlow() {
         params={{ slug }}
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ChevronLeft className="h-4 w-4" /> Back to {tour.name}
+        <ChevronLeft className="h-4 w-4" /> {ru ? "Назад к туру" : "Back to"} {translatedTour.name}
       </Link>
 
       <div className="mt-4 flex items-center gap-4">
         <img
           src={tourImage(tour.image_key)}
-          alt={tour.name}
+          alt={translatedTour.name}
           loading="lazy"
           width={1280}
           height={864}
           className="h-16 w-16 rounded-lg object-cover"
         />
         <div>
-          <p className="text-eyebrow">Booking</p>
-          <h1 className="font-display text-4xl">{tour.name}</h1>
+          <p className="text-eyebrow">{ru ? "Бронирование" : "Booking"}</p>
+          <h1 className="font-display text-4xl">{translatedTour.name}</h1>
         </div>
       </div>
 
       {/* Progress */}
-      <ol className="mt-8 flex gap-2" aria-label="Booking progress">
-        {stepLabels.map((label, i) => {
+      <ol className="mt-8 flex gap-2" aria-label={ru ? "Ход бронирования" : "Booking progress"}>
+        {labels.map((label, i) => {
           const done = i < step;
           const current = i === step;
           const reachable = i < step;
@@ -350,16 +368,20 @@ function BookingFlow() {
         })}
       </ol>
       <p className="mt-3 text-xs text-muted-foreground">
-        Step {step + 1} of 4 · your details are kept if you go back.
+        {ru
+          ? `Шаг ${step + 1} из 4 · при возврате данные сохранятся.`
+          : `Step ${step + 1} of 4 · your details are kept if you go back.`}
       </p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="surface-panel p-6">
           {step === 0 ? (
             <div>
-              <h2 className="font-display text-3xl">Pick a date</h2>
+              <h2 className="font-display text-3xl">{ru ? "Выберите дату" : "Pick a date"}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Demo availability. Start times are Bishkek time.
+                {ru
+                  ? "Демо-доступность. Время указано по Бишкеку."
+                  : "Demo availability. Start times are Bishkek time."}
               </p>
               <div className="mt-4 space-y-2">
                 {loadingDates
@@ -369,7 +391,9 @@ function BookingFlow() {
                   : null}
                 {!loadingDates && open.length === 0 ? (
                   <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
-                    No open dates for this trip at the moment. Check another tour or come back soon.
+                    {ru
+                      ? "Сейчас для этого тура нет свободных дат. Посмотрите другой тур или загляните позже."
+                      : "No open dates for this trip at the moment. Check another tour or come back soon."}
                   </p>
                 ) : null}
                 {all.map((d) => {
@@ -400,10 +424,10 @@ function BookingFlow() {
                         <CalendarDays className="h-5 w-5 text-primary" />
                         <span>
                           <span className="block font-semibold">
-                            {formatDate(d.departure_date)}
+                            {formatDate(d.departure_date, language)}
                           </span>
                           <span className="block text-xs text-muted-foreground">
-                            Starts {formatTime(d.departure_time)} ·{" "}
+                            {ru ? "Начало" : "Starts"} {formatTime(d.departure_time)} ·{" "}
                             <span
                               className={
                                 state === "few"
@@ -413,7 +437,7 @@ function BookingFlow() {
                                     : ""
                               }
                             >
-                              {availabilityLabel(d)}
+                              {availabilityLabel(d, language)}
                             </span>
                           </span>
                         </span>
@@ -428,15 +452,17 @@ function BookingFlow() {
 
           {step === 1 && departure ? (
             <div>
-              <h2 className="font-display text-3xl">How many guests?</h2>
+              <h2 className="font-display text-3xl">
+                {ru ? "Сколько гостей?" : "How many guests?"}
+              </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {formatDate(departure.departure_date)} at {formatTime(departure.departure_time)} ·{" "}
-                {availabilityLabel(departure)}
+                {formatDate(departure.departure_date, language)} {ru ? "в" : "at"}{" "}
+                {formatTime(departure.departure_time)} · {availabilityLabel(departure, language)}
               </p>
               <div className="mt-6 flex items-center gap-6">
                 <button
                   type="button"
-                  aria-label="Fewer guests"
+                  aria-label={ru ? "Меньше гостей" : "Fewer guests"}
                   disabled={guests <= 1}
                   onClick={() => setGuests((g) => Math.max(1, g - 1))}
                   className="flex h-12 w-12 items-center justify-center rounded-full border border-border disabled:opacity-40"
@@ -448,7 +474,7 @@ function BookingFlow() {
                 </span>
                 <button
                   type="button"
-                  aria-label="More guests"
+                  aria-label={ru ? "Больше гостей" : "More guests"}
                   disabled={guests >= maxGuests}
                   onClick={() => setGuests((g) => Math.min(maxGuests, g + 1))}
                   className="flex h-12 w-12 items-center justify-center rounded-full border border-border disabled:opacity-40"
@@ -458,7 +484,9 @@ function BookingFlow() {
               </div>
               {guests >= maxGuests ? (
                 <p className="mt-3 text-xs text-muted-foreground">
-                  That&apos;s the most we can take on this date.
+                  {ru
+                    ? "Это максимальное число гостей для этой даты."
+                    : "That's the most we can take on this date."}
                 </p>
               ) : null}
               {formErrors.guests ? (
@@ -467,12 +495,14 @@ function BookingFlow() {
               <div className="mt-6 rounded-lg border border-border p-4 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {guests} {guests === 1 ? "guest" : "guests"} × ${tour.price_per_person}
+                    {guests}{" "}
+                    {ru ? (guests === 1 ? "гость" : "гостей") : guests === 1 ? "guest" : "guests"} ×
+                    ${tour.price_per_person}
                   </span>
                   <span>${total}</span>
                 </div>
                 <div className="mt-2 flex items-baseline justify-between border-t border-border pt-2">
-                  <span className="font-bold">Total</span>
+                  <span className="font-bold">{ru ? "Итого" : "Total"}</span>
                   <span className="font-display text-3xl">${total}</span>
                 </div>
               </div>
@@ -488,12 +518,12 @@ function BookingFlow() {
                 goNext();
               }}
             >
-              <h2 className="font-display text-3xl">Your details</h2>
+              <h2 className="font-display text-3xl">{ru ? "Ваши контакты" : "Your details"}</h2>
               <div
                 className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
                 aria-hidden="true"
               >
-                <Label htmlFor="website">Website</Label>
+                <Label htmlFor="website">{ru ? "Сайт" : "Website"}</Label>
                 <Input
                   id="website"
                   value={website}
@@ -504,7 +534,7 @@ function BookingFlow() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="name">Full name</Label>
+                  <Label htmlFor="name">{ru ? "Полное имя" : "Full name"}</Label>
                   <Input {...inputProps("name")} autoComplete="name" placeholder="Marta Kowalski" />
                   <FieldError id="name-error" message={errors.name} />
                 </div>
@@ -521,7 +551,7 @@ function BookingFlow() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">{ru ? "Телефон" : "Phone"}</Label>
                   <Input
                     {...inputProps("phone")}
                     type="tel"
@@ -531,20 +561,30 @@ function BookingFlow() {
                   <FieldError id="phone-error" message={errors.phone} />
                 </div>
                 <div>
-                  <Label htmlFor="whatsapp">WhatsApp (optional)</Label>
+                  <Label htmlFor="whatsapp">WhatsApp ({ru ? "необязательно" : "optional"})</Label>
                   <Input
                     {...inputProps("whatsapp")}
                     type="tel"
-                    placeholder="If different from your phone"
+                    placeholder={
+                      ru ? "Если отличается от телефона" : "If different from your phone"
+                    }
                   />
                   <FieldError id="whatsapp-error" message={errors.whatsapp} />
                 </div>
               </div>
               <div>
-                <Label htmlFor="notes">Anything we should know? (optional)</Label>
+                <Label htmlFor="notes">
+                  {ru
+                    ? "Что нам стоит знать? (необязательно)"
+                    : "Anything we should know? (optional)"}
+                </Label>
                 <Textarea
                   {...inputProps("notes")}
-                  placeholder="Dietary needs, pickup address, experience level…"
+                  placeholder={
+                    ru
+                      ? "Питание, адрес, уровень опыта…"
+                      : "Dietary needs, pickup address, experience level…"
+                  }
                 />
                 <div className="flex justify-between">
                   <FieldError id="notes-error" message={errors.notes} />
@@ -559,20 +599,25 @@ function BookingFlow() {
 
           {step === 3 && departure ? (
             <div>
-              <h2 className="font-display text-3xl">Review your booking</h2>
+              <h2 className="font-display text-3xl">
+                {ru ? "Проверьте бронирование" : "Review your booking"}
+              </h2>
               <dl className="mt-5 divide-y divide-border text-sm">
                 {[
-                  ["Tour", tour.name],
-                  ["Date", formatDate(departure.departure_date)],
-                  ["Start time", `${formatTime(departure.departure_time)} (Bishkek time)`],
-                  ["Guests", String(guests)],
-                  ["Meeting point", tour.meeting_point],
-                  ["Name", name],
+                  [ru ? "Тур" : "Tour", translatedTour.name],
+                  [ru ? "Дата" : "Date", formatDate(departure.departure_date, language)],
+                  [
+                    ru ? "Время начала" : "Start time",
+                    `${formatTime(departure.departure_time)} (${ru ? "по Бишкеку" : "Bishkek time"})`,
+                  ],
+                  [ru ? "Гости" : "Guests", String(guests)],
+                  [ru ? "Точка встречи" : "Meeting point", translatedTour.meeting_point],
+                  [ru ? "Имя" : "Name", name],
                   ["Email", email],
-                  ["Phone", phone],
+                  [ru ? "Телефон" : "Phone", phone],
                   ...(whatsapp ? ([["WhatsApp", whatsapp]] as [string, string][]) : []),
-                  ...(notes ? ([["Notes", notes]] as [string, string][]) : []),
-                  ["Price per person", `$${tour.price_per_person}`],
+                  ...(notes ? ([[ru ? "Примечание" : "Notes", notes]] as [string, string][]) : []),
+                  [ru ? "Цена за человека" : "Price per person", `$${tour.price_per_person}`],
                 ].map(([label, value]) => (
                   <div key={label} className="flex justify-between gap-6 py-3">
                     <dt className="text-muted-foreground">{label}</dt>
@@ -583,7 +628,7 @@ function BookingFlow() {
               <div className="mt-2 rounded-lg bg-primary/10 p-4">
                 <div className="flex items-baseline justify-between">
                   <span className="font-bold">
-                    Total{" "}
+                    {ru ? "Итого" : "Total"}{" "}
                     <span className="font-normal text-muted-foreground">
                       ({guests} × ${tour.price_per_person})
                     </span>
@@ -591,7 +636,9 @@ function BookingFlow() {
                   <span className="font-display text-5xl">${total}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Paid on the day — no payment is taken now.
+                  {ru
+                    ? "Оплата в день поездки — сейчас платить не нужно."
+                    : "Paid on the day — no payment is taken now."}
                 </p>
               </div>
             </div>
@@ -604,7 +651,7 @@ function BookingFlow() {
               disabled={step === 0 || submitting}
               className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold disabled:opacity-40"
             >
-              Back
+              {ru ? "Назад" : "Back"}
             </button>
 
             {step < 3 ? (
@@ -614,7 +661,7 @@ function BookingFlow() {
                 disabled={nextDisabled}
                 className="rounded-md bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-40"
               >
-                Continue
+                {ru ? "Продолжить" : "Continue"}
               </button>
             ) : (
               <button
@@ -624,7 +671,13 @@ function BookingFlow() {
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-60"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                {submitting ? "Confirming…" : `Confirm booking · $${total}`}
+                {submitting
+                  ? ru
+                    ? "Подтверждаем…"
+                    : "Confirming…"
+                  : ru
+                    ? `Подтвердить бронирование · $${total}`
+                    : `Confirm booking · $${total}`}
               </button>
             )}
           </div>
@@ -633,24 +686,31 @@ function BookingFlow() {
         {/* Summary */}
         <aside className="h-fit lg:sticky lg:top-24">
           <div className="surface-panel p-5 text-sm">
-            <p className="text-eyebrow">Your trip</p>
-            <p className="mt-2 font-display text-2xl">{tour.name}</p>
+            <p className="text-eyebrow">{ru ? "Ваша поездка" : "Your trip"}</p>
+            <p className="mt-2 font-display text-2xl">{translatedTour.name}</p>
             <ul className="mt-3 space-y-2 text-muted-foreground">
               <li className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-primary" />
-                {departure ? formatDate(departure.departure_date) : "Pick a date"}
+                {departure
+                  ? formatDate(departure.departure_date, language)
+                  : ru
+                    ? "Выберите дату"
+                    : "Pick a date"}
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-primary" />
-                {departure ? `${formatTime(departure.departure_time)} start` : "—"}
+                {departure
+                  ? `${ru ? "Начало" : "Start"}: ${formatTime(departure.departure_time)}`
+                  : "—"}
               </li>
               <li className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" />
-                {guests} {guests === 1 ? "guest" : "guests"}
+                {guests}{" "}
+                {ru ? (guests === 1 ? "гость" : "гостей") : guests === 1 ? "guest" : "guests"}
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                {tour.meeting_point}
+                {translatedTour.meeting_point}
               </li>
             </ul>
             <div className="mt-4 space-y-1 border-t border-border pt-3">
@@ -661,7 +721,7 @@ function BookingFlow() {
                 <span>${total}</span>
               </div>
               <div className="flex items-baseline justify-between">
-                <span className="font-bold">Total</span>
+                <span className="font-bold">{ru ? "Итого" : "Total"}</span>
                 <span className="font-display text-3xl">${total}</span>
               </div>
             </div>

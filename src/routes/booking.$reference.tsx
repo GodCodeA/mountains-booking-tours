@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
 import { useI18n } from "@/lib/i18n";
+import { localizeMeetingPoint, localizeTourName } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/booking/$reference")({
   head: () => ({
@@ -28,7 +29,8 @@ function Confirmation() {
   const { reference } = Route.useParams();
   const { data: booking, isLoading, isError } = useQuery(bookingQuery(reference));
   const [copied, setCopied] = useState(false);
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const ru = language === "ru";
 
   async function copyConfirmationLink() {
     try {
@@ -52,15 +54,19 @@ function Confirmation() {
   if (isError || !booking) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="font-display text-5xl">Booking not found</h1>
+        <h1 className="font-display text-5xl">
+          {ru ? "Бронирование не найдено" : "Booking not found"}
+        </h1>
         <p className="mt-3 text-muted-foreground">
-          We couldn&apos;t find that booking. Please check your confirmation link.
+          {ru
+            ? "Мы не нашли это бронирование. Проверьте ссылку в подтверждении."
+            : "We couldn't find that booking. Please check your confirmation link."}
         </p>
         <Link
           to="/tours"
           className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
         >
-          Browse tours
+          {ru ? "Смотреть туры" : "Browse tours"}
         </Link>
       </div>
     );
@@ -71,8 +77,10 @@ function Confirmation() {
       <div className="flex items-center gap-3">
         <CheckCircle2 className="h-9 w-9 text-success" />
         <div>
-          <p className="text-eyebrow">You&apos;re booked</p>
-          <h1 className="font-display text-5xl">See you in the mountains</h1>
+          <p className="text-eyebrow">{ru ? "Вы забронированы" : "You're booked"}</p>
+          <h1 className="font-display text-5xl">
+            {ru ? "До встречи в горах" : "See you in the mountains"}
+          </h1>
         </div>
       </div>
 
@@ -83,7 +91,7 @@ function Confirmation() {
       <div className="surface-panel mt-8 overflow-hidden">
         <img
           src={tourImage(booking.image_key)}
-          alt={booking.tour_name}
+          alt={localizeTourName(booking.tour_name, language)}
           loading="lazy"
           width={1280}
           height={864}
@@ -91,7 +99,9 @@ function Confirmation() {
         />
         <div className="space-y-4 p-6">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-3xl">{booking.tour_name}</h2>
+            <h2 className="font-display text-3xl">
+              {localizeTourName(booking.tour_name, language)}
+            </h2>
             <span className="rounded-md bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
               {t("reference")} {displayBookingReference(booking.reference)}
             </span>
@@ -99,14 +109,15 @@ function Confirmation() {
           <div className="grid gap-3 text-sm sm:grid-cols-2">
             <span className="inline-flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
-              {formatDate(booking.departure_date)}
+              {formatDate(booking.departure_date, language)}
             </span>
             <span className="inline-flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" /> {booking.guests}{" "}
               {booking.guests === 1 ? t("guest") : t("guests")}
             </span>
             <span className="inline-flex items-center gap-2 sm:col-span-2">
-              <MapPin className="h-4 w-4 text-primary" /> {booking.meeting_point}
+              <MapPin className="h-4 w-4 text-primary" />{" "}
+              {localizeMeetingPoint(booking.meeting_point, language)}
             </span>
           </div>
           <div className="flex items-baseline justify-between border-t border-border pt-4">

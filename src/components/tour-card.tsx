@@ -3,6 +3,8 @@ import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 
 import { formatDate, spotsLeft, type Departure, type Tour } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
+import { localizeTour } from "@/lib/tour-localization";
+import { useI18n } from "@/lib/i18n";
 
 export function TourCard({
   tour,
@@ -13,6 +15,8 @@ export function TourCard({
   nextDeparture?: Departure | null;
   showAvailability?: boolean;
 }) {
+  const { language, t } = useI18n();
+  tour = localizeTour(tour, language);
   const left = nextDeparture ? spotsLeft(nextDeparture) : 0;
   return (
     <Link
@@ -43,10 +47,10 @@ export function TourCard({
           </span>
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5" />
-            {tour.duration_days} {tour.duration_days === 1 ? "day" : "days"}
+            {tour.duration_days} {tour.duration_days === 1 ? t("day") : t("days")}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5" /> max {tour.max_group_size}
+            <Users className="h-3.5 w-3.5" /> {t("max")} {tour.max_group_size}
           </span>
         </div>
         {showAvailability ? (
@@ -54,25 +58,28 @@ export function TourCard({
             <CalendarDays className="h-3.5 w-3.5 text-primary" />
             {nextDeparture ? (
               <span className="text-foreground">
-                Next:{" "}
-                <span className="font-semibold">{formatDate(nextDeparture.departure_date)}</span>
+                {t("next")}:{" "}
+                <span className="font-semibold">
+                  {formatDate(nextDeparture.departure_date, language)}
+                </span>
                 {left <= 3 ? (
                   <span className="ml-2 font-semibold text-accent">
-                    {left} {left === 1 ? "spot" : "spots"} left
+                    {left} {left === 1 ? t("spot") : t("spots")} {t("left")}
                   </span>
                 ) : null}
               </span>
             ) : (
-              <span className="text-muted-foreground">No open dates right now</span>
+              <span className="text-muted-foreground">{t("noOpenDates")}</span>
             )}
           </div>
         ) : null}
         <div className="flex items-baseline justify-between border-t border-border pt-3">
           <span className="text-sm text-muted-foreground">
-            from <span className="text-lg font-bold text-foreground">${tour.price_per_person}</span>{" "}
-            / person
+            {t("from")}{" "}
+            <span className="text-lg font-bold text-foreground">${tour.price_per_person}</span> /{" "}
+            {t("perPerson")}
           </span>
-          <span className="text-sm font-bold text-primary">View trip →</span>
+          <span className="text-sm font-bold text-primary">{t("viewTrip")} →</span>
         </div>
       </div>
     </Link>

@@ -24,6 +24,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { spotsLeft, toursQuery, upcomingDeparturesQuery, type Departure } from "@/lib/bookings";
+import { useI18n } from "@/lib/i18n";
+import { localizeDifficulty, localizeRegion, localizeTour } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/tours/")({
   head: () => ({
@@ -47,18 +49,8 @@ export const Route = createFileRoute("/tours/")({
 });
 
 const DIFFICULTIES = ["Easy", "Moderate", "Challenging"];
-const DURATIONS = [
-  { value: "all", label: "Any length" },
-  { value: "1", label: "Day trip" },
-  { value: "2-3", label: "2–3 days" },
-  { value: "4+", label: "4+ days" },
-];
-const SORTS = [
-  { value: "recommended", label: "Recommended" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "duration", label: "Duration: shortest first" },
-];
+const DURATIONS = ["all", "1", "2-3", "4+"] as const;
+const SORTS = ["recommended", "price-asc", "price-desc", "duration"] as const;
 
 type Filters = {
   difficulty: string;
@@ -110,9 +102,11 @@ function FilterGroup({ label, children }: { label: string; children: React.React
 }
 
 function ToursPage() {
+  const { language } = useI18n();
+  const ru = language === "ru";
   const toursQ = useQuery(toursQuery);
   const depsQ = useQuery(upcomingDeparturesQuery);
-  const tours = toursQ.data ?? [];
+  const tours = useMemo(() => toursQ.data ?? [], [toursQ.data]);
 
   const priceBounds = useMemo<[number, number]>(() => {
     if (!tours.length) return [0, 0];
@@ -157,13 +151,29 @@ function ToursPage() {
 
   const searched = useMemo(() => {
     if (!debounced) return tours;
-    return tours.filter((t) =>
-      [t.name, t.summary, t.description, t.region, t.difficulty, ...t.highlights]
+    return tours.filter((original) => {
+      const t = localizeTour(original, language);
+      return [t.name, t.summary, t.description, t.region, t.difficulty, ...t.highlights]
         .join(" ")
         .toLowerCase()
-        .includes(debounced),
-    );
-  }, [tours, debounced]);
+        .includes(debounced);
+    });
+  }, [tours, debounced, language]);
+
+  const durationLabel = (value: (typeof DURATIONS)[number]) =>
+    ({
+      all: ru ? "Любая длительность" : "Any length",
+      "1": ru ? "1 день" : "Day trip",
+      "2-3": ru ? "2–3 дня" : "2–3 days",
+      "4+": ru ? "4+ дней" : "4+ days",
+    })[value];
+  const sortLabel = (value: (typeof SORTS)[number]) =>
+    ({
+      recommended: ru ? "Рекомендуемые" : "Recommended",
+      "price-asc": ru ? "Цена: по возрастанию" : "Price: low to high",
+      "price-desc": ru ? "Цена: по убыванию" : "Price: high to low",
+      duration: ru ? "Сначала короткие" : "Duration: shortest first",
+    })[value];
 
   const visible = useMemo(() => {
     const list = searched.filter(
@@ -199,41 +209,38 @@ function ToursPage() {
 
   const filterPanel = (
     <div className="space-y-7">
-      <FilterGroup label="Difficulty">
+      <FilterGroup label={ru ? "Сложность" : "Difficulty"}>
         <Pill active={filters.difficulty === "all"} onClick={() => set("difficulty", "all")}>
-          All
+          {ru ? "Все" : "All"}
         </Pill>
         {DIFFICULTIES.map((d) => (
           <Pill key={d} active={filters.difficulty === d} onClick={() => set("difficulty", d)}>
-            {d}
+            {localizeDifficulty(d, language)}
           </Pill>
         ))}
       </FilterGroup>
-      <FilterGroup label="Duration">
+      <FilterGroup label={ru ? "Продолжительность" : "Duration"}>
         {DURATIONS.map((d) => (
-          <Pill
-            key={d.value}
-            active={filters.duration === d.value}
-            onClick={() => set("duration", d.value)}
-          >
-            {d.label}
+          <Pill key={d} active={filters.duration === d} onClick={() => set("duration", d)}>
+            {durationLabel(d)}
           </Pill>
         ))}
       </FilterGroup>
-      <FilterGroup label="Region">
+      <FilterGroup label={ru ? "Регион" : "Region"}>
         <Pill active={filters.category === "all"} onClick={() => set("category", "all")}>
-          All regions
+          {ru ? "Все регионы" : "All regions"}
         </Pill>
         {categories.map((c) => (
           <Pill key={c} active={filters.category === c} onClick={() => set("category", c)}>
-            {c}
+            {localizeRegion(c, language)}
           </Pill>
         ))}
       </FilterGroup>
       {priceBounds[1] > priceBounds[0] ? (
         <div>
           <p className="text-eyebrow mb-3">
-            Price per person: ${filters.price[0]} – ${filters.price[1]}
+            {ru ? "Цена за человека" : "Price per person"}: ${filters.price[0]} – $
+            {filters.price[1]}
           </p>
           <Slider
             min={priceBounds[0]}
@@ -241,16 +248,16 @@ function ToursPage() {
             step={5}
             value={filters.price}
             onValueChange={(v) => set("price", [v[0], v[1]] as [number, number])}
-            aria-label="Price range"
+            aria-label={ru ? "Диапазон цен" : "Price range"}
           />
         </div>
       ) : null}
-      <FilterGroup label="Availability">
+      <FilterGroup label={ru ? "Доступность" : "Availability"}>
         <Pill active={!filters.availableOnly} onClick={() => set("availableOnly", false)}>
-          All tours
+          {ru ? "Все туры" : "All tours"}
         </Pill>
         <Pill active={filters.availableOnly} onClick={() => set("availableOnly", true)}>
-          Has open dates
+          {ru ? "Есть свободные даты" : "Has open dates"}
         </Pill>
       </FilterGroup>
     </div>
@@ -261,11 +268,14 @@ function ToursPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <p className="text-eyebrow">Six trips, one guide</p>
-      <h1 className="mt-3 font-display text-6xl sm:text-7xl">Choose your mountains</h1>
+      <p className="text-eyebrow">{ru ? "Шесть поездок, одна команда" : "Six trips, one guide"}</p>
+      <h1 className="mt-3 font-display text-6xl sm:text-7xl">
+        {ru ? "Выберите свои горы" : "Choose your mountains"}
+      </h1>
       <p className="mt-4 max-w-xl text-muted-foreground">
-        Prices are per person and include transport from the meeting point, guiding and the meals
-        listed on each trip.
+        {ru
+          ? "Цены указаны за человека и включают транспорт от места встречи, услуги гида и питание, указанное в описании тура."
+          : "Prices are per person and include transport from the meeting point, guiding and the meals listed on each trip."}
       </p>
 
       {/* Search + sort + mobile filter trigger */}
@@ -275,15 +285,15 @@ function ToursPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search tours, regions, lakes…"
-            aria-label="Search tours"
+            placeholder={ru ? "Поиск туров, регионов, озёр…" : "Search tours, regions, lakes…"}
+            aria-label={ru ? "Поиск туров" : "Search tours"}
             className="h-11 pl-9 pr-9"
           />
           {query ? (
             <button
               type="button"
               onClick={() => setQuery("")}
-              aria-label="Clear search"
+              aria-label={ru ? "Очистить поиск" : "Clear search"}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -292,13 +302,16 @@ function ToursPage() {
         </div>
         <div className="flex gap-3">
           <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="h-11 flex-1 sm:w-56" aria-label="Sort tours">
+            <SelectTrigger
+              className="h-11 flex-1 sm:w-56"
+              aria-label={ru ? "Сортировка туров" : "Sort tours"}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {SORTS.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
+                <SelectItem key={s} value={s}>
+                  {sortLabel(s)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -306,7 +319,7 @@ function ToursPage() {
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" className="h-11 lg:hidden">
-                <SlidersHorizontal className="h-4 w-4" /> Filters
+                <SlidersHorizontal className="h-4 w-4" /> {ru ? "Фильтры" : "Filters"}
                 {activeCount ? (
                   <span className="ml-1 rounded-full bg-primary px-2 text-xs text-primary-foreground">
                     {activeCount}
@@ -316,15 +329,19 @@ function ToursPage() {
             </SheetTrigger>
             <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
               <SheetHeader>
-                <SheetTitle className="font-display text-3xl">Filter tours</SheetTitle>
+                <SheetTitle className="font-display text-3xl">
+                  {ru ? "Фильтры туров" : "Filter tours"}
+                </SheetTitle>
               </SheetHeader>
               <div className="px-4 py-2">{filterPanel}</div>
               <SheetFooter className="flex-row gap-3">
                 <Button variant="outline" className="flex-1" onClick={resetAll}>
-                  Reset
+                  {ru ? "Сбросить" : "Reset"}
                 </Button>
                 <Button className="flex-1" onClick={() => setSheetOpen(false)}>
-                  Show {visible.length} {visible.length === 1 ? "tour" : "tours"}
+                  {ru
+                    ? `Показать: ${visible.length}`
+                    : `Show ${visible.length} ${visible.length === 1 ? "tour" : "tours"}`}
                 </Button>
               </SheetFooter>
             </SheetContent>
@@ -338,7 +355,7 @@ function ToursPage() {
             {filterPanel}
             {activeCount ? (
               <Button variant="ghost" size="sm" className="mt-6" onClick={resetAll}>
-                Reset filters
+                {ru ? "Сбросить фильтры" : "Reset filters"}
               </Button>
             ) : null}
           </div>
@@ -347,14 +364,17 @@ function ToursPage() {
         <div>
           {!isLoading && !toursQ.isError ? (
             <p className="mb-4 text-sm text-muted-foreground">
-              {visible.length} of {tours.length} tours
+              {ru
+                ? `Показано: ${visible.length} из ${tours.length}`
+                : `${visible.length} of ${tours.length} tours`}
             </p>
           ) : null}
 
           {noDatesAnywhere ? (
             <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-              No departure dates are open right now. New dates are added regularly — check back
-              soon.
+              {ru
+                ? "Сейчас нет свободных дат. Мы регулярно добавляем новые — загляните позже."
+                : "No departure dates are open right now. New dates are added regularly — check back soon."}
             </div>
           ) : null}
 
@@ -376,7 +396,9 @@ function ToursPage() {
 
           {toursQ.isError ? (
             <p className="mt-8 text-sm text-destructive">
-              We couldn&apos;t load the tours. Please refresh the page and try again.
+              {ru
+                ? "Не удалось загрузить туры. Обновите страницу и попробуйте снова."
+                : "We couldn't load the tours. Please refresh the page and try again."}
             </p>
           ) : null}
 
@@ -385,16 +407,24 @@ function ToursPage() {
               <Mountain className="h-10 w-10 text-primary" />
               <h2 className="mt-4 font-display text-3xl">
                 {debounced && searched.length === 0
-                  ? `Nothing found for "${query.trim()}"`
-                  : "No tours match"}
+                  ? ru
+                    ? `Ничего не найдено: «${query.trim()}»`
+                    : `Nothing found for "${query.trim()}"`
+                  : ru
+                    ? "Нет подходящих туров"
+                    : "No tours match"}
               </h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 {debounced && searched.length === 0
-                  ? "Try a tour name, a region like Issyk-Kul, or a word like lake or yurt."
-                  : "Try widening the price range or removing a filter."}
+                  ? ru
+                    ? "Попробуйте название тура, регион, например Иссык-Куль, или слово «озеро» либо «юрта»."
+                    : "Try a tour name, a region like Issyk-Kul, or a word like lake or yurt."
+                  : ru
+                    ? "Расширьте диапазон цен или уберите один из фильтров."
+                    : "Try widening the price range or removing a filter."}
               </p>
               <Button variant="outline" className="mt-6" onClick={resetAll}>
-                Clear search & filters
+                {ru ? "Очистить поиск и фильтры" : "Clear search & filters"}
               </Button>
             </div>
           ) : null}

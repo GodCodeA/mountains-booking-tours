@@ -36,10 +36,34 @@ export type BookingFormValues = z.infer<typeof bookingFormSchema>;
 
 export type BookingField = "name" | "email" | "phone" | "whatsapp" | "notes";
 
+const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
+  name: "Укажите полное имя (минимум 2 символа).",
+  email: "Укажите корректный email.",
+  phone: "Укажите корректный номер телефона, например +996 555 000 000.",
+  whatsapp: "Укажите корректный номер WhatsApp или оставьте поле пустым.",
+  notes: "Примечание должно содержать не более 500 символов.",
+  guests: "Укажите корректное количество гостей.",
+  departureId: "Выберите дату.",
+};
+
+function localizedError(
+  field: BookingField | "guests" | "departureId",
+  message: string,
+  language: "en" | "ru",
+) {
+  return language === "ru" ? russianErrors[field] : message;
+}
+
 /** Validate a single contact field; returns an error message or null. */
-export function validateField(field: BookingField, value: string): string | null {
+export function validateField(
+  field: BookingField,
+  value: string,
+  language: "en" | "ru" = "en",
+): string | null {
   const result = bookingFormSchema.shape[field].safeParse(value);
-  return result.success ? null : (result.error.issues[0]?.message ?? "Invalid value.");
+  return result.success
+    ? null
+    : localizedError(field, result.error.issues[0]?.message ?? "Invalid value.", language);
 }
 
 /** Validate the whole form, including capacity rules. Returns a map of field → message. */
@@ -52,6 +76,7 @@ export function validateBookingForm(values: {
   guests: number;
   departureId: string | undefined;
   maxGuests: number;
+  language?: "en" | "ru";
 }): Partial<Record<BookingField | "guests" | "departureId", string>> {
   const errors: Partial<Record<BookingField | "guests" | "departureId", string>> = {};
   const parsed = bookingFormSchema.safeParse({
@@ -66,11 +91,14 @@ export function validateBookingForm(values: {
   if (!parsed.success) {
     for (const issue of parsed.error.issues) {
       const key = issue.path[0] as BookingField | "guests" | "departureId";
-      if (!errors[key]) errors[key] = issue.message;
+      if (!errors[key]) errors[key] = localizedError(key, issue.message, values.language ?? "en");
     }
   }
   if (!errors.guests && values.guests > values.maxGuests) {
-    errors.guests = `Only ${values.maxGuests} spot${values.maxGuests === 1 ? "" : "s"} left on this date.`;
+    errors.guests =
+      values.language === "ru"
+        ? `На эту дату осталось только ${values.maxGuests} ${values.maxGuests === 1 ? "место" : "места"}.`
+        : `Only ${values.maxGuests} spot${values.maxGuests === 1 ? "" : "s"} left on this date.`;
   }
   return errors;
 }
