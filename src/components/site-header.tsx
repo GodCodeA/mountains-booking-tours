@@ -30,7 +30,7 @@ export function SiteHeader() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          {code.toUpperCase()}
+          {code === "ru" ? "РУ" : "EN"}
         </button>
       ))}
     </div>
