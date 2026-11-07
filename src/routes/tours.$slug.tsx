@@ -189,7 +189,9 @@ function TourBody({
           <p className="text-eyebrow">
             {tour.region} · {tour.difficulty}
           </p>
-          <h1 className="mt-3 max-w-3xl font-display text-6xl sm:text-8xl">{tour.name}</h1>
+          <h1 className="mt-3 max-w-3xl font-display text-5xl leading-[0.96] sm:text-8xl sm:leading-none">
+            {tour.name}
+          </h1>
           <p className="mt-4 max-w-xl text-muted-foreground">{tour.summary}</p>
           <p className="mt-5 text-sm">
             {ru ? "От" : "From"}{" "}
