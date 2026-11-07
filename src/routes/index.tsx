@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toursQuery, type Tour } from "@/lib/bookings";
 import { faqs, guides, reviews } from "@/lib/site-content";
 import { tourImage } from "@/lib/tour-images";
+import { useI18n } from "@/lib/i18n";
 import {
   Accordion,
   AccordionContent,
@@ -105,6 +106,8 @@ function SectionHeading({
 }
 
 function Home() {
+  const { language } = useI18n();
+  const ru = language === "ru";
   const { data: tours, isLoading, isError } = useQuery(toursQuery);
   const recommended = tours ? pickRecommended(tours) : [];
 
@@ -120,26 +123,31 @@ function Home() {
         />
         <div className="absolute inset-0 -z-10 image-veil" />
         <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-44">
-          <p className="text-eyebrow">Guided mountain tours from Bishkek</p>
+          <p className="text-eyebrow">
+            {ru ? "Горные туры с гидом из Бишкека" : "Guided mountain tours from Bishkek"}
+          </p>
           <h1 className="mt-4 max-w-3xl font-display text-6xl sm:text-8xl">
-            Walk the Tian Shan with people who call it home.
+            {ru
+              ? "Откройте Тянь-Шань с теми, кто называет его домом."
+              : "Walk the Tian Shan with people who call it home."}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Small-group day hikes, yurt nights and multi-day treks across Kyrgyzstan. See real
-            dates, book in minutes and pay on the day.
+            {ru
+              ? "Походы одного дня, ночёвки в юртах и многодневные треки по Кыргызстану. Выберите дату, забронируйте за несколько минут и оплатите в день поездки."
+              : "Small-group day hikes, yurt nights and multi-day treks across Kyrgyzstan. See real dates, book in minutes and pay on the day."}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/tours"
               className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] transition-opacity hover:opacity-90"
             >
-              Explore tours
+              {ru ? "Выбрать тур" : "Explore tours"}
             </Link>
             <a
               href="#featured"
               className="rounded-md border border-border bg-background/60 px-6 py-3 text-sm font-bold backdrop-blur transition-colors hover:bg-secondary"
             >
-              Check availability
+              {ru ? "Проверить даты" : "Check availability"}
             </a>
           </div>
         </div>
@@ -147,11 +155,16 @@ function Home() {
 
       <section id="featured" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading eyebrow="Featured tours" title="Where we go">
-            Pick a trip to see open dates and remaining spots.
+          <SectionHeading
+            eyebrow={ru ? "Популярные туры" : "Featured tours"}
+            title={ru ? "Куда мы едем" : "Where we go"}
+          >
+            {ru
+              ? "Выберите поездку, чтобы увидеть свободные даты и места."
+              : "Pick a trip to see open dates and remaining spots."}
           </SectionHeading>
           <Link to="/tours" className="text-sm font-bold text-primary hover:underline">
-            See all {tours?.length ?? ""} tours →
+            {ru ? `Все туры (${tours?.length ?? ""}) →` : `See all ${tours?.length ?? ""} tours →`}
           </Link>
         </div>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -173,7 +186,10 @@ function Home() {
 
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <SectionHeading eyebrow="Why Ala-Too Adventures" title="Simple, honest mountain trips" />
+          <SectionHeading
+            eyebrow={ru ? "Почему Ala-Too Adventures" : "Why Ala-Too Adventures"}
+            title={ru ? "Простые и честные поездки в горы" : "Simple, honest mountain trips"}
+          />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {benefits.map((b) => (
               <div key={b.title} className="surface-panel p-6">
@@ -187,7 +203,10 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="How it works" title="Booked in three steps" />
+        <SectionHeading
+          eyebrow={ru ? "Как это работает" : "How it works"}
+          title={ru ? "Бронирование за три шага" : "Booked in three steps"}
+        />
         <ol className="mt-10 grid gap-6 sm:grid-cols-3">
           {howItWorks.map((s) => (
             <li key={s.n} className="border-t-2 border-primary pt-5">
@@ -201,7 +220,10 @@ function Home() {
 
       {recommended.length > 0 ? (
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-          <SectionHeading eyebrow="Recommended" title="Not sure where to start?" />
+          <SectionHeading
+            eyebrow={ru ? "Рекомендации" : "Recommended"}
+            title={ru ? "Не знаете, с чего начать?" : "Not sure where to start?"}
+          />
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {recommended.map(({ label, tour }) => (
               <Link
@@ -217,11 +239,26 @@ function Home() {
                   className="h-24 w-24 shrink-0 rounded-lg object-cover"
                 />
                 <div>
-                  <p className="text-eyebrow">{label}</p>
+                  <p className="text-eyebrow">
+                    {ru
+                      ? ({
+                          "Short on time": "Мало времени",
+                          "A weekend away": "На выходные",
+                          "The big adventure": "Большое приключение",
+                        }[label] ?? label)
+                      : label}
+                  </p>
                   <p className="mt-1 font-bold group-hover:text-primary">{tour.name}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {tour.duration_days} {tour.duration_days === 1 ? "day" : "days"} ·{" "}
-                    {tour.difficulty} · from ${tour.price_per_person}
+                    {tour.duration_days}{" "}
+                    {ru
+                      ? tour.duration_days === 1
+                        ? "день"
+                        : "дня/дней"
+                      : tour.duration_days === 1
+                        ? "day"
+                        : "days"}{" "}
+                    · {tour.difficulty} · {ru ? "от" : "from"} ${tour.price_per_person}
                   </p>
                 </div>
               </Link>
@@ -232,8 +269,13 @@ function Home() {
 
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <SectionHeading eyebrow="The team" title="Your guides">
-            A small local team — you&apos;ll know who is leading your trip before you arrive.
+          <SectionHeading
+            eyebrow={ru ? "Команда" : "The team"}
+            title={ru ? "Ваши гиды" : "Your guides"}
+          >
+            {ru
+              ? "Небольшая местная команда: вы заранее знаете, кто ведёт вашу поездку."
+              : "A small local team — you&apos;ll know who is leading your trip before you arrive."}
           </SectionHeading>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {guides.map((g) => (
@@ -253,8 +295,13 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="Guest stories" title="What travellers say">
-          Sample reviews for this demo — not verified customers.
+        <SectionHeading
+          eyebrow={ru ? "Отзывы гостей" : "Guest stories"}
+          title={ru ? "Что говорят путешественники" : "What travellers say"}
+        >
+          {ru
+            ? "Примеры отзывов для демо-версии, это не подтверждённые клиенты."
+            : "Sample reviews for this demo — not verified customers."}
         </SectionHeading>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {reviews.map((r) => (
@@ -269,7 +316,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
-        <SectionHeading eyebrow="FAQ" title="Good to know" />
+        <SectionHeading eyebrow="FAQ" title={ru ? "Полезно знать" : "Good to know"} />
         <Accordion type="single" collapsible className="mt-6">
           {faqs.map((f) => (
             <AccordionItem key={f.q} value={f.q}>
@@ -285,9 +332,13 @@ function Home() {
           <div className="flex items-start gap-4">
             <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
             <div>
-              <h2 className="font-display text-5xl">Ready for the mountains?</h2>
+              <h2 className="font-display text-5xl">
+                {ru ? "Готовы к горам?" : "Ready for the mountains?"}
+              </h2>
               <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-                Pick a tour, choose an open date and you&apos;re booked.
+                {ru
+                  ? "Выберите тур, свободную дату — и бронирование готово."
+                  : "Pick a tour, choose an open date and you&apos;re booked."}
               </p>
             </div>
           </div>
@@ -295,7 +346,7 @@ function Home() {
             to="/tours"
             className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
           >
-            Explore tours
+            {ru ? "Выбрать тур" : "Explore tours"}
           </Link>
         </div>
       </section>
