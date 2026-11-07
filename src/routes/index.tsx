@@ -181,13 +181,13 @@ function Home() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/tours"
-              className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] transition-opacity hover:opacity-90"
+              className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] motion-safe:transition-[transform,box-shadow,opacity] motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[0_22px_48px_-18px_oklch(0.775_0.148_68_/_0.55)] motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] hover:opacity-90"
             >
               {ru ? "Выбрать тур" : "Explore tours"}
             </Link>
             <a
               href="#featured"
-              className="rounded-md border border-border bg-background/60 px-6 py-3 text-sm font-bold backdrop-blur transition-colors hover:bg-secondary"
+              className="rounded-md border border-border bg-background/60 px-6 py-3 text-sm font-bold backdrop-blur motion-safe:transition-[transform,background-color,border-color] motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] hover:bg-secondary"
             >
               {ru ? "Проверить даты" : "Check availability"}
             </a>
@@ -274,7 +274,7 @@ function Home() {
                 key={label}
                 to="/tours/$slug"
                 params={{ slug: tour.slug }}
-                className="group flex gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary"
+                className="group flex gap-4 rounded-xl border border-border bg-card p-4 motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-ridge)]"
               >
                 <img
                   src={tourImage(tour.image_key)}
