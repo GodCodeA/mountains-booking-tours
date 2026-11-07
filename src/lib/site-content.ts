@@ -46,10 +46,10 @@ export const reviews: Review[] = [
     isSample: true,
   },
   {
-    name: "Mei",
-    from: "Singapore",
-    tour: "Altyn-Arashan Escape",
-    text: "I liked seeing exactly how many spots were left. The hot springs after the hike were perfect.",
+    name: "Айдана",
+    from: "Казахстан",
+    tour: "Побег в Алтын-Арашан",
+    text: "Очень удобно, что заранее видно, сколько мест осталось. После похода горячие источники были именно тем, что нужно.",
     isSample: true,
   },
 ];
