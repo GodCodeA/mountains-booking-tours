@@ -46,13 +46,13 @@ export function SiteHeader() {
           <span className="font-display text-2xl leading-none">Ala-Too Adventures</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 sm:flex">
+        <nav className="hidden items-center gap-3 sm:flex">
           {nav.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
+              className="rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
               activeOptions={{ exact: item.to === "/" }}
             >
               {t(item.label)}
@@ -81,8 +81,8 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
-              className="py-3 text-sm font-semibold text-muted-foreground"
-              activeProps={{ className: "text-foreground" }}
+              className="w-fit rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
               activeOptions={{ exact: item.to === "/" }}
             >
               {t(item.label)}
