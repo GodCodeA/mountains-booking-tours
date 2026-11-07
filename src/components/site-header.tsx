@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Languages, Mountain, Menu } from "lucide-react";
+import { Mountain, Menu } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 
@@ -18,14 +18,13 @@ export function SiteHeader() {
       className="inline-flex items-center rounded-md border border-border p-0.5"
       aria-label={t("language")}
     >
-      <Languages className="ml-1.5 h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
       {(["en", "ru"] as const).map((code) => (
         <button
           key={code}
           type="button"
           onClick={() => setLanguage(code)}
           aria-pressed={language === code}
-          className={`rounded px-2 py-1 text-xs font-bold transition-colors ${
+          className={`rounded px-2.5 py-1 text-xs font-bold transition-colors ${
             language === code
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:text-foreground"
