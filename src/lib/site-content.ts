@@ -27,6 +27,9 @@ export const guides: Guide[] = [
   },
 ];
 
+// A review is a guest's original statement, not interface copy. Keep the whole
+// record in the author's language: international guests in English and guests
+// from the CIS in Russian. Never translate reviews on a language switch.
 export const reviews: Review[] = [
   {
     name: "Sofia",
@@ -107,30 +110,6 @@ const russianGuides: Guide[] = [
   },
 ];
 
-const russianReviews: Review[] = [
-  {
-    name: "София",
-    from: "Германия",
-    tour: "Приключение на Сон-Куле",
-    text: "Бронирование заняло две минуты, и всё на странице полностью совпало с поездкой. Ночь в юрте стала лучшим моментом путешествия.",
-    isSample: true,
-  },
-  {
-    name: "Даниэль",
-    from: "Великобритания",
-    tour: "Поход в Ала-Арчу",
-    text: "Отличный темп для разной по подготовке группы. Понятное место встречи, трансфер вовремя, а гид знал каждое растение и вершину.",
-    isSample: true,
-  },
-  {
-    name: "Мэй",
-    from: "Сингапур",
-    tour: "Отдых в Алтын-Арашане",
-    text: "Мне понравилось, что сразу видно, сколько мест осталось. Горячие источники после похода были идеальны.",
-    isSample: true,
-  },
-];
-
 const russianFaqs: { q: string; a: string }[] = [
   {
     q: "Как забронировать тур?",
@@ -168,6 +147,6 @@ const russianFaqs: { q: string; a: string }[] = [
 
 export function siteContent(language: Language) {
   return language === "ru"
-    ? { guides: russianGuides, reviews: russianReviews, faqs: russianFaqs }
+    ? { guides: russianGuides, reviews, faqs: russianFaqs }
     : { guides, reviews, faqs };
 }
