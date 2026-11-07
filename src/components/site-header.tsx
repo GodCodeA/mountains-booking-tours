@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Mountain, Menu } from "lucide-react";
+import { Mountain, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 
@@ -65,11 +65,18 @@ export function SiteHeader() {
           {languagePicker}
           <button
             type="button"
-            aria-label="Toggle menu"
+            aria-label={open ? t("closeMenu") : t("openMenu")}
+            aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="rounded-md border border-border p-2"
+            className="rounded-md border border-border p-2 transition-colors hover:bg-secondary"
           >
-            <Menu className="h-5 w-5" />
+            <span
+              className={`block motion-safe:transition-transform motion-safe:duration-200 ${
+                open ? "rotate-90 scale-90" : "rotate-0 scale-100"
+              }`}
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </span>
           </button>
         </div>
       </div>
