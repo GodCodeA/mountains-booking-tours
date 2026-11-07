@@ -1,15 +1,41 @@
 import { Link } from "@tanstack/react-router";
-import { Mountain, Menu } from "lucide-react";
+import { Languages, Mountain, Menu } from "lucide-react";
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { to: "/tours", label: "Tours" },
-  { to: "/dashboard", label: "Owner" },
+  { to: "/", label: "home" },
+  { to: "/tours", label: "tours" },
+  { to: "/dashboard", label: "owner" },
 ] as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { language, setLanguage, t } = useI18n();
+
+  const languagePicker = (
+    <div
+      className="inline-flex items-center rounded-md border border-border p-0.5"
+      aria-label={t("language")}
+    >
+      <Languages className="ml-1.5 h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+      {(["en", "ru"] as const).map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => setLanguage(code)}
+          aria-pressed={language === code}
+          className={`rounded px-2 py-1 text-xs font-bold transition-colors ${
+            language === code
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {code.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
@@ -30,19 +56,23 @@ export function SiteHeader() {
               activeProps={{ className: "text-foreground" }}
               activeOptions={{ exact: item.to === "/" }}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
+          {languagePicker}
         </nav>
 
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-          className="rounded-md border border-border p-2 sm:hidden"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-2 sm:hidden">
+          {languagePicker}
+          <button
+            type="button"
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+            className="rounded-md border border-border p-2"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {open ? (
@@ -56,7 +86,7 @@ export function SiteHeader() {
               activeProps={{ className: "text-foreground" }}
               activeOptions={{ exact: item.to === "/" }}
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           ))}
         </nav>
