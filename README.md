@@ -1,14 +1,14 @@
 # Ala-Too Adventures
 
-A mountain-tour booking platform for Ala-Too Adventures in Bishkek, Kyrgyzstan. Guests can browse trips, see dates and remaining capacity, make a booking, and receive a private confirmation link. The owner has a separate authenticated dashboard for managing bookings.
+A mountain-tour booking platform for a small owner-run tour business in Bishkek, Kyrgyzstan. It turns “Can I book this tour?” into a confirmed booking with minimal manual work: guests browse trips, see dates and remaining capacity, make a booking, and receive a private confirmation link. The owner has a separate authenticated dashboard for managing bookings.
 
 ## Live demo
 
 [Open Ala-Too Adventures](https://mountains-booking-tours.bishkek-2020.workers.dev/)
 
-## Purpose
+## Project status
 
-Ala-Too Adventures is a small mountain tour business in Bishkek, Kyrgyzstan, run by one owner. The app turns "Can I book this tour?" into "You're booked" with minimal manual work.
+**Demo / not production-ready.** Tours, dates, guides, reviews, contacts and bookings are sample data. Online payments and transactional email delivery are not configured. Complete the production checklist and replace all sample content before accepting real customer bookings.
 
 ## Main features
 
