@@ -1,6 +1,6 @@
 # Ala-Too Adventures
 
-A bilingual (English/Russian) mountain-tour booking platform. Guests can see dates and remaining capacity, make a booking, and receive a private confirmation link. The owner has a separate authenticated dashboard for managing bookings.
+A mountain-tour booking platform for Ala-Too Adventures in Bishkek, Kyrgyzstan. Guests can browse trips, see dates and remaining capacity, make a booking, and receive a private confirmation link. The owner has a separate authenticated dashboard for managing bookings.
 
 ## Live demo
 
