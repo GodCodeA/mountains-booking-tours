@@ -6,6 +6,7 @@ import { Check, CheckCircle2, Copy, CalendarDays, MapPin, Users } from "lucide-r
 import { Skeleton } from "@/components/ui/skeleton";
 import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/booking/$reference")({
   head: () => ({
@@ -27,6 +28,7 @@ function Confirmation() {
   const { reference } = Route.useParams();
   const { data: booking, isLoading, isError } = useQuery(bookingQuery(reference));
   const [copied, setCopied] = useState(false);
+  const { t } = useI18n();
 
   async function copyConfirmationLink() {
     try {
@@ -75,7 +77,7 @@ function Confirmation() {
       </div>
 
       <p className="mt-4 text-muted-foreground">
-        Your booking is confirmed. Save this link so you can return to these trip details anytime.
+        {t("bookingConfirmed")} {t("saveLink")}
       </p>
 
       <div className="surface-panel mt-8 overflow-hidden">
@@ -91,7 +93,7 @@ function Confirmation() {
           <div className="flex items-center justify-between">
             <h2 className="font-display text-3xl">{booking.tour_name}</h2>
             <span className="rounded-md bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
-              Ref {displayBookingReference(booking.reference)}
+              {t("reference")} {displayBookingReference(booking.reference)}
             </span>
           </div>
           <div className="grid gap-3 text-sm sm:grid-cols-2">
@@ -101,14 +103,14 @@ function Confirmation() {
             </span>
             <span className="inline-flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" /> {booking.guests}{" "}
-              {booking.guests === 1 ? "guest" : "guests"}
+              {booking.guests === 1 ? t("guest") : t("guests")}
             </span>
             <span className="inline-flex items-center gap-2 sm:col-span-2">
               <MapPin className="h-4 w-4 text-primary" /> {booking.meeting_point}
             </span>
           </div>
           <div className="flex items-baseline justify-between border-t border-border pt-4">
-            <span className="text-sm text-muted-foreground">Total, payable on the day</span>
+            <span className="text-sm text-muted-foreground">{t("totalPayable")}</span>
             <span className="font-display text-4xl">${booking.total_price}</span>
           </div>
         </div>
@@ -121,13 +123,13 @@ function Confirmation() {
           className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
         >
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          {copied ? "Link copied" : "Copy confirmation link"}
+          {copied ? t("linkCopied") : t("copyLink")}
         </button>
         <Link
           to="/tours"
           className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
         >
-          Browse more trips
+          {t("browseTrips")}
         </Link>
       </div>
     </div>

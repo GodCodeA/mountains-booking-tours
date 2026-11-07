@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/lib/i18n";
 import { sendReminderNow } from "@/lib/reminders.functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -141,6 +142,7 @@ function Dashboard() {
 function OwnerDashboard() {
   const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
+  const { t } = useI18n();
   const fetchBookings = useServerFn(listDashboardBookings);
   const runCancel = useServerFn(cancelBooking);
   const {
@@ -201,7 +203,7 @@ function OwnerDashboard() {
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-eyebrow">Owner view</p>
+          <p className="text-eyebrow">{t("ownerView")}</p>
           <h1 className="mt-3 font-display text-6xl">Today at a glance</h1>
           <p className="mt-3 text-sm text-muted-foreground">
             Demo data — bookings, guests and dates here are sample records.
@@ -214,7 +216,7 @@ function OwnerDashboard() {
           className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
         >
           <LogOut className="h-4 w-4" />
-          {signingOut ? "Signing out…" : "Sign out"}
+          {signingOut ? t("signingOut") : t("signOut")}
         </button>
       </div>
 
