@@ -82,13 +82,13 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <nav className="flex flex-col border-t border-border px-4 pb-3 sm:hidden">
+        <nav className="flex flex-col gap-1 border-t border-border px-4 py-2 sm:hidden">
           {nav.map((item) => (
             <Link
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
-              className="w-fit rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              className="w-full rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
               activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
               activeOptions={{ exact: item.to === "/" }}
             >
