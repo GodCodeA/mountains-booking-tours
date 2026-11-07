@@ -20,7 +20,7 @@ Ala-Too Adventures is a small mountain tour business in Bishkek, Kyrgyzstan, run
 
 React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS v4, shadcn/ui, Lucide icons, zod.
 
-## Data (Lovable Cloud / Supabase)
+## Data (Supabase)
 
 - `tours`, `departures`, `bookings` tables
 - A database trigger keeps `departures.spots_taken` in sync and blocks overbooking

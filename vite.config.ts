@@ -1,32 +1,33 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
-//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
-//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
+import tailwindcss from "@tailwindcss/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  // This app is deployed as a Cloudflare Worker. The Lovable config installs
-  // Nitro; pinning its target prevents an accidental Node-oriented build.
-  nitro: {
-    preset: "cloudflare-module",
-    cloudflare: {
-      nodeCompat: true,
-      deployConfig: true,
-      // Runtime Supabase secrets are read through process.env by the server
-      // client. Make the Workers binding available there explicitly.
-      wrangler: {
-        compatibility_flags: ["nodejs_compat_populate_process_env"],
-        // Runtime values are managed in the Cloudflare dashboard. Without this,
-        // `wrangler deploy` removes dashboard variables absent from this file.
-        keep_vars: true,
+  plugins: [
+    tailwindcss(),
+    tsconfigPaths(),
+    tanstackStart({
+      importProtection: {
+        behavior: "error",
+        client: { files: ["**/server/**"], specifiers: ["server-only"] },
       },
-    } as never,
-  },
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-  },
+      server: { entry: "server" },
+    }),
+    nitro({
+      preset: "cloudflare-module",
+      cloudflare: {
+        nodeCompat: true,
+        deployConfig: true,
+        wrangler: {
+          compatibility_flags: ["nodejs_compat_populate_process_env"],
+          // Dashboard-managed Worker values must survive `wrangler deploy`.
+          keep_vars: true,
+        },
+      },
+    } as never),
+    react(),
+  ],
 });
