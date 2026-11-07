@@ -164,11 +164,11 @@ function Home() {
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         <div className="absolute inset-0 -z-10 image-veil" />
-        <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-44">
+        <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pb-12 pt-24 sm:px-6 sm:pb-24 sm:pt-44">
           <p className="text-eyebrow">
             {ru ? "Горные туры с гидом из Бишкека" : "Guided mountain tours from Bishkek"}
           </p>
-          <h1 className="mt-4 max-w-3xl font-display text-6xl sm:text-8xl">
+          <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
             {ru
               ? "Откройте Тянь-Шань с теми, кто называет его домом."
               : "Walk the Tian Shan with people who call it home."}
