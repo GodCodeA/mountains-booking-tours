@@ -1,0 +1,73 @@
+import { localText, type Language } from "./i18n";
+
+type MapPoint = {
+  latitude: number;
+  longitude: number;
+  english: string;
+  russian: string;
+  kyrgyz: string;
+};
+
+// These pins identify the real destination area only. They are deliberately
+// not presented as a route, trail GPX, pickup point, or emergency location.
+const points: Record<string, MapPoint> = {
+  "ala-archa-day-hike": {
+    latitude: 42.583,
+    longitude: 74.483,
+    english: "Ala-Archa Nature Park",
+    russian: "Национальный парк Ала-Арча",
+    kyrgyz: "Ала-Арча жаратылыш паркы",
+  },
+  "song-kul-adventure": {
+    latitude: 41.833,
+    longitude: 75.167,
+    english: "Song-Kul Lake",
+    russian: "Озеро Сон-Куль",
+    kyrgyz: "Соң-Көл",
+  },
+  "kel-suu-adventure": {
+    latitude: 40.643056,
+    longitude: 76.395,
+    english: "Kel-Suu Lake",
+    russian: "Озеро Кель-Суу",
+    kyrgyz: "Көл-Суу көлү",
+  },
+  "altyn-arashan-escape": {
+    latitude: 42.353,
+    longitude: 78.526,
+    english: "Altyn-Arashan valley",
+    russian: "Долина Алтын-Арашан",
+    kyrgyz: "Алтын-Арашан өрөөнү",
+  },
+  "jyrgalan-mountain-trek": {
+    latitude: 42.6,
+    longitude: 79.03,
+    english: "Jyrgalan village",
+    russian: "Село Жыргалан",
+    kyrgyz: "Жыргалан айылы",
+  },
+  "issyk-kul-mountain-escape": {
+    latitude: 42.1,
+    longitude: 77.2,
+    english: "Southern shore of Issyk-Kul",
+    russian: "Южный берег Иссык-Куля",
+    kyrgyz: "Ысык-Көлдүн түштүк жээги",
+  },
+};
+
+export function tourMapPoint(slug: string, language: Language) {
+  const point = points[slug];
+  if (!point) return undefined;
+  return {
+    ...point,
+    label: localText(language, point.english, point.russian, point.kyrgyz),
+  };
+}
+
+export function googleMapsEmbedUrl(point: Pick<MapPoint, "latitude" | "longitude">) {
+  return `https://www.google.com/maps?q=${point.latitude},${point.longitude}&z=11&output=embed`;
+}
+
+export function googleMapsUrl(point: Pick<MapPoint, "latitude" | "longitude">) {
+  return `https://www.google.com/maps/search/?api=1&query=${point.latitude},${point.longitude}`;
+}

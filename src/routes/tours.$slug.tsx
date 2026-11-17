@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Check,
   Clock,
+  ExternalLink,
   MapPin,
   Mountain,
   ShieldCheck,
@@ -39,6 +40,7 @@ import {
 } from "@/lib/bookings";
 import { tourGallery } from "@/lib/tour-images";
 import { dayLabel, localText, maxGroupSizeLabel, useI18n } from "@/lib/i18n";
+import { googleMapsEmbedUrl, googleMapsUrl, tourMapPoint } from "@/lib/tour-map";
 import { localizeTour } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/tours/$slug")({
@@ -117,6 +119,7 @@ const SECTIONS = [
   ["included", "Included"],
   ["bring", "What to bring"],
   ["meeting", "Meeting point"],
+  ["map", "Map"],
   ["availability", "Dates"],
   ["faq", "FAQ"],
 ] as const;
@@ -143,6 +146,7 @@ function TourBody({
   const content = siteContent(language);
   tour = localizeTour(tour, language);
   const extras = tourExtras(tour.slug, language);
+  const mapPoint = tourMapPoint(tour.slug, language);
   const photos = tourGallery(tour.image_key);
   const [active, setActive] = useState(0);
   const list = departures ?? [];
@@ -229,6 +233,7 @@ function TourBody({
                       included: "Включено",
                       bring: "Что взять",
                       meeting: "Встреча",
+                      map: "Карта",
                       availability: "Даты",
                       faq: "Частые вопросы",
                     }[id] ?? label)
@@ -238,6 +243,7 @@ function TourBody({
                       included: "Камтылган",
                       bring: "Эмне алуу керек",
                       meeting: "Жолугушуу",
+                      map: "Карта",
                       availability: "Даталар",
                       faq: "Көп берилүүчү суроолор",
                     }[id] ?? label)}
@@ -415,6 +421,46 @@ function TourBody({
               </p>
             </div>
           </section>
+
+          {mapPoint ? (
+            <section id="map" className="scroll-mt-32">
+              <h2 className="font-display text-4xl">
+                {text("Map of the area", "Карта района", "Аймактын картасы")}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                {text(
+                  "This marker shows the approximate destination area for the demo tour. It is not a route, a GPS track or a meeting point.",
+                  "Метка показывает примерный район демо-тура. Это не маршрут, GPS-трек или точка встречи.",
+                  "Белги демо-тур өтүүчү болжолдуу аймакты көрсөтөт. Бул маршрут, GPS-трек же жолугушуу жери эмес.",
+                )}
+              </p>
+              <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card">
+                <iframe
+                  title={text(
+                    `Map of ${mapPoint.label}`,
+                    `Карта: ${mapPoint.label}`,
+                    `${mapPoint.label} картасы`,
+                  )}
+                  src={googleMapsEmbedUrl(mapPoint)}
+                  className="h-80 w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+                <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+                  <p className="text-sm font-semibold">{mapPoint.label}</p>
+                  <a
+                    href={googleMapsUrl(mapPoint)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold hover:border-primary hover:text-primary"
+                  >
+                    {text("Open in Google Maps", "Открыть в Google Maps", "Google Maps'тен ачуу")}
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           <section id="availability" className="scroll-mt-32">
             <h2 className="font-display text-4xl">
