@@ -107,7 +107,7 @@ const copy = {
     signingOut: "Чыгып жатабыз…",
     day: "күн",
     days: "күн",
-    max: "макс.",
+    max: "эң көп",
     next: "Жакынкы дата",
     spot: "орун",
     spots: "орун",
@@ -177,7 +177,7 @@ export function guestLabel(count: number, language: Language) {
 }
 
 export function maxGroupSizeLabel(count: number, language: Language) {
-  return localText(language, `Max: ${count}`, `Макс.: ${count}`, `Эң көп: ${count}`);
+  return localText(language, `Max: ${count}`, `Макс.: ${count}`, `Эң көп: ${count} адам`);
 }
 
 export function useI18n() {
