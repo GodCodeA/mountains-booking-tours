@@ -20,33 +20,33 @@ function useFallbackLanguage() {
 
   useEffect(() => {
     const saved = window.localStorage.getItem("ala-too-language");
-    if (saved === "en" || saved === "ru") setLanguage(saved);
+    if (saved === "en" || saved === "ru" || saved === "ky") setLanguage(saved);
   }, []);
 
   return language;
 }
 
 function NotFoundComponent() {
-  const ru = useFallbackLanguage() === "ru";
+  const language = useFallbackLanguage();
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    language === "ru" ? russian : language === "ky" ? kyrgyz : english;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">
-          {ru ? "Страница не найдена" : "Page not found"}
+          {text("Page not found", "Страница не найдена", "Барак табылган жок")}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          {ru
-            ? "Страница, которую вы ищете, не существует или была перемещена."
-            : "The page you're looking for doesn't exist or has been moved."}
+          {text("The page you're looking for doesn't exist or has been moved.", "Страница, которую вы ищете, не существует или была перемещена.", "Сиз издеп жаткан барак жок же башка жакка жылдырылган.")}
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            {ru ? "На главную" : "Go home"}
+            {text("Go home", "На главную", "Башкы бетке")}
           </Link>
         </div>
       </div>
@@ -57,7 +57,9 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  const ru = useFallbackLanguage() === "ru";
+  const language = useFallbackLanguage();
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    language === "ru" ? russian : language === "ky" ? kyrgyz : english;
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -66,12 +68,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          {ru ? "Страница не загрузилась" : "This page didn't load"}
+          {text("This page didn't load", "Страница не загрузилась", "Бул барак жүктөлгөн жок")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {ru
-            ? "Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную."
-            : "Something went wrong on our end. You can try refreshing or head back home."}
+          {text("Something went wrong on our end. You can try refreshing or head back home.", "Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную.", "Бир нерсе туура эмес кетти. Баракты жаңыртып же башкы бетке кайтып көрүңүз.")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -81,13 +81,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            {ru ? "Повторить" : "Try again"}
+            {text("Try again", "Повторить", "Кайра аракет кылуу")}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            {ru ? "На главную" : "Go home"}
+            {text("Go home", "На главную", "Башкы бетке")}
           </a>
         </div>
       </div>

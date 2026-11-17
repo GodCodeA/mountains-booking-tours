@@ -23,7 +23,13 @@ export function SiteFooter() {
         </div>
         <div className="text-sm text-muted-foreground">
           <p className="text-eyebrow">{t("contact")}</p>
-          <p className="mt-3">{language === "ru" ? "Бишкек, Кыргызстан" : "Bishkek, Kyrgyzstan"}</p>
+          <p className="mt-3">
+            {language === "ru"
+              ? "Бишкек, Кыргызстан"
+              : language === "ky"
+                ? "Бишкек, Кыргызстан"
+                : "Bishkek, Kyrgyzstan"}
+          </p>
           <p>WhatsApp +996 555 000 000</p>
           <p>hello@alatoo-adventures.example</p>
         </div>

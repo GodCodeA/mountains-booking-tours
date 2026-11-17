@@ -3,5 +3,5 @@
 - Data access goes through `src/lib/bookings.ts` (query option objects + mutations) using the browser Supabase client; keeps route components free of query plumbing.
 - Tour photos are bundled assets mapped by `image_key` in `src/lib/tour-images.ts`; the database stores only the key so images stay out of the DB.
 - Pages are flat TanStack routes (`index`, `tours.index`, `tours.$slug`, `book.$slug`, `booking.$reference`, `dashboard`); shared chrome lives in `__root.tsx`.
-- Prototype has no authentication: booking tables use permissive demo RLS policies. Add real auth before this handles live customer data.
+- Owner access uses Supabase email magic links and the `admin_users` allow-list. Public visitors can browse tours and create bookings through protected server functions; review the authorization model again before handling real customer data.
 - Tour itineraries, packing lists and the cancellation text live in `src/lib/tour-content.ts` (keyed by slug); home-page guides, reviews and FAQ live in `src/lib/site-content.ts` and are flagged `isSample`. Core tour facts stay in the database so prices and capacity have one source.

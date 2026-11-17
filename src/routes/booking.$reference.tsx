@@ -6,7 +6,7 @@ import { Check, CheckCircle2, Copy, CalendarDays, MapPin, Users } from "lucide-r
 import { Skeleton } from "@/components/ui/skeleton";
 import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
-import { useI18n } from "@/lib/i18n";
+import { localText, useI18n } from "@/lib/i18n";
 import { localizeMeetingPoint, localizeTourName } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/booking/$reference")({
@@ -30,7 +30,8 @@ function Confirmation() {
   const { data: booking, isLoading, isError } = useQuery(bookingQuery(reference));
   const [copied, setCopied] = useState(false);
   const { t, language } = useI18n();
-  const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
 
   async function copyConfirmationLink() {
     try {
@@ -55,18 +56,16 @@ function Confirmation() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
         <h1 className="font-display text-5xl">
-          {ru ? "Бронирование не найдено" : "Booking not found"}
+          {text("Booking not found", "Бронирование не найдено", "Брондоо табылган жок")}
         </h1>
         <p className="mt-3 text-muted-foreground">
-          {ru
-            ? "Мы не нашли это бронирование. Проверьте ссылку в подтверждении."
-            : "We couldn't find that booking. Please check your confirmation link."}
+          {text("We couldn't find that booking. Please check your confirmation link.", "Мы не нашли это бронирование. Проверьте ссылку в подтверждении.", "Бул брондоо табылган жок. Ырастоо шилтемесин текшериңиз.")}
         </p>
         <Link
           to="/tours"
           className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
         >
-          {ru ? "Смотреть туры" : "Browse tours"}
+          {text("Browse tours", "Смотреть туры", "Турларды көрүү")}
         </Link>
       </div>
     );
@@ -77,9 +76,9 @@ function Confirmation() {
       <div className="flex items-center gap-3">
         <CheckCircle2 className="h-9 w-9 text-success" />
         <div>
-          <p className="text-eyebrow">{ru ? "Вы забронированы" : "You're booked"}</p>
+          <p className="text-eyebrow">{text("You're booked", "Вы забронированы", "Сиз брондодуңуз")}</p>
           <h1 className="font-display text-5xl">
-            {ru ? "До встречи в горах" : "See you in the mountains"}
+            {text("See you in the mountains", "До встречи в горах", "Тоодо жолугушканча")}
           </h1>
         </div>
       </div>

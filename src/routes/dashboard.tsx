@@ -1,13 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Bell, CalendarDays, LogOut, Mail, Phone, Users, X, RefreshCw } from "lucide-react";
+import { CalendarDays, LogOut, Mail, Phone, Users, X, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { useI18n } from "@/lib/i18n";
-import { sendReminderNow } from "@/lib/reminders.functions";
+import { localText, useI18n } from "@/lib/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -23,7 +22,6 @@ import {
   departuresQuery,
   displayBookingReference,
   formatDate,
-  formatBishkekDateTime,
   listDashboardBookings,
   rescheduleBooking,
   spotsLeft,
@@ -53,13 +51,13 @@ export const Route = createFileRoute("/dashboard")({
       {
         name: "description",
         content:
-          "Today's departures, upcoming bookings, guest counts and one-tap reminders, rescheduling and cancellations.",
+          "Today's departures, upcoming bookings, guest counts, rescheduling and cancellations.",
       },
       { name: "robots", content: "noindex" },
       { property: "og:title", content: "Owner dashboard — Ala-Too Adventures" },
       {
         property: "og:description",
-        content: "Manage bookings, reminders and reschedules in one place.",
+        content: "Manage bookings, reschedules and cancellations in one place.",
       },
     ],
   }),
@@ -70,7 +68,8 @@ const tabs = ["Today", "Upcoming", "All"] as const;
 
 function Dashboard() {
   const { language } = useI18n();
-  const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const [userId, setUserId] = useState<string>();
   const [sessionChecked, setSessionChecked] = useState(false);
   const [email, setEmail] = useState("");
@@ -95,15 +94,19 @@ function Dashboard() {
     if (error) {
       toast.error(
         error.message ||
-          (ru
-            ? "Не удалось отправить ссылку для входа. Попробуйте ещё раз."
-            : "Couldn't send the sign-in link. Please try again."),
+          text(
+            "Couldn't send the sign-in link. Please try again.",
+            "Не удалось отправить ссылку для входа. Попробуйте ещё раз.",
+            "Кирүү шилтемесин жөнөтүү мүмкүн болгон жок. Кайра аракет кылыңыз.",
+          ),
       );
     } else
       toast.success(
-        ru
-          ? "Проверьте почту: туда отправлена защищённая ссылка для входа."
-          : "Check your email for the secure sign-in link.",
+        text(
+          "Check your email for the secure sign-in link.",
+          "Проверьте почту: туда отправлена защищённая ссылка для входа.",
+          "Электрондук почтаңызды текшериңиз: коопсуз кирүү шилтемеси жөнөтүлдү.",
+        ),
       );
     setSendingLink(false);
   }
@@ -119,20 +122,22 @@ function Dashboard() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-20 text-center">
-      <p className="text-eyebrow">{ru ? "Доступ владельца" : "Owner access"}</p>
+      <p className="text-eyebrow">{text("Owner access", "Доступ владельца", "Ээсинин кирүүсү")}</p>
       <h1 className="mt-3 font-display text-5xl">
-        {ru ? "Закрытый кабинет" : "Private dashboard"}
+        {text("Private dashboard", "Закрытый кабинет", "Жеке кабинет")}
       </h1>
       {userId ? (
         <p className="mt-3 text-sm text-muted-foreground">
-          {ru
-            ? "У этой учётной записи нет доступа к бронированиям."
-            : "This account is not approved to access bookings."}
+          {text(
+            "This account is not approved to access bookings.",
+            "У этой учётной записи нет доступа к бронированиям.",
+            "Бул аккаунтка брондоолорго кирүүгө уруксат берилген эмес.",
+          )}
         </p>
       ) : (
         <form className="mt-6 space-y-3 text-left" onSubmit={sendMagicLink}>
           <label className="block text-sm font-semibold" htmlFor="owner-email">
-            {ru ? "Email владельца" : "Owner email"}
+            {text("Owner email", "Email владельца", "Ээсинин электрондук почтасы")}
           </label>
           <input
             id="owner-email"
@@ -149,12 +154,8 @@ function Dashboard() {
             className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-50"
           >
             {sendingLink
-              ? ru
-                ? "Отправляем…"
-                : "Sending…"
-              : ru
-                ? "Отправить ссылку для входа"
-                : "Email me a sign-in link"}
+              ? text("Sending…", "Отправляем…", "Жөнөтүлүүдө…")
+              : text("Email me a sign-in link", "Отправить ссылку для входа", "Кирүү шилтемесин жөнөтүү")}
           </button>
         </form>
       )}
@@ -166,7 +167,8 @@ function OwnerDashboard() {
   const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
   const { t, language } = useI18n();
-  const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const fetchBookings = useServerFn(listDashboardBookings);
   const runCancel = useServerFn(cancelBooking);
   const {
@@ -186,40 +188,15 @@ function OwnerDashboard() {
     void queryClient.invalidateQueries({ queryKey: ["departures"] });
   };
 
-  const sendReminder = useServerFn(sendReminderNow);
-  const remind = useMutation({
-    mutationFn: async (row: Row) =>
-      sendReminder({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
-    onSuccess: (res, row) => {
-      if (res.status === "sent")
-        toast.success(
-          ru
-            ? `Напоминание отправлено: ${row.customer_name}`
-            : `Reminder emailed to ${row.customer_name}`,
-        );
-      else if (res.status === "skipped")
-        toast.info(res.error ?? (ru ? "Отправлять нечего." : "Nothing to send."));
-      else
-        toast.error(
-          ru
-            ? `Ошибка напоминания: ${res.error ?? "неизвестная ошибка"}`
-            : `Reminder failed: ${res.error ?? "unknown error"}`,
-        );
-      invalidate();
-    },
-    onError: () =>
-      toast.error(ru ? "Не удалось отправить напоминание." : "Couldn't send that reminder."),
-  });
-
   const cancel = useMutation({
     mutationFn: async (row: Row) =>
       runCancel({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
     onSuccess: () => {
-      toast.success(ru ? "Бронирование отменено" : "Booking cancelled");
+      toast.success(text("Booking cancelled", "Бронирование отменено", "Брондоо жокко чыгарылды"));
       invalidate();
     },
     onError: () =>
-      toast.error(ru ? "Не удалось отменить бронирование." : "Couldn't cancel that booking."),
+      toast.error(text("Couldn't cancel that booking.", "Не удалось отменить бронирование.", "Брондоону жокко чыгаруу мүмкүн болгон жок.")),
   });
 
   const today = bishkekToday();
@@ -242,12 +219,14 @@ function OwnerDashboard() {
         <div>
           <p className="text-eyebrow">{t("ownerView")}</p>
           <h1 className="mt-3 font-display text-6xl">
-            {ru ? "Коротко о сегодняшнем дне" : "Today at a glance"}
+            {text("Today at a glance", "Коротко о сегодняшнем дне", "Бүгүнкү күн кыскача")}
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            {ru
-              ? "Демо-данные: бронирования, гости и даты здесь являются тестовыми записями."
-              : "Demo data — bookings, guests and dates here are sample records."}
+            {text(
+              "Demo data — bookings, guests and dates here are sample records.",
+              "Демо-данные: бронирования, гости и даты здесь являются тестовыми записями.",
+              "Демо-маалыматтар: бул жердеги брондоолор, коноктор жана даталар тесттик жазуулар.",
+            )}
           </p>
         </div>
         <button
@@ -262,9 +241,9 @@ function OwnerDashboard() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <Stat label={ru ? "Выезды сегодня" : "Departures today"} value={todays.length} />
-        <Stat label={ru ? "Ближайшие бронирования" : "Upcoming bookings"} value={upcoming.length} />
-        <Stat label={ru ? "Забронировано гостей" : "Guests booked ahead"} value={guestsUpcoming} />
+        <Stat label={text("Departures today", "Выезды сегодня", "Бүгүнкү сапарлар")} value={todays.length} />
+        <Stat label={text("Upcoming bookings", "Ближайшие бронирования", "Алдыдагы брондоолор")} value={upcoming.length} />
+        <Stat label={text("Guests booked ahead", "Забронировано гостей", "Алдын ала брондолгон коноктор")} value={guestsUpcoming} />
       </div>
 
       <div className="mt-10 flex gap-2">
@@ -279,7 +258,7 @@ function OwnerDashboard() {
                 : "rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
             }
           >
-            {ru ? ({ Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t) : t}
+            {text(t, { Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t, { Today: "Бүгүн", Upcoming: "Алдыдагы", All: "Баары" }[t] ?? t)}
           </button>
         ))}
       </div>
@@ -295,23 +274,17 @@ function OwnerDashboard() {
           <p className="text-sm text-destructive">
             {bookingsError instanceof Error
               ? bookingsError.message
-              : ru
-                ? "Не удалось загрузить бронирования."
-                : "Couldn't load bookings."}
+              : text("Couldn't load bookings.", "Не удалось загрузить бронирования.", "Брондоолорду жүктөө мүмкүн болгон жок.")}
           </p>
         ) : null}
 
         {!isLoading && visible.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border p-10 text-center">
-            <p className="font-semibold">{ru ? "Пока здесь пусто" : "Nothing here yet"}</p>
+            <p className="font-semibold">{text("Nothing here yet", "Пока здесь пусто", "Азырынча бул жерде эч нерсе жок")}</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {tab === "Today"
-                ? ru
-                  ? "Сегодня выездов нет — можно спокойно начать утро."
-                  : "No departures today — enjoy the morning."
-                : ru
-                  ? "Новые бронирования появятся здесь сразу после оформления."
-                  : "New bookings will appear here as soon as they come in."}
+                ? text("No departures today — enjoy the morning.", "Сегодня выездов нет — можно спокойно начать утро.", "Бүгүн сапарлар жок — эртең мененди жай баштаңыз.")
+                : text("New bookings will appear here as soon as they come in.", "Новые бронирования появятся здесь сразу после оформления.", "Жаңы брондоолор катталгандан кийин дароо бул жерде көрүнөт.")}
             </p>
           </div>
         ) : null}
@@ -326,7 +299,7 @@ function OwnerDashboard() {
                   </h2>
                   <StatusBadge status={row.status} />
                   <span className="rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
-                    {ru ? "Код" : "Ref"} {displayBookingReference(row.reference)}
+                    {text("Ref", "Код", "Код")} {displayBookingReference(row.reference)}
                   </span>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
@@ -336,7 +309,7 @@ function OwnerDashboard() {
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-primary" /> {row.guests}{" "}
-                    {ru ? "гостей" : "guests"}
+                    {text("guests", "гостей", "конок")}
                   </span>
                   <span className="font-semibold text-foreground">${row.total_price}</span>
                 </div>
@@ -364,19 +337,11 @@ function OwnerDashboard() {
             <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
               <button
                 type="button"
-                disabled={row.status === "cancelled" || remind.isPending}
-                onClick={() => remind.mutate(row)}
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-40"
-              >
-                <Bell className="h-4 w-4" /> {ru ? "Отправить напоминание" : "Send reminder"}
-              </button>
-              <button
-                type="button"
                 disabled={row.status === "cancelled"}
                 onClick={() => setRescheduling(row)}
                 className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-40"
               >
-                <RefreshCw className="h-4 w-4" /> {ru ? "Перенести" : "Reschedule"}
+                <RefreshCw className="h-4 w-4" /> {text("Reschedule", "Перенести", "Башка күнгө жылдыруу")}
               </button>
               <button
                 type="button"
@@ -384,29 +349,8 @@ function OwnerDashboard() {
                 onClick={() => cancel.mutate(row)}
                 className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-destructive disabled:opacity-40"
               >
-                <X className="h-4 w-4" /> {ru ? "Отменить" : "Cancel"}
+                <X className="h-4 w-4" /> {text("Cancel", "Отменить", "Жокко чыгаруу")}
               </button>
-              {row.status !== "cancelled" ? (
-                <span
-                  className={`text-xs ${row.reminder_status === "failed" ? "text-destructive" : "text-muted-foreground"}`}
-                  title={row.reminder_error ?? undefined}
-                >
-                  {ru ? "Напоминание" : "Reminder"}:{" "}
-                  {row.reminder_status === "sent"
-                    ? `${ru ? "Отправлено" : "Sent"}${row.reminder_sent_at ? ` ${formatBishkekDateTime(row.reminder_sent_at, language)}` : ""}`
-                    : row.reminder_status === "failed"
-                      ? ru
-                        ? "Ошибка"
-                        : "Failed"
-                      : row.reminder_status === "sending"
-                        ? ru
-                          ? "Отправляем…"
-                          : "Sending…"
-                        : ru
-                          ? "Ожидает"
-                          : "Pending"}
-                </span>
-              ) : null}
             </div>
           </article>
         ))}
@@ -440,10 +384,12 @@ function StatusBadge({ status }: { status: string }) {
         : "bg-success/15 text-success";
   return (
     <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold capitalize ${tone}`}>
-      {language === "ru"
-        ? ({ confirmed: "подтверждено", pending: "ожидает", cancelled: "отменено" }[status] ??
-          status)
-        : status}
+      {localText(
+        language,
+        status,
+        ({ confirmed: "подтверждено", pending: "ожидает", cancelled: "отменено" }[status] ?? status),
+        ({ confirmed: "тастыкталды", pending: "күтүлүүдө", cancelled: "жокко чыгарылды" }[status] ?? status),
+      )}
     </span>
   );
 }
@@ -458,7 +404,8 @@ function RescheduleDialog({
   onDone: () => void;
 }) {
   const { language } = useI18n();
-  const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const { data: departures, isLoading } = useQuery(departuresQuery(row?.tour_id));
   const runReschedule = useServerFn(rescheduleBooking);
   const [saving, setSaving] = useState(false);
@@ -473,19 +420,25 @@ function RescheduleDialog({
       });
       if (result.status === "full") {
         toast.error(
-          ru ? "На этой дате больше недостаточно мест." : "That date no longer has enough spots.",
+          text(
+            "That date no longer has enough spots.",
+            "На этой дате больше недостаточно мест.",
+            "Бул датага орун жетишсиз болуп калды.",
+          ),
         );
       } else {
         toast.success(
-          ru
-            ? `Перенесено на ${formatDate(target.departure_date, language)}`
-            : `Moved to ${formatDate(target.departure_date)}`,
+          text(
+            `Moved to ${formatDate(target.departure_date, language)}`,
+            `Перенесено на ${formatDate(target.departure_date, language)}`,
+            `${formatDate(target.departure_date, language)} күнүнө жылдырылды`,
+          ),
         );
         onDone();
         onClose();
       }
     } catch {
-      toast.error(ru ? "Не удалось перенести это бронирование." : "Couldn't move that booking.");
+      toast.error(text("Couldn't move that booking.", "Не удалось перенести это бронирование.", "Бул брондоону жылдыруу мүмкүн болгон жок."));
     } finally {
       setSaving(false);
     }
@@ -496,10 +449,12 @@ function RescheduleDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="font-display text-3xl">
-            {ru ? "Перенести бронирование" : "Reschedule booking"}
+            {text("Reschedule booking", "Перенести бронирование", "Брондоону башка күнгө жылдыруу")}
           </DialogTitle>
           <DialogDescription>
-            {row ? `${row.customer_name} · ${row.guests} guests · ${row.tours.name}` : ""}
+            {row
+              ? `${row.customer_name} · ${row.guests} ${text("guests", "гостей", "конок")} · ${localizeTour(row.tours, language).name}`
+              : ""}
           </DialogDescription>
         </DialogHeader>
         <div className="max-h-80 space-y-2 overflow-y-auto">
@@ -516,15 +471,17 @@ function RescheduleDialog({
               >
                 <span className="font-semibold">{formatDate(d.departure_date, language)}</span>
                 <span className="text-xs text-muted-foreground">
-                  {spotsLeft(d)} {ru ? "мест осталось" : "spots left"}
+                  {spotsLeft(d)} {text("spots left", "мест осталось", "орун калды")}
                 </span>
               </button>
             ))}
           {!isLoading && departures?.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              {ru
-                ? "Для этого тура нет других доступных дат."
-                : "No other dates available for this trip."}
+              {text(
+                "No other dates available for this trip.",
+                "Для этого тура нет других доступных дат.",
+                "Бул тур үчүн башка жеткиликтүү күндөр жок.",
+              )}
             </p>
           ) : null}
         </div>

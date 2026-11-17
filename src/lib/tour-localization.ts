@@ -143,54 +143,151 @@ const ru: Record<
   },
 };
 
-export function localizeTour<T extends Tour>(tour: T, language: "en" | "ru"): T {
-  return language === "ru" && ru[tour.slug] ? { ...tour, ...ru[tour.slug] } : tour;
+const ky: typeof ru = {
+  "ala-archa-day-hike": {
+    name: "Ала-Арчага бир күндүк жөө жүрүш",
+    summary: "Бишкекке жакын капчыгайда сергиткен альп күнүн өткөрүңүз.",
+    description:
+      "Шаардан кырк мүнөттө эле Ала-Арча капчыгайында карагайлуу токой, мөңгү суулуу дарыялар жана гранит аскалар ачылат. Ак-Сай чыйыры менен шаркыратмадагы көрүнүш чекитине чейин барабыз, токой чегинен өйдө пикник кылабыз жана кечке жуук Бишкекке кайтабыз. Бул Кыргызстандын тоолору менен таанышуунун мыкты жолу.",
+    region: "Чүй",
+    difficulty: "Жеңил",
+    highlights: ["Ак-Сай шаркыратмасынын көрүнүш чекити", "Мөңгү суулуу дарыядан өтүү", "Токой чегинен өйдө пикник"],
+    included: ["Бишкектен трансфер", "Тоолук гид", "Паркка кирүү", "Пикник жана чай"],
+    not_included: ["Жеке жабдык", "Камсыздандыруу", "Чайпул"],
+    meeting_point: "Ала-Тоо аянты, Бишкек — 07:30",
+  },
+  "song-kul-adventure": {
+    name: "Соң-Көлдөгү саякат",
+    summary: "Бийик тоолуу көлдүн жээгиндеги боз үй лагеринде эки түн.",
+    description:
+      "Соң-Көл жайкы жайлоолордун арасында, деңиз деңгээлинен 3016 метр бийиктикте жайгашкан. Калмак-Ашуу ашуусу аркылуу өтүп, көл жээгинде ат минебиз, койчулардын үй-бүлөсү менен кечки тамак ичебиз жана Борбор Азиядагы эң тунук асмандын астында түнөбүз.",
+    region: "Нарын",
+    difficulty: "Орточо",
+    highlights: ["Салттуу боз үй лагеринде эки түн", "Жайлоодо ат менен сейилдөө", "Укмуштуудай түнкү асман"],
+    included: ["Жеке транспорт", "Гид", "Боз үйдөгү 2 түн", "Бардык тамак", "Ат менен сейилдөө"],
+    not_included: ["Уктоочу баштык (ижарага алса болот)", "Алкоголь", "Чайпул"],
+    meeting_point: "Бишкектеги сиздин жайгашкан жериңиз — 07:00",
+  },
+  "kel-suu-adventure": {
+    name: "Көл-Суудагы саякат",
+    summary: "Тик аскалардын арасындагы алыскы чек ара көлү.",
+    description:
+      "Көл-Суу — кайтып келгиңди келтирген саякат. Нарын облусунун тереңинде төрт күн: Көк-Кыя өрөөнү аркылуу аскалар менен курчалган фьорд сымал көлгө чейин барабыз. Уруксат кагаздар, лагерь жана жол уюштурулуп коюлган — сизге басып, суктануу гана калат.",
+    region: "Нарын",
+    difficulty: "Татаал",
+    highlights: ["Чек ара аймагына уруксат кагазын даярдайбыз", "Тик аскалар арасындагы фьорд сымал көл", "Көк-Кыя өрөөнүндөгү жапайы лагерь"],
+    included: ["4×4 транспорт", "Чек ара уруксаты", "Гид жана ашпозчу", "Кемпинг жабдыгы", "Бардык тамак"],
+    not_included: ["Жеке треккинг жабдыгы", "Камсыздандыруу", "Чайпул"],
+    meeting_point: "Бишкектеги сиздин жайгашкан жериңиз — 06:30",
+  },
+  "altyn-arashan-escape": {
+    name: "Алтын-Арашанга эс алуу",
+    summary: "Ысык булактар, жыгач үйлөр жана карлуу чокулардын өрөөнү.",
+    description:
+      "Караколдон Алтын-Арашанга бурулуштуу тоо жолу алып барат. Бул жерде термалдык бассейндер мөңгү суулуу дарыянын жанында жайгашкан. Эки күн бою сейилдеп, ысык булактарга түшүп, отун меши бар конок үйүндө тынч кеч өткөрөбүз.",
+    region: "Ысык-Көл",
+    difficulty: "Орточо",
+    highlights: ["Табигый ысык булактарда сүзүү", "Ала-Көл ашуусун көздөй сейилдөө", "Отун мешинин жанында кечки тамак"],
+    included: ["Караколдон транспорт", "Гид", "Конок үйүндө 1 түн", "Тамак", "Ысык булактарга кирүү"],
+    not_included: ["Бишкек—Каракол транспорту", "Камсыздандыруу", "Чайпул"],
+    meeting_point: "Караколдун борбордук мечити — 09:00",
+  },
+  "jyrgalan-mountain-trek": {
+    name: "Жыргаландагы тоо треги",
+    summary: "Тынч тоо айылы аркылуу кырлар менен жөө саякат.",
+    description:
+      "Жыргалан — жашыл, тынч жана кырлар менен өткөн чыйырларга бай жер. Үч күн бою айылдын конок үйлөрүнүн ортосунда басып, Боз-Учук көлдөрүн көрөбүз жана алыстан Терскей Ала-Тоону караган гүлдүү кырлардан өтөбүз.",
+    region: "Ысык-Көл",
+    difficulty: "Орточо",
+    highlights: ["Боз-Учук бийик тоо көлдөрү", "Жергиликтүү тургундардын конок үйлөрүндө түнөө", "Июнь жана июлдагы гүлдүү кырлар"],
+    included: ["Гид", "Конок үйүндө 2 түн", "Бардык тамак", "Айылдар ортосунда жүктү ташуу"],
+    not_included: ["Жыргаланга чейинки транспорт", "Камсыздандыруу", "Чайпул"],
+    meeting_point: "Жыргалан айылынын аянты — 09:00",
+  },
+  "issyk-kul-mountain-escape": {
+    name: "Ысык-Көл жана тоолор",
+    summary: "Көл жээгиндеги таңдар жана тоодогу күндүзгү саякаттар.",
+    description:
+      "Дүйнөдөгү экинчи ири бийик тоолуу көлдү айланып өткөн беш күндүк жай саякат: Жомок капчыгайы, Жети-Өгүздүн кызыл аскалары, Караколдогу түн жана тынч түштүк жээктеги узун күндөр. Үй-бүлөлөргө жана узак жөө жүрүшсүз тоолорду каалагандарга ылайыктуу.",
+    region: "Ысык-Көл",
+    difficulty: "Жеңил",
+    highlights: ["Жомок капчыгайы", "Жети-Өгүздүн кызыл аскалары", "Түштүк жээкте сүзүү"],
+    included: ["5 күндүк жеке транспорт", "Гид", "4 түн жайгашуу", "Эртең мененки жана кечки тамак", "Бардык кирүү билеттер"],
+    not_included: ["Түшкү тамак", "Камсыздандыруу", "Чайпул"],
+    meeting_point: "Бишкектеги сиздин жайгашкан жериңиз — 08:00",
+  },
+};
+
+export function localizeTour<T extends Tour>(tour: T, language: "en" | "ru" | "ky"): T {
+  const translations = language === "ru" ? ru : language === "ky" ? ky : undefined;
+  return translations?.[tour.slug] ? { ...tour, ...translations[tour.slug] } : tour;
 }
 
-export function localizeDifficulty(difficulty: string, language: "en" | "ru") {
-  if (language !== "ru") return difficulty;
-  const translations: Record<string, string> = {
+export function localizeDifficulty(difficulty: string, language: "en" | "ru" | "ky") {
+  if (language === "en") return difficulty;
+  const translations: Record<string, string> = language === "ru" ? {
     Easy: "Лёгкий",
     Moderate: "Средний",
     Challenging: "Сложный",
+  } : {
+    Easy: "Жеңил",
+    Moderate: "Орточо",
+    Challenging: "Татаал",
   };
   return translations[difficulty] ?? difficulty;
 }
 
-export function localizeRegion(region: string, language: "en" | "ru") {
-  if (language !== "ru") return region;
-  const translations: Record<string, string> = {
+export function localizeRegion(region: string, language: "en" | "ru" | "ky") {
+  if (language === "en") return region;
+  const translations: Record<string, string> = language === "ru" ? {
     Chuy: "Чуй",
     Naryn: "Нарын",
     "Issyk-Kul": "Иссык-Куль",
+  } : {
+    Chuy: "Чүй",
+    Naryn: "Нарын",
+    "Issyk-Kul": "Ысык-Көл",
   };
   return translations[region] ?? region;
 }
 
 /** Confirmation RPC data has a tour name rather than a slug. */
-export function localizeTourName(name: string, language: "en" | "ru") {
-  if (language !== "ru") return name;
-  return (
-    {
+export function localizeTourName(name: string, language: "en" | "ru" | "ky") {
+  if (language === "en") return name;
+  const translations: Record<string, string> = language === "ru" ? {
       "Ala-Archa Day Hike": "Поход в Ала-Арчу",
       "Song-Kul Adventure": "Приключение на Сон-Куле",
       "Kel-Suu Adventure": "Приключение на Кель-Суу",
       "Altyn-Arashan Escape": "Отдых в Алтын-Арашане",
       "Jyrgalan Mountain Trek": "Горный трек в Жыргалане",
       "Issyk-Kul & Mountain Escape": "Иссык-Куль и горы",
-    }[name] ?? name
-  );
+    } : {
+      "Ala-Archa Day Hike": "Ала-Арчага бир күндүк жөө жүрүш",
+      "Song-Kul Adventure": "Соң-Көлдөгү саякат",
+      "Kel-Suu Adventure": "Көл-Суудагы саякат",
+      "Altyn-Arashan Escape": "Алтын-Арашанга эс алуу",
+      "Jyrgalan Mountain Trek": "Жыргаландагы тоо треги",
+      "Issyk-Kul & Mountain Escape": "Ысык-Көл жана тоолор",
+    };
+  return translations[name] ?? name;
 }
 
-export function localizeMeetingPoint(point: string, language: "en" | "ru") {
-  if (language !== "ru") return point;
-  const translations: Record<string, string> = {
+export function localizeMeetingPoint(point: string, language: "en" | "ru" | "ky") {
+  if (language === "en") return point;
+  const translations: Record<string, string> = language === "ru" ? {
     "Ala-Too Square, Bishkek — 07:30": "Площадь Ала-Тоо, Бишкек — 07:30",
     "Your Bishkek accommodation — 07:00": "Ваше жильё в Бишкеке — 07:00",
     "Your Bishkek accommodation — 06:30": "Ваше жильё в Бишкеке — 06:30",
     "Karakol central mosque — 09:00": "Центральная мечеть Каракола — 09:00",
     "Jyrgalan village square — 09:00": "Площадь села Жыргалан — 09:00",
     "Your Bishkek accommodation — 08:00": "Ваше жильё в Бишкеке — 08:00",
+  } : {
+    "Ala-Too Square, Bishkek — 07:30": "Ала-Тоо аянты, Бишкек — 07:30",
+    "Your Bishkek accommodation — 07:00": "Бишкектеги сиздин жайгашкан жериңиз — 07:00",
+    "Your Bishkek accommodation — 06:30": "Бишкектеги сиздин жайгашкан жериңиз — 06:30",
+    "Karakol central mosque — 09:00": "Караколдун борбордук мечити — 09:00",
+    "Jyrgalan village square — 09:00": "Жыргалан айылынын аянты — 09:00",
+    "Your Bishkek accommodation — 08:00": "Бишкектеги сиздин жайгашкан жериңиз — 08:00",
   };
   return translations[point] ?? point;
 }

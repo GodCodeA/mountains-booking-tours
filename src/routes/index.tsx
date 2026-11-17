@@ -9,7 +9,7 @@ import { toursQuery, type Tour } from "@/lib/bookings";
 import { siteContent } from "@/lib/site-content";
 import { localizeTour } from "@/lib/tour-localization";
 import { tourImage } from "@/lib/tour-images";
-import { useI18n } from "@/lib/i18n";
+import { localText, useI18n } from "@/lib/i18n";
 import {
   Accordion,
   AccordionContent,
@@ -93,6 +93,14 @@ const russianBenefits = [
   },
 ];
 
+const kyrgyzBenefits = [
+  { icon: Users, title: "Чакан топтор", body: "Ар бир сапарда конок аз болот: темп топко ылайык, ар ким гид менен убакыт өткөрөт." },
+  { icon: Map, title: "Так программа", body: "Брондоодон мурун ар бир турда маршрут, убакыт, камтылган кызматтар жана керектүү жабдык көрсөтүлөт." },
+  { icon: CalendarCheck, title: "Онлайн жеткиликтүүлүк", body: "Бош даталарды жана калган орундардын так санын дароо көрөсүз — жооп күтүүнүн кереги жок." },
+  { icon: MousePointerClick, title: "Оңой брондоо", body: "Бир нече мүнөттө брондоп, сапар болгон күнү төлөйсүз. Алдын ала төлөм да, карта маалыматы да жок." },
+  { icon: Compass, title: "Жергиликтүү тоо билими", body: "Маршруттарды бул өрөөндөрдү, мезгилдерди жана үй-бүлөлөрдү билген Бишкектин тургундары пландайт." },
+];
+
 const howItWorks = [
   { n: "01", title: "Choose a tour", body: "Compare difficulty, duration and price." },
   { n: "02", title: "Pick a date and guests", body: "Only dates with open spots can be selected." },
@@ -111,6 +119,12 @@ const russianHowItWorks = [
     title: "Подтвердите бронирование",
     body: "Оставьте контакты и сразу получите код бронирования.",
   },
+];
+
+const kyrgyzHowItWorks = [
+  { n: "01", title: "Турду тандаңыз", body: "Татаалдыгын, узактыгын жана баасын салыштырыңыз." },
+  { n: "02", title: "Датаны жана конокторду тандаңыз", body: "Бош орундары бар даталар гана жеткиликтүү." },
+  { n: "03", title: "Брондоону ырастаңыз", body: "Байланыш маалыматыңызды жазыңыз жана дароо брондоо кодун алыңыз." },
 ];
 
 function pickRecommended(tours: Tour[]) {
@@ -147,9 +161,12 @@ function SectionHeading({
 function Home() {
   const { language } = useI18n();
   const ru = language === "ru";
+  const ky = language === "ky";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const content = siteContent(language);
-  const localizedBenefits = ru ? russianBenefits : benefits;
-  const localizedSteps = ru ? russianHowItWorks : howItWorks;
+  const localizedBenefits = ru ? russianBenefits : ky ? kyrgyzBenefits : benefits;
+  const localizedSteps = ru ? russianHowItWorks : ky ? kyrgyzHowItWorks : howItWorks;
   const { data: tours, isLoading, isError } = useQuery(toursQuery);
   const recommended = tours ? pickRecommended(tours) : [];
 
@@ -166,30 +183,26 @@ function Home() {
         <div className="absolute inset-0 -z-10 image-veil" />
         <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pb-12 pt-24 sm:px-6 sm:pb-24 sm:pt-44">
           <p className="text-eyebrow">
-            {ru ? "Горные туры с гидом из Бишкека" : "Guided mountain tours from Bishkek"}
+            {text("Guided mountain tours from Bishkek", "Горные туры с гидом из Бишкека", "Бишкектен гид менен тоо турлары")}
           </p>
           <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
-            {ru
-              ? "Откройте Тянь-Шань с теми, кто называет его домом."
-              : "Walk the Tian Shan with people who call it home."}
+            {text("Walk the Tian Shan with people who call it home.", "Откройте Тянь-Шань с теми, кто называет его домом.", "Теңир-Тоону аны өз үйү деп атагандар менен кыдырыңыз.")}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-            {ru
-              ? "Походы одного дня, ночёвки в юртах и многодневные треки по Кыргызстану. Выберите дату, забронируйте за несколько минут и оплатите в день поездки."
-              : "Small-group day hikes, yurt nights and multi-day treks across Kyrgyzstan. See real dates, book in minutes and pay on the day."}
+            {text("Small-group day hikes, yurt nights and multi-day treks across Kyrgyzstan. See real dates, book in minutes and pay on the day.", "Походы одного дня, ночёвки в юртах и многодневные треки по Кыргызстану. Выберите дату, забронируйте за несколько минут и оплатите в день поездки.", "Кыргызстан боюнча бир күндүк жөө жүрүштөр, боз үйдөгү түндөр жана көп күндүк тректер. Чыныгы даталарды көрүп, бир нече мүнөттө брондоп, сапар күнү төлөңүз.")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/tours"
               className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)] motion-safe:transition-[transform,box-shadow,opacity] motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[0_22px_48px_-18px_oklch(0.775_0.148_68_/_0.55)] motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] hover:opacity-90"
             >
-              {ru ? "Выбрать тур" : "Explore tours"}
+              {text("Explore tours", "Выбрать тур", "Тур тандоо")}
             </Link>
             <a
               href="#featured"
               className="rounded-md border border-border bg-background/60 px-6 py-3 text-sm font-bold backdrop-blur motion-safe:transition-[transform,background-color,border-color] motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] hover:bg-secondary"
             >
-              {ru ? "Проверить даты" : "Check availability"}
+              {text("Check availability", "Проверить даты", "Даталарды көрүү")}
             </a>
           </div>
         </div>
@@ -198,15 +211,13 @@ function Home() {
       <section id="featured" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
-            eyebrow={ru ? "Популярные туры" : "Featured tours"}
-            title={ru ? "Куда мы едем" : "Where we go"}
+            eyebrow={text("Featured tours", "Популярные туры", "Тандалган турлар")}
+            title={text("Where we go", "Куда мы едем", "Кайда барабыз")}
           >
-            {ru
-              ? "Выберите поездку, чтобы увидеть свободные даты и места."
-              : "Pick a trip to see open dates and remaining spots."}
+            {text("Pick a trip to see open dates and remaining spots.", "Выберите поездку, чтобы увидеть свободные даты и места.", "Бош даталарды жана калган орундарды көрүү үчүн сапарды тандаңыз.")}
           </SectionHeading>
           <Link to="/tours" className="text-sm font-bold text-primary hover:underline">
-            {ru ? `Все туры (${tours?.length ?? ""}) →` : `See all ${tours?.length ?? ""} tours →`}
+            {text(`See all ${tours?.length ?? ""} tours →`, `Все туры (${tours?.length ?? ""}) →`, `Бардык турлар (${tours?.length ?? ""}) →`)}
           </Link>
         </div>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -217,9 +228,7 @@ function Home() {
             : null}
           {isError ? (
             <p className="text-sm text-destructive">
-              {ru
-                ? "Сейчас не удалось загрузить туры. Обновите страницу и попробуйте ещё раз."
-                : "We couldn't load the tours just now. Please refresh the page."}
+              {text("We couldn't load the tours just now. Please refresh the page.", "Сейчас не удалось загрузить туры. Обновите страницу и попробуйте ещё раз.", "Турларды азыр жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.")}
             </p>
           ) : null}
           {tours?.slice(0, 3).map((tour) => (
@@ -231,8 +240,8 @@ function Home() {
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
-            eyebrow={ru ? "Почему Ala-Too Adventures" : "Why Ala-Too Adventures"}
-            title={ru ? "Простые и честные поездки в горы" : "Simple, honest mountain trips"}
+            eyebrow={text("Why Ala-Too Adventures", "Почему Ala-Too Adventures", "Эмне үчүн Ala-Too Adventures")}
+            title={text("Simple, honest mountain trips", "Простые и честные поездки в горы", "Жөнөкөй жана ишенимдүү тоо сапарлары")}
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {localizedBenefits.map((b) => (
@@ -248,8 +257,8 @@ function Home() {
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <SectionHeading
-          eyebrow={ru ? "Как это работает" : "How it works"}
-          title={ru ? "Бронирование за три шага" : "Booked in three steps"}
+          eyebrow={text("How it works", "Как это работает", "Бул кандай иштейт")}
+          title={text("Booked in three steps", "Бронирование за три шага", "Үч кадамда брондоо")}
         />
         <ol className="mt-10 grid gap-6 sm:grid-cols-3">
           {localizedSteps.map((s) => (
@@ -265,8 +274,8 @@ function Home() {
       {recommended.length > 0 ? (
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
           <SectionHeading
-            eyebrow={ru ? "Рекомендации" : "Recommended"}
-            title={ru ? "Не знаете, с чего начать?" : "Not sure where to start?"}
+            eyebrow={text("Recommended", "Рекомендации", "Сунуштар")}
+            title={text("Not sure where to start?", "Не знаете, с чего начать?", "Эмнеден баштаарыңызды билбейсизби?")}
           />
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {recommended.map(({ label, tour }) => (
@@ -284,27 +293,35 @@ function Home() {
                 />
                 <div>
                   <p className="text-eyebrow">
-                    {ru
-                      ? ({
-                          "Short on time": "Мало времени",
-                          "A weekend away": "На выходные",
-                          "The big adventure": "Большое приключение",
-                        }[label] ?? label)
-                      : label}
+                    {language === "en"
+                      ? label
+                      : language === "ru"
+                        ? ({
+                            "Short on time": "Мало времени",
+                            "A weekend away": "На выходные",
+                            "The big adventure": "Большое приключение",
+                          }[label] ?? label)
+                        : ({
+                            "Short on time": "Убакыт аз болсо",
+                            "A weekend away": "Дем алышка",
+                            "The big adventure": "Чоң саякат",
+                          }[label] ?? label)}
                   </p>
                   <p className="mt-1 font-bold group-hover:text-primary">
                     {localizeTour(tour, language).name}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {tour.duration_days}{" "}
-                    {ru
+                    {language === "ru"
                       ? tour.duration_days === 1
                         ? "день"
                         : "дня/дней"
-                      : tour.duration_days === 1
-                        ? "day"
-                        : "days"}{" "}
-                    · {localizeTour(tour, language).difficulty} · {ru ? "от" : "from"} $
+                      : language === "ky"
+                        ? "күн"
+                        : tour.duration_days === 1
+                          ? "day"
+                          : "days"}{" "}
+                    · {localizeTour(tour, language).difficulty} · {text("from", "от", "баштап")} $
                     {tour.price_per_person}
                   </p>
                 </div>
@@ -317,12 +334,10 @@ function Home() {
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
-            eyebrow={ru ? "Команда" : "The team"}
-            title={ru ? "Ваши гиды" : "Your guides"}
+            eyebrow={text("The team", "Команда", "Команда")}
+            title={text("Your guides", "Ваши гиды", "Сиздин гиддер")}
           >
-            {ru
-              ? "Небольшая местная команда: вы заранее знаете, кто ведёт вашу поездку."
-              : "A small local team — you&apos;ll know who is leading your trip before you arrive."}
+            {text("A small local team — you'll know who is leading your trip before you arrive.", "Небольшая местная команда: вы заранее знаете, кто ведёт вашу поездку.", "Чакан жергиликтүү команда: сапарыңызды ким жетектээрин алдын ала билесиз.")}
           </SectionHeading>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {content.guides.map((g) => (
@@ -343,12 +358,10 @@ function Home() {
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <SectionHeading
-          eyebrow={ru ? "Отзывы гостей" : "Guest stories"}
-          title={ru ? "Что говорят путешественники" : "What travellers say"}
+          eyebrow={text("Guest stories", "Отзывы гостей", "Коноктордун пикирлери")}
+          title={text("What travellers say", "Что говорят путешественники", "Саякатчылар эмне дешет")}
         >
-          {ru
-            ? "Примеры отзывов для демо-версии, это не подтверждённые клиенты."
-            : "Sample reviews for this demo — not verified customers."}
+          {text("Sample reviews for this demo — not verified customers.", "Примеры отзывов для демо-версии, это не подтверждённые клиенты.", "Бул демо-нускадагы мисал пикирлер, алар ырасталган кардарлар эмес.")}
         </SectionHeading>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {content.reviews.map((r) => (
@@ -363,7 +376,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
-        <SectionHeading eyebrow="FAQ" title={ru ? "Полезно знать" : "Good to know"} />
+        <SectionHeading eyebrow="FAQ" title={text("Good to know", "Полезно знать", "Билип коюңуз")} />
         <Accordion type="single" collapsible className="mt-6">
           {content.faqs.map((f) => (
             <AccordionItem key={f.q} value={f.q}>
@@ -380,12 +393,10 @@ function Home() {
             <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
             <div>
               <h2 className="font-display text-5xl">
-                {ru ? "Готовы к горам?" : "Ready for the mountains?"}
+                {text("Ready for the mountains?", "Готовы к горам?", "Тоого даярсызбы?")}
               </h2>
               <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-                {ru
-                  ? "Выберите тур, свободную дату — и бронирование готово."
-                  : "Pick a tour, choose an open date and you&apos;re booked."}
+                {text("Pick a tour, choose an open date and you're booked.", "Выберите тур, свободную дату — и бронирование готово.", "Турду жана бош датаны тандаңыз — брондоо даяр.")}
               </p>
             </div>
           </div>
@@ -393,7 +404,7 @@ function Home() {
             to="/tours"
             className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
           >
-            {ru ? "Выбрать тур" : "Explore tours"}
+            {text("Explore tours", "Выбрать тур", "Тур тандоо")}
           </Link>
         </div>
       </section>

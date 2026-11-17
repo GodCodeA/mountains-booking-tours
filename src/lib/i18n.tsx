@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type Language = "en" | "ru";
+export type Language = "en" | "ru" | "ky";
 
 const copy = {
   en: {
@@ -79,6 +79,44 @@ const copy = {
     perPerson: "за человека",
     viewTrip: "Смотреть тур",
   },
+  ky: {
+    home: "Башкы бет",
+    tours: "Турлар",
+    owner: "Кабинет",
+    language: "Тил",
+    openMenu: "Менюнү ачуу",
+    closeMenu: "Менюнү жабуу",
+    explore: "Тур тандоо",
+    allTours: "Бардык турлар",
+    ownerDashboard: "Ээсинин кабинети",
+    footerDescription:
+      "Бишкектен чыккан, бул өрөөндөрдү жакшы билген жергиликтүү команда менен чакан топторго тоо саякаттары.",
+    contact: "Байланыш",
+    demoNotice: "Демо-нуска: турлар, жеткиликтүүлүк жана брондоолор — тесттик маалыматтар.",
+    bookingConfirmed: "Брондоо ырасталды.",
+    saveLink: "Саякаттын чоо-жайына кийин кайтуу үчүн бул шилтемени сактап коюңуз.",
+    copyLink: "Шилтемени көчүрүү",
+    linkCopied: "Шилтеме көчүрүлдү",
+    browseTrips: "Башка турларды көрүү",
+    reference: "Код",
+    guests: "конок",
+    guest: "конок",
+    totalPayable: "Жалпы сумма, сапар болгон күнү төлөнөт",
+    ownerView: "Ээсинин кабинети",
+    signOut: "Чыгуу",
+    signingOut: "Чыгып жатабыз…",
+    day: "күн",
+    days: "күн",
+    max: "макс.",
+    next: "Жакынкы дата",
+    spot: "орун",
+    spots: "орун",
+    left: "калды",
+    noOpenDates: "Азыр бош даталар жок",
+    from: "баштап",
+    perPerson: "адамга",
+    viewTrip: "Турду көрүү",
+  },
 } as const;
 
 type CopyKey = keyof (typeof copy)["en"];
@@ -96,7 +134,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === "en" || saved === "ru") setLanguage(saved);
+    if (saved === "en" || saved === "ru" || saved === "ky") setLanguage(saved);
   }, []);
 
   useEffect(() => {
@@ -110,6 +148,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+/** Select interface copy without changing user-generated content such as reviews. */
+export function localText(language: Language, english: string, russian: string, kyrgyz: string) {
+  return language === "ru" ? russian : language === "ky" ? kyrgyz : english;
 }
 
 export function useI18n() {

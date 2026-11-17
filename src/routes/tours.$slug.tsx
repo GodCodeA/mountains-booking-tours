@@ -19,7 +19,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CANCELLATION_POLICY, CANCELLATION_POLICY_RU, tourExtras } from "@/lib/tour-content";
+import { CANCELLATION_POLICY, CANCELLATION_POLICY_KY, CANCELLATION_POLICY_RU, tourExtras } from "@/lib/tour-content";
 import { siteContent } from "@/lib/site-content";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,7 +33,7 @@ import {
   type AvailabilityState,
 } from "@/lib/bookings";
 import { tourGallery } from "@/lib/tour-images";
-import { useI18n } from "@/lib/i18n";
+import { localText, useI18n } from "@/lib/i18n";
 import { localizeTour } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/tours/$slug")({
@@ -64,7 +64,8 @@ export const Route = createFileRoute("/tours/$slug")({
 
 function TourDetail() {
   const { language } = useI18n();
-  const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const { slug } = Route.useParams();
   const { data: tour, isLoading, isError } = useQuery(tourQuery(slug));
   const { data: departures, isLoading: loadingDates } = useQuery(departuresQuery(tour?.id));
@@ -82,17 +83,15 @@ function TourDetail() {
   if (isError || !tour) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="font-display text-5xl">{ru ? "Тур не найден" : "Trip not found"}</h1>
+        <h1 className="font-display text-5xl">{text("Trip not found", "Тур не найден", "Тур табылган жок")}</h1>
         <p className="mt-3 text-muted-foreground">
-          {ru
-            ? "Этого тура нет или он больше не проводится."
-            : "That tour doesn't exist or is no longer offered."}
+          {text("That tour doesn't exist or is no longer offered.", "Этого тура нет или он больше не проводится.", "Бул тур жок же мындан ары сунушталбайт.")}
         </p>
         <Link
           to="/tours"
           className="mt-6 inline-block rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
         >
-          {ru ? "Все туры" : "See all tours"}
+          {text("See all tours", "Все туры", "Бардык турларды көрүү")}
         </Link>
       </div>
     );
@@ -128,6 +127,8 @@ function TourBody({
 }) {
   const { language } = useI18n();
   const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const content = siteContent(language);
   tour = localizeTour(tour, language);
   const extras = tourExtras(tour.slug, language);
@@ -140,36 +141,32 @@ function TourBody({
   const facts: [React.ReactNode, string, string][] = [
     [
       <Clock key="c" className="h-4 w-4 text-primary" />,
-      ru ? "Длительность" : "Duration",
-      `${tour.duration_days} ${tour.duration_days === 1 ? (ru ? "день" : "day") : ru ? "дней" : "days"}`,
+      text("Duration", "Длительность", "Узактыгы"),
+      `${tour.duration_days} ${language === "ru" ? (tour.duration_days === 1 ? "день" : "дней") : language === "ky" ? "күн" : tour.duration_days === 1 ? "day" : "days"}`,
     ],
     [
       <Mountain key="m" className="h-4 w-4 text-primary" />,
-      ru ? "Сложность" : "Difficulty",
+      text("Difficulty", "Сложность", "Татаалдык"),
       tour.difficulty,
     ],
     [
       <Users key="u" className="h-4 w-4 text-primary" />,
-      ru ? "Размер группы" : "Group size",
-      ru ? `Макс. ${tour.max_group_size}` : `Max ${tour.max_group_size}`,
+      text("Group size", "Размер группы", "Топтун көлөмү"),
+      text(`Max ${tour.max_group_size}`, `Макс. ${tour.max_group_size}`, `Макс. ${tour.max_group_size}`),
     ],
     [
       <MapPin key="p" className="h-4 w-4 text-primary" />,
-      ru ? "Точка встречи" : "Meeting point",
+      text("Meeting point", "Точка встречи", "Жолугушуу жери"),
       tour.meeting_point,
     ],
     [
       <CalendarDays key="d" className="h-4 w-4 text-primary" />,
-      ru ? "Ближайшая дата" : "Next date",
+      text("Next date", "Ближайшая дата", "Жакынкы дата"),
       loadingDates
-        ? ru
-          ? "Загрузка…"
-          : "Loading…"
+        ? text("Loading…", "Загрузка…", "Жүктөлүүдө…")
         : next
           ? `${formatDate(next.departure_date, language)}, ${formatTime(next.departure_time)}`
-          : ru
-            ? "Нет свободных дат"
-            : "No open dates",
+          : text("No open dates", "Нет свободных дат", "Бош даталар жок"),
     ],
   ];
 
@@ -194,9 +191,9 @@ function TourBody({
           </h1>
           <p className="mt-4 max-w-xl text-muted-foreground">{tour.summary}</p>
           <p className="mt-5 text-sm">
-            {ru ? "От" : "From"}{" "}
+            {text("From", "От", "Баштап")}{" "}
             <span className="font-display text-3xl">${tour.price_per_person}</span>{" "}
-            <span className="text-muted-foreground">{ru ? "за человека" : "per person"}</span>
+            <span className="text-muted-foreground">{text("per person", "за человека", "адамга")}</span>
           </p>
         </div>
       </div>
@@ -210,17 +207,11 @@ function TourBody({
               href={`#${id}`}
               className="whitespace-nowrap text-muted-foreground hover:text-foreground"
             >
-              {ru
-                ? ({
-                    overview: "Обзор",
-                    itinerary: "Программа",
-                    included: "Включено",
-                    bring: "Что взять",
-                    meeting: "Встреча",
-                    availability: "Даты",
-                    faq: "FAQ",
-                  }[id] ?? label)
-                : label}
+              {language === "en"
+                ? label
+                : language === "ru"
+                  ? ({ overview: "Обзор", itinerary: "Программа", included: "Включено", bring: "Что взять", meeting: "Встреча", availability: "Даты", faq: "FAQ" }[id] ?? label)
+                  : ({ overview: "Сереп", itinerary: "Программа", included: "Камтылган", bring: "Эмне алуу керек", meeting: "Жолугушуу", availability: "Даталар", faq: "FAQ" }[id] ?? label)}
             </a>
           ))}
         </div>
@@ -240,20 +231,20 @@ function TourBody({
             ))}
             <div>
               <dt className="text-xs uppercase tracking-wider text-muted-foreground">
-                {ru ? "Цена" : "Price"}
+                {text("Price", "Цена", "Баа")}
               </dt>
               <dd className="mt-1 text-sm font-semibold">
-                ${tour.price_per_person} / {ru ? "чел." : "person"}
+                ${tour.price_per_person} / {text("person", "чел.", "адам")}
               </dd>
             </div>
           </dl>
 
           {/* Gallery */}
-          <section aria-label={ru ? "Галерея" : "Photo gallery"}>
+          <section aria-label={text("Photo gallery", "Галерея", "Сүрөттөр") }>
             <div className="overflow-hidden rounded-xl">
               <img
                 src={photos[active]}
-                alt={`${tour.name} — ${ru ? "фото" : "photo"} ${active + 1}`}
+                alt={`${tour.name} — ${text("photo", "фото", "сүрөт")} ${active + 1}`}
                 loading="lazy"
                 width={1280}
                 height={864}
@@ -266,7 +257,7 @@ function TourBody({
                   key={src}
                   type="button"
                   onClick={() => setActive(i)}
-                  aria-label={ru ? `Показать фото ${i + 1}` : `Show photo ${i + 1}`}
+                  aria-label={text(`Show photo ${i + 1}`, `Показать фото ${i + 1}`, `${i + 1}-сүрөттү көрсөтүү`)}
                   className={
                     i === active
                       ? "overflow-hidden rounded-lg ring-2 ring-primary"
@@ -287,9 +278,9 @@ function TourBody({
           </section>
 
           <section id="overview" className="scroll-mt-32">
-            <h2 className="font-display text-4xl">{ru ? "Обзор" : "Overview"}</h2>
+            <h2 className="font-display text-4xl">{text("Overview", "Обзор", "Сереп")}</h2>
             <p className="mt-3 leading-relaxed text-muted-foreground">{tour.description}</p>
-            <h3 className="mt-8 font-display text-3xl">{ru ? "Главное" : "Highlights"}</h3>
+            <h3 className="mt-8 font-display text-3xl">{text("Highlights", "Главное", "Негизгиси")}</h3>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {tour.highlights.map((h) => (
                 <li key={h} className="flex items-start gap-2 text-sm">
@@ -302,7 +293,7 @@ function TourBody({
 
           {extras.itinerary.length > 0 ? (
             <section id="itinerary" className="scroll-mt-32">
-              <h2 className="font-display text-4xl">{ru ? "Программа" : "Itinerary"}</h2>
+              <h2 className="font-display text-4xl">{text("Itinerary", "Программа", "Программа")}</h2>
               <ol className="mt-4 space-y-4 border-l border-border pl-5">
                 {extras.itinerary.map((step) => (
                   <li key={step.time + step.title}>
@@ -317,7 +308,7 @@ function TourBody({
 
           <section id="included" className="grid scroll-mt-32 gap-8 sm:grid-cols-2">
             <div>
-              <h2 className="font-display text-3xl">{ru ? "Включено" : "Included"}</h2>
+              <h2 className="font-display text-3xl">{text("Included", "Включено", "Камтылган")}</h2>
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                 {tour.included.map((i) => (
                   <li key={i} className="flex items-start gap-2">
@@ -328,7 +319,7 @@ function TourBody({
               </ul>
             </div>
             <div>
-              <h2 className="font-display text-3xl">{ru ? "Не включено" : "Not included"}</h2>
+              <h2 className="font-display text-3xl">{text("Not included", "Не включено", "Камтылган эмес")}</h2>
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                 {tour.not_included.map((i) => (
                   <li key={i} className="flex items-start gap-2">
@@ -341,7 +332,7 @@ function TourBody({
           </section>
 
           <section id="bring" className="scroll-mt-32">
-            <h2 className="font-display text-3xl">{ru ? "Что взять с собой" : "What to bring"}</h2>
+            <h2 className="font-display text-3xl">{text("What to bring", "Что взять с собой", "Эмне алуу керек")}</h2>
             <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
               {extras.whatToBring.map((i) => (
                 <li key={i} className="flex items-start gap-2">
@@ -354,34 +345,30 @@ function TourBody({
 
           <section id="meeting" className="grid scroll-mt-32 gap-8 sm:grid-cols-2">
             <div>
-              <h2 className="font-display text-3xl">{ru ? "Точка встречи" : "Meeting point"}</h2>
+              <h2 className="font-display text-3xl">{text("Meeting point", "Точка встречи", "Жолугушуу жери")}</h2>
               <p className="mt-3 flex items-start gap-2 text-sm">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 {tour.meeting_point}
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                {ru
-                  ? "Пожалуйста, приходите за 15 минут до времени старта, указанного для вашей даты."
-                  : "Please arrive 15 minutes before the start time shown on your date."}
+                {text("Please arrive 15 minutes before the start time shown on your date.", "Пожалуйста, приходите за 15 минут до времени старта, указанного для вашей даты.", "Сиздин датаңызда көрсөтүлгөн башталыш убактысынан 15 мүнөт мурун келиңиз.")}
               </p>
             </div>
             <div>
               <h2 className="font-display text-3xl">
-                {ru ? "Условия отмены" : "Cancellation policy"}
+                {text("Cancellation policy", "Условия отмены", "Жокко чыгаруу шарттары")}
               </h2>
               <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                {ru ? CANCELLATION_POLICY_RU : CANCELLATION_POLICY}
+                {language === "ru" ? CANCELLATION_POLICY_RU : language === "ky" ? CANCELLATION_POLICY_KY : CANCELLATION_POLICY}
               </p>
             </div>
           </section>
 
           <section id="availability" className="scroll-mt-32">
-            <h2 className="font-display text-4xl">{ru ? "Доступность" : "Availability"}</h2>
+            <h2 className="font-display text-4xl">{text("Availability", "Доступность", "Жеткиликтүүлүк")}</h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {ru
-                ? "Демо-доступность: даты являются тестовыми данными. Время указано по Бишкеку."
-                : "Demo availability — dates are sample data. Start times are Bishkek time."}
+              {text("Demo availability — dates are sample data. Start times are Bishkek time.", "Демо-доступность: даты являются тестовыми данными. Время указано по Бишкеку.", "Демо-жеткиликтүүлүк: даталар тесттик маалыматтар. Убакыт Бишкек убактысы менен көрсөтүлгөн.")}
             </p>
             <div className="mt-4 space-y-2">
               {loadingDates
@@ -391,9 +378,7 @@ function TourBody({
                 : null}
               {!loadingDates && openCount === 0 ? (
                 <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
-                  {ru
-                    ? "Сейчас нет свободных дат. Напишите Азамату в WhatsApp, и он добавит новую."
-                    : "No open dates right now. Message Azamat on WhatsApp and he'll add one."}
+                  {text("No open dates right now. Message Azamat on WhatsApp and he'll add one.", "Сейчас нет свободных дат. Напишите Азамату в WhatsApp, и он добавит новую.", "Азыр бош даталар жок. Азаматка WhatsApp аркылуу жазыңыз, ал жаңысын кошот.")}
                 </p>
               ) : null}
               {list.map((d) => {
@@ -412,7 +397,7 @@ function TourBody({
                       <div>
                         <p className="font-semibold">{formatDate(d.departure_date, language)}</p>
                         <p className="text-xs text-muted-foreground">
-                          {ru ? "Начало" : "Starts"} {formatTime(d.departure_time)}
+                          {text("Starts", "Начало", "Башталышы")} {formatTime(d.departure_time)}
                         </p>
                       </div>
                     </div>
@@ -424,7 +409,7 @@ function TourBody({
                       </span>
                       {state === "full" ? (
                         <span className="rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-foreground">
-                          {ru ? "Недоступно" : "Unavailable"}
+                          {text("Unavailable", "Недоступно", "Жеткиликсиз")}
                         </span>
                       ) : (
                         <Link
@@ -433,7 +418,7 @@ function TourBody({
                           search={{ departure: d.id }}
                           className="rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground"
                         >
-                          {ru ? "Выбрать дату" : "Select date"}
+                          {text("Select date", "Выбрать дату", "Датаны тандоо")}
                         </Link>
                       )}
                     </div>
@@ -458,21 +443,19 @@ function TourBody({
 
         <aside className="h-fit lg:sticky lg:top-32">
           <div className="surface-panel p-6">
-            <p className="text-sm text-muted-foreground">{ru ? "От" : "From"}</p>
+            <p className="text-sm text-muted-foreground">{text("From", "От", "Баштап")}</p>
             <p className="font-display text-6xl">${tour.price_per_person}</p>
-            <p className="text-sm text-muted-foreground">{ru ? "за человека" : "per person"}</p>
+            <p className="text-sm text-muted-foreground">{text("per person", "за человека", "адамга")}</p>
             <p className="mt-4 text-sm">
               {loadingDates
-                ? ru
-                  ? "Проверяем даты…"
-                  : "Checking dates…"
+                ? text("Checking dates…", "Проверяем даты…", "Даталар текшерилүүдө…")
                 : openCount > 0
-                  ? ru
+                  ? language === "ru"
                     ? `${openCount} ${openCount === 1 ? "свободная дата" : "свободных дат"}${next ? ` · ближайшая ${formatDate(next.departure_date, language)}` : ""}`
-                    : `${openCount} open ${openCount === 1 ? "date" : "dates"}${next ? ` · next ${formatDate(next.departure_date, language)}` : ""}`
-                  : ru
-                    ? "Сейчас нет свободных дат"
-                    : "No open dates right now"}
+                    : language === "ky"
+                      ? `${openCount} бош дата${next ? ` · жакынкысы ${formatDate(next.departure_date, language)}` : ""}`
+                      : `${openCount} open ${openCount === 1 ? "date" : "dates"}${next ? ` · next ${formatDate(next.departure_date, language)}` : ""}`
+                  : text("No open dates right now", "Сейчас нет свободных дат", "Азыр бош даталар жок")}
             </p>
             <Link
               to="/book/$slug"
@@ -480,12 +463,10 @@ function TourBody({
               search={{}}
               className="mt-5 block rounded-md bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground shadow-[var(--shadow-glow)]"
             >
-              {ru ? "Проверить даты и забронировать" : "Check availability & book"}
+              {text("Check availability & book", "Проверить даты и забронировать", "Даталарды көрүп, брондоо")}
             </Link>
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              {ru
-                ? "Онлайн-оплаты нет — вы платите в день поездки."
-                : "No payment taken — you pay on the day."}
+              {text("No payment taken — you pay on the day.", "Онлайн-оплаты нет — вы платите в день поездки.", "Онлайн төлөм жок — сапар болгон күнү төлөйсүз.")}
             </p>
           </div>
         </aside>

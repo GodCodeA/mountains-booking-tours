@@ -46,19 +46,29 @@ const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
   departureId: "Выберите дату.",
 };
 
+const kyrgyzErrors: Record<BookingField | "guests" | "departureId", string> = {
+  name: "Толук атыңызды жазыңыз (кеминде 2 белги).",
+  email: "Туура email дарегин жазыңыз.",
+  phone: "Туура телефон номерин жазыңыз, мисалы +996 555 000 000.",
+  whatsapp: "Туура WhatsApp номерин жазыңыз же талааны бош калтырыңыз.",
+  notes: "Эскертүү 500 белгиден ашпашы керек.",
+  guests: "Коноктордун туура санын жазыңыз.",
+  departureId: "Датаны тандаңыз.",
+};
+
 function localizedError(
   field: BookingField | "guests" | "departureId",
   message: string,
-  language: "en" | "ru",
+  language: "en" | "ru" | "ky",
 ) {
-  return language === "ru" ? russianErrors[field] : message;
+  return language === "ru" ? russianErrors[field] : language === "ky" ? kyrgyzErrors[field] : message;
 }
 
 /** Validate a single contact field; returns an error message or null. */
 export function validateField(
   field: BookingField,
   value: string,
-  language: "en" | "ru" = "en",
+  language: "en" | "ru" | "ky" = "en",
 ): string | null {
   const result = bookingFormSchema.shape[field].safeParse(value);
   return result.success
@@ -76,7 +86,7 @@ export function validateBookingForm(values: {
   guests: number;
   departureId: string | undefined;
   maxGuests: number;
-  language?: "en" | "ru";
+  language?: "en" | "ru" | "ky";
 }): Partial<Record<BookingField | "guests" | "departureId", string>> {
   const errors: Partial<Record<BookingField | "guests" | "departureId", string>> = {};
   const parsed = bookingFormSchema.safeParse({
@@ -98,7 +108,9 @@ export function validateBookingForm(values: {
     errors.guests =
       values.language === "ru"
         ? `На эту дату осталось только ${values.maxGuests} ${values.maxGuests === 1 ? "место" : "места"}.`
-        : `Only ${values.maxGuests} spot${values.maxGuests === 1 ? "" : "s"} left on this date.`;
+        : values.language === "ky"
+          ? `Бул датага болгону ${values.maxGuests} орун калды.`
+          : `Only ${values.maxGuests} spot${values.maxGuests === 1 ? "" : "s"} left on this date.`;
   }
   return errors;
 }

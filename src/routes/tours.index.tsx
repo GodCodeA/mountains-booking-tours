@@ -24,7 +24,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { spotsLeft, toursQuery, upcomingDeparturesQuery, type Departure } from "@/lib/bookings";
-import { useI18n } from "@/lib/i18n";
+import { localText, useI18n } from "@/lib/i18n";
 import { localizeDifficulty, localizeRegion, localizeTour } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/tours/")({
@@ -104,6 +104,8 @@ function FilterGroup({ label, children }: { label: string; children: React.React
 function ToursPage() {
   const { language } = useI18n();
   const ru = language === "ru";
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
   const toursQ = useQuery(toursQuery);
   const depsQ = useQuery(upcomingDeparturesQuery);
   const tours = useMemo(() => toursQ.data ?? [], [toursQ.data]);
@@ -162,17 +164,17 @@ function ToursPage() {
 
   const durationLabel = (value: (typeof DURATIONS)[number]) =>
     ({
-      all: ru ? "Любая длительность" : "Any length",
-      "1": ru ? "1 день" : "Day trip",
-      "2-3": ru ? "2–3 дня" : "2–3 days",
-      "4+": ru ? "4+ дней" : "4+ days",
+      all: text("Any length", "Любая длительность", "Каалаган узактык"),
+      "1": text("Day trip", "1 день", "1 күн"),
+      "2-3": text("2–3 days", "2–3 дня", "2–3 күн"),
+      "4+": text("4+ days", "4+ дней", "4+ күн"),
     })[value];
   const sortLabel = (value: (typeof SORTS)[number]) =>
     ({
-      recommended: ru ? "Рекомендуемые" : "Recommended",
-      "price-asc": ru ? "Цена: по возрастанию" : "Price: low to high",
-      "price-desc": ru ? "Цена: по убыванию" : "Price: high to low",
-      duration: ru ? "Сначала короткие" : "Duration: shortest first",
+      recommended: text("Recommended", "Рекомендуемые", "Сунушталган"),
+      "price-asc": text("Price: low to high", "Цена: по возрастанию", "Баа: арзандан кымбатка"),
+      "price-desc": text("Price: high to low", "Цена: по убыванию", "Баа: кымбаттан арзанга"),
+      duration: text("Duration: shortest first", "Сначала короткие", "Адегенде кыскасы"),
     })[value];
 
   const visible = useMemo(() => {
@@ -209,9 +211,9 @@ function ToursPage() {
 
   const filterPanel = (
     <div className="space-y-7">
-      <FilterGroup label={ru ? "Сложность" : "Difficulty"}>
+      <FilterGroup label={text("Difficulty", "Сложность", "Татаалдык")}>
         <Pill active={filters.difficulty === "all"} onClick={() => set("difficulty", "all")}>
-          {ru ? "Все" : "All"}
+          {text("All", "Все", "Баары")}
         </Pill>
         {DIFFICULTIES.map((d) => (
           <Pill key={d} active={filters.difficulty === d} onClick={() => set("difficulty", d)}>
@@ -219,16 +221,16 @@ function ToursPage() {
           </Pill>
         ))}
       </FilterGroup>
-      <FilterGroup label={ru ? "Продолжительность" : "Duration"}>
+      <FilterGroup label={text("Duration", "Продолжительность", "Узактыгы")}>
         {DURATIONS.map((d) => (
           <Pill key={d} active={filters.duration === d} onClick={() => set("duration", d)}>
             {durationLabel(d)}
           </Pill>
         ))}
       </FilterGroup>
-      <FilterGroup label={ru ? "Регион" : "Region"}>
+      <FilterGroup label={text("Region", "Регион", "Аймак")}>
         <Pill active={filters.category === "all"} onClick={() => set("category", "all")}>
-          {ru ? "Все регионы" : "All regions"}
+          {text("All regions", "Все регионы", "Бардык аймактар")}
         </Pill>
         {categories.map((c) => (
           <Pill key={c} active={filters.category === c} onClick={() => set("category", c)}>
@@ -239,7 +241,7 @@ function ToursPage() {
       {priceBounds[1] > priceBounds[0] ? (
         <div>
           <p className="text-eyebrow mb-3">
-            {ru ? "Цена за человека" : "Price per person"}: ${filters.price[0]} – $
+            {text("Price per person", "Цена за человека", "Адамга баа")}: ${filters.price[0]} – $
             {filters.price[1]}
           </p>
           <Slider
@@ -248,16 +250,16 @@ function ToursPage() {
             step={5}
             value={filters.price}
             onValueChange={(v) => set("price", [v[0], v[1]] as [number, number])}
-            aria-label={ru ? "Диапазон цен" : "Price range"}
+            aria-label={text("Price range", "Диапазон цен", "Баа аралыгы")}
           />
         </div>
       ) : null}
-      <FilterGroup label={ru ? "Доступность" : "Availability"}>
+      <FilterGroup label={text("Availability", "Доступность", "Жеткиликтүүлүк")}>
         <Pill active={!filters.availableOnly} onClick={() => set("availableOnly", false)}>
-          {ru ? "Все туры" : "All tours"}
+          {text("All tours", "Все туры", "Бардык турлар")}
         </Pill>
         <Pill active={filters.availableOnly} onClick={() => set("availableOnly", true)}>
-          {ru ? "Есть свободные даты" : "Has open dates"}
+          {text("Has open dates", "Есть свободные даты", "Бош даталар бар")}
         </Pill>
       </FilterGroup>
     </div>
@@ -268,14 +270,12 @@ function ToursPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <p className="text-eyebrow">{ru ? "Шесть поездок, одна команда" : "Six trips, one guide"}</p>
+      <p className="text-eyebrow">{text("Six trips, one guide", "Шесть поездок, одна команда", "Алты сапар, бир команда")}</p>
       <h1 className="mt-3 font-display text-6xl sm:text-7xl">
-        {ru ? "Выберите свои горы" : "Choose your mountains"}
+        {text("Choose your mountains", "Выберите свои горы", "Өз тооңузду тандаңыз")}
       </h1>
       <p className="mt-4 max-w-xl text-muted-foreground">
-        {ru
-          ? "Цены указаны за человека и включают транспорт от места встречи, услуги гида и питание, указанное в описании тура."
-          : "Prices are per person and include transport from the meeting point, guiding and the meals listed on each trip."}
+        {text("Prices are per person and include transport from the meeting point, guiding and the meals listed on each trip.", "Цены указаны за человека и включают транспорт от места встречи, услуги гида и питание, указанное в описании тура.", "Баалар бир адамга көрсөтүлгөн жана жолугушуу жеринен транспортту, гид кызматын жана тур сүрөттөмөсүндө көрсөтүлгөн тамакты камтыйт.")}
       </p>
 
       {/* Search + sort + mobile filter trigger */}
@@ -285,15 +285,15 @@ function ToursPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={ru ? "Поиск туров, регионов, озёр…" : "Search tours, regions, lakes…"}
-            aria-label={ru ? "Поиск туров" : "Search tours"}
+            placeholder={text("Search tours, regions, lakes…", "Поиск туров, регионов, озёр…", "Турларды, аймактарды, көлдөрдү издөө…")}
+            aria-label={text("Search tours", "Поиск туров", "Турларды издөө")}
             className="h-11 pl-9 pr-9"
           />
           {query ? (
             <button
               type="button"
               onClick={() => setQuery("")}
-              aria-label={ru ? "Очистить поиск" : "Clear search"}
+              aria-label={text("Clear search", "Очистить поиск", "Издөөнү тазалоо")}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -304,7 +304,7 @@ function ToursPage() {
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger
               className="h-11 flex-1 sm:w-56"
-              aria-label={ru ? "Сортировка туров" : "Sort tours"}
+              aria-label={text("Sort tours", "Сортировка туров", "Турларды иреттөө")}
             >
               <SelectValue />
             </SelectTrigger>
@@ -319,7 +319,7 @@ function ToursPage() {
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" className="h-11 lg:hidden">
-                <SlidersHorizontal className="h-4 w-4" /> {ru ? "Фильтры" : "Filters"}
+                <SlidersHorizontal className="h-4 w-4" /> {text("Filters", "Фильтры", "Чыпкалар")}
                 {activeCount ? (
                   <span className="ml-1 rounded-full bg-primary px-2 text-xs text-primary-foreground">
                     {activeCount}
@@ -330,18 +330,16 @@ function ToursPage() {
             <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
               <SheetHeader>
                 <SheetTitle className="font-display text-3xl">
-                  {ru ? "Фильтры туров" : "Filter tours"}
+                  {text("Filter tours", "Фильтры туров", "Тур чыпкалары")}
                 </SheetTitle>
               </SheetHeader>
               <div className="px-4 py-2">{filterPanel}</div>
               <SheetFooter className="flex-row gap-3">
                 <Button variant="outline" className="flex-1" onClick={resetAll}>
-                  {ru ? "Сбросить" : "Reset"}
+                  {text("Reset", "Сбросить", "Тазалоо")}
                 </Button>
                 <Button className="flex-1" onClick={() => setSheetOpen(false)}>
-                  {ru
-                    ? `Показать: ${visible.length}`
-                    : `Show ${visible.length} ${visible.length === 1 ? "tour" : "tours"}`}
+                  {text(`Show ${visible.length} ${visible.length === 1 ? "tour" : "tours"}`, `Показать: ${visible.length}`, `Көрсөтүү: ${visible.length}`)}
                 </Button>
               </SheetFooter>
             </SheetContent>
@@ -355,7 +353,7 @@ function ToursPage() {
             {filterPanel}
             {activeCount ? (
               <Button variant="ghost" size="sm" className="mt-6" onClick={resetAll}>
-                {ru ? "Сбросить фильтры" : "Reset filters"}
+                {text("Reset filters", "Сбросить фильтры", "Чыпкаларды тазалоо")}
               </Button>
             ) : null}
           </div>
@@ -364,17 +362,13 @@ function ToursPage() {
         <div>
           {!isLoading && !toursQ.isError ? (
             <p className="mb-4 text-sm text-muted-foreground">
-              {ru
-                ? `Показано: ${visible.length} из ${tours.length}`
-                : `${visible.length} of ${tours.length} tours`}
+              {text(`${visible.length} of ${tours.length} tours`, `Показано: ${visible.length} из ${tours.length}`, `${tours.length} турдун ${visible.length} көрсөтүлдү`)}
             </p>
           ) : null}
 
           {noDatesAnywhere ? (
             <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-              {ru
-                ? "Сейчас нет свободных дат. Мы регулярно добавляем новые — загляните позже."
-                : "No departure dates are open right now. New dates are added regularly — check back soon."}
+              {text("No departure dates are open right now. New dates are added regularly — check back soon.", "Сейчас нет свободных дат. Мы регулярно добавляем новые — загляните позже.", "Азыр бош даталар жок. Жаңы даталарды дайыма кошуп турабыз — кийинчерээк кириңиз.")}
             </div>
           ) : null}
 
@@ -396,9 +390,7 @@ function ToursPage() {
 
           {toursQ.isError ? (
             <p className="mt-8 text-sm text-destructive">
-              {ru
-                ? "Не удалось загрузить туры. Обновите страницу и попробуйте снова."
-                : "We couldn't load the tours. Please refresh the page and try again."}
+              {text("We couldn't load the tours. Please refresh the page and try again.", "Не удалось загрузить туры. Обновите страницу и попробуйте снова.", "Турларды жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.")}
             </p>
           ) : null}
 
@@ -407,24 +399,16 @@ function ToursPage() {
               <Mountain className="h-10 w-10 text-primary" />
               <h2 className="mt-4 font-display text-3xl">
                 {debounced && searched.length === 0
-                  ? ru
-                    ? `Ничего не найдено: «${query.trim()}»`
-                    : `Nothing found for "${query.trim()}"`
-                  : ru
-                    ? "Нет подходящих туров"
-                    : "No tours match"}
+                  ? text(`Nothing found for "${query.trim()}"`, `Ничего не найдено: «${query.trim()}»`, `«${query.trim()}» боюнча эч нерсе табылган жок`)
+                  : text("No tours match", "Нет подходящих туров", "Ылайыктуу турлар жок")}
               </h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 {debounced && searched.length === 0
-                  ? ru
-                    ? "Попробуйте название тура, регион, например Иссык-Куль, или слово «озеро» либо «юрта»."
-                    : "Try a tour name, a region like Issyk-Kul, or a word like lake or yurt."
-                  : ru
-                    ? "Расширьте диапазон цен или уберите один из фильтров."
-                    : "Try widening the price range or removing a filter."}
+                  ? text("Try a tour name, a region like Issyk-Kul, or a word like lake or yurt.", "Попробуйте название тура, регион, например Иссык-Куль, или слово «озеро» либо «юрта».", "Турдун атын, Ысык-Көл сыяктуу аймакты же «көл», «боз үй» деген сөздөрдү издеп көрүңүз.")
+                  : text("Try widening the price range or removing a filter.", "Расширьте диапазон цен или уберите один из фильтров.", "Баа аралыгын кеңейтип же бир чыпканы алып салыңыз.")}
               </p>
               <Button variant="outline" className="mt-6" onClick={resetAll}>
-                {ru ? "Очистить поиск и фильтры" : "Clear search & filters"}
+                {text("Clear search & filters", "Очистить поиск и фильтры", "Издөө менен чыпкаларды тазалоо")}
               </Button>
             </div>
           ) : null}

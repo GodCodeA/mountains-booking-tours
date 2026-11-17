@@ -18,7 +18,7 @@ export function SiteHeader() {
       className="inline-flex items-center rounded-md border border-border p-0.5"
       aria-label={t("language")}
     >
-      {(["en", "ru"] as const).map((code) => (
+      {(["en", "ru", "ky"] as const).map((code) => (
         <button
           key={code}
           type="button"
@@ -30,7 +30,7 @@ export function SiteHeader() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          {code === "ru" ? "РУ" : "EN"}
+          {code === "ru" ? "РУ" : code === "ky" ? "КЫ" : "EN"}
         </button>
       ))}
     </div>
