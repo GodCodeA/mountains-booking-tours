@@ -61,7 +61,11 @@ function localizedError(
   message: string,
   language: "en" | "ru" | "ky",
 ) {
-  return language === "ru" ? russianErrors[field] : language === "ky" ? kyrgyzErrors[field] : message;
+  return language === "ru"
+    ? russianErrors[field]
+    : language === "ky"
+      ? kyrgyzErrors[field]
+      : message;
 }
 
 /** Validate a single contact field; returns an error message or null. */

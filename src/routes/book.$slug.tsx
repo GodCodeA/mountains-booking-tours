@@ -235,9 +235,15 @@ function BookingFlow() {
   if (isError || !tour) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="font-display text-5xl">{text("Trip not found", "Тур не найден", "Тур табылган жок")}</h1>
+        <h1 className="font-display text-5xl">
+          {text("Trip not found", "Тур не найден", "Тур табылган жок")}
+        </h1>
         <p className="mt-3 text-muted-foreground">
-          {text("We couldn't load this tour. Please try again.", "Не удалось загрузить этот тур. Попробуйте ещё раз.", "Бул турду жүктөө мүмкүн болбоду. Кайра аракет кылыңыз.")}
+          {text(
+            "We couldn't load this tour. Please try again.",
+            "Не удалось загрузить этот тур. Попробуйте ещё раз.",
+            "Бул турду жүктөө мүмкүн болбоду. Кайра аракет кылыңыз.",
+          )}
         </p>
         <Link
           to="/tours"
@@ -258,7 +264,11 @@ function BookingFlow() {
       });
       if (result.status === "full") {
         toast.error(
-          text("Someone just booked those spots. Please pick another date or fewer guests.", "Кто-то только что забронировал эти места. Выберите другую дату или меньше гостей.", "Бул орундарды башка бирөө жаңы эле брондоду. Башка датаны же азыраак конокту тандаңыз."),
+          text(
+            "Someone just booked those spots. Please pick another date or fewer guests.",
+            "Кто-то только что забронировал эти места. Выберите другую дату или меньше гостей.",
+            "Бул орундарды башка бирөө жаңы эле брондоду. Башка датаны же азыраак конокту тандаңыз.",
+          ),
         );
         await queryClient.invalidateQueries({ queryKey: ["departures"] });
         setStep(0);
@@ -276,7 +286,11 @@ function BookingFlow() {
       navigate({ to: "/booking/$reference", params: { reference: result.reference } });
     } catch (err) {
       toast.error(
-        text("We couldn't save that booking. Please try again.", "Не удалось сохранить бронирование. Попробуйте ещё раз.", "Брондоону сактоо мүмкүн болбоду. Кайра аракет кылыңыз."),
+        text(
+          "We couldn't save that booking. Please try again.",
+          "Не удалось сохранить бронирование. Попробуйте ещё раз.",
+          "Брондоону сактоо мүмкүн болбоду. Кайра аракет кылыңыз.",
+        ),
       );
       setSubmitting(false);
       return;
@@ -297,7 +311,8 @@ function BookingFlow() {
 
   const nextDisabled = (step === 0 && !departure) || (step === 1 && !guestsValid);
   const translatedTour = localizeTour(tour, language);
-  const labels = language === "ru" ? russianStepLabels : language === "ky" ? kyrgyzStepLabels : stepLabels;
+  const labels =
+    language === "ru" ? russianStepLabels : language === "ky" ? kyrgyzStepLabels : stepLabels;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
@@ -306,7 +321,8 @@ function BookingFlow() {
         params={{ slug }}
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ChevronLeft className="h-4 w-4" /> {text("Back to", "Назад к туру", "Турга кайтуу")} {translatedTour.name}
+        <ChevronLeft className="h-4 w-4" /> {text("Back to", "Назад к туру", "Турга кайтуу")}{" "}
+        {translatedTour.name}
       </Link>
 
       <div className="mt-4 flex items-center gap-4">
@@ -325,7 +341,10 @@ function BookingFlow() {
       </div>
 
       {/* Progress */}
-      <ol className="mt-8 flex gap-2" aria-label={text("Booking progress", "Ход бронирования", "Брондоо кадамдары")}>
+      <ol
+        className="mt-8 flex gap-2"
+        aria-label={text("Booking progress", "Ход бронирования", "Брондоо кадамдары")}
+      >
         {labels.map((label, i) => {
           const done = i < step;
           const current = i === step;
@@ -365,16 +384,26 @@ function BookingFlow() {
         })}
       </ol>
       <p className="mt-3 text-xs text-muted-foreground">
-        {text(`Step ${step + 1} of 4 · your details are kept if you go back.`, `Шаг ${step + 1} из 4 · при возврате данные сохранятся.`, `${step + 1}-кадам, 4төн · артка кайтсаңыз, маалымат сакталат.`)}
+        {text(
+          `Step ${step + 1} of 4 · your details are kept if you go back.`,
+          `Шаг ${step + 1} из 4 · при возврате данные сохранятся.`,
+          `${step + 1}-кадам, 4төн · артка кайтсаңыз, маалымат сакталат.`,
+        )}
       </p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="surface-panel p-6">
           {step === 0 ? (
             <div>
-              <h2 className="font-display text-3xl">{text("Pick a date", "Выберите дату", "Датаны тандаңыз")}</h2>
+              <h2 className="font-display text-3xl">
+                {text("Pick a date", "Выберите дату", "Датаны тандаңыз")}
+              </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {text("Demo availability. Start times are Bishkek time.", "Демо-доступность. Время указано по Бишкеку.", "Демо-жеткиликтүүлүк. Убакыт Бишкек убактысы менен көрсөтүлгөн.")}
+                {text(
+                  "Demo availability. Start times are Bishkek time.",
+                  "Демо-доступность. Время указано по Бишкеку.",
+                  "Демо-жеткиликтүүлүк. Убакыт Бишкек убактысы менен көрсөтүлгөн.",
+                )}
               </p>
               <div className="mt-4 space-y-2">
                 {loadingDates
@@ -384,7 +413,11 @@ function BookingFlow() {
                   : null}
                 {!loadingDates && open.length === 0 ? (
                   <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
-                    {text("No open dates for this trip at the moment. Check another tour or come back soon.", "Сейчас для этого тура нет свободных дат. Посмотрите другой тур или загляните позже.", "Азыр бул тур үчүн бош даталар жок. Башка турду караңыз же кийинчерээк кириңиз.")}
+                    {text(
+                      "No open dates for this trip at the moment. Check another tour or come back soon.",
+                      "Сейчас для этого тура нет свободных дат. Посмотрите другой тур или загляните позже.",
+                      "Азыр бул тур үчүн бош даталар жок. Башка турду караңыз же кийинчерээк кириңиз.",
+                    )}
                   </p>
                 ) : null}
                 {all.map((d) => {
@@ -475,7 +508,11 @@ function BookingFlow() {
               </div>
               {guests >= maxGuests ? (
                 <p className="mt-3 text-xs text-muted-foreground">
-                  {text("That's the most we can take on this date.", "Это максимальное число гостей для этой даты.", "Бул күнгө карата коноктордун эң көп санына жетти.")}
+                  {text(
+                    "That's the most we can take on this date.",
+                    "Это максимальное число гостей для этой даты.",
+                    "Бул күнгө карата коноктордун эң көп санына жетти.",
+                  )}
                 </p>
               ) : null}
               {formErrors.guests ? (
@@ -485,8 +522,16 @@ function BookingFlow() {
                 <div className="flex justify-between text-muted-foreground">
                   <span>
                     {guests}{" "}
-                    {language === "ru" ? (guests === 1 ? "гость" : "гостей") : language === "ky" ? "конок" : guests === 1 ? "guest" : "guests"} ×
-                    ${tour.price_per_person}
+                    {language === "ru"
+                      ? guests === 1
+                        ? "гость"
+                        : "гостей"
+                      : language === "ky"
+                        ? "конок"
+                        : guests === 1
+                          ? "guest"
+                          : "guests"}{" "}
+                    × ${tour.price_per_person}
                   </span>
                   <span>${total}</span>
                 </div>
@@ -507,7 +552,9 @@ function BookingFlow() {
                 goNext();
               }}
             >
-              <h2 className="font-display text-3xl">{text("Your details", "Ваши контакты", "Байланыш маалыматыңыз")}</h2>
+              <h2 className="font-display text-3xl">
+                {text("Your details", "Ваши контакты", "Байланыш маалыматыңыз")}
+              </h2>
               <div
                 className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
                 aria-hidden="true"
@@ -550,26 +597,36 @@ function BookingFlow() {
                   <FieldError id="phone-error" message={errors.phone} />
                 </div>
                 <div>
-                  <Label htmlFor="whatsapp">WhatsApp ({text("optional", "необязательно", "милдеттүү эмес")})</Label>
+                  <Label htmlFor="whatsapp">
+                    WhatsApp ({text("optional", "необязательно", "милдеттүү эмес")})
+                  </Label>
                   <Input
                     {...inputProps("whatsapp")}
                     type="tel"
-                    placeholder={
-                      text("If different from your phone", "Если отличается от телефона", "Телефонуңуздан башка болсо")
-                    }
+                    placeholder={text(
+                      "If different from your phone",
+                      "Если отличается от телефона",
+                      "Телефонуңуздан башка болсо",
+                    )}
                   />
                   <FieldError id="whatsapp-error" message={errors.whatsapp} />
                 </div>
               </div>
               <div>
                 <Label htmlFor="notes">
-                  {text("Anything we should know? (optional)", "Что нам стоит знать? (необязательно)", "Биз эмнени билишибиз керек? (милдеттүү эмес)")}
+                  {text(
+                    "Anything we should know? (optional)",
+                    "Что нам стоит знать? (необязательно)",
+                    "Биз эмнени билишибиз керек? (милдеттүү эмес)",
+                  )}
                 </Label>
                 <Textarea
                   {...inputProps("notes")}
-                  placeholder={
-                    text("Dietary needs, pickup address, experience level…", "Питание, адрес, уровень опыта…", "Тамактануу өзгөчөлүгү, алып кетүү дареги, тажрыйба деңгээли…")
-                  }
+                  placeholder={text(
+                    "Dietary needs, pickup address, experience level…",
+                    "Питание, адрес, уровень опыта…",
+                    "Тамактануу өзгөчөлүгү, алып кетүү дареги, тажрыйба деңгээли…",
+                  )}
                 />
                 <div className="flex justify-between">
                   <FieldError id="notes-error" message={errors.notes} />
@@ -596,13 +653,21 @@ function BookingFlow() {
                     `${formatTime(departure.departure_time)} (${text("Bishkek time", "по Бишкеку", "Бишкек убактысы")})`,
                   ],
                   [text("Guests", "Гости", "Коноктор"), String(guests)],
-                  [text("Meeting point", "Точка встречи", "Жолугушуу жери"), translatedTour.meeting_point],
+                  [
+                    text("Meeting point", "Точка встречи", "Жолугушуу жери"),
+                    translatedTour.meeting_point,
+                  ],
                   [text("Name", "Имя", "Аты"), name],
                   ["Email", email],
                   [text("Phone", "Телефон", "Телефон"), phone],
                   ...(whatsapp ? ([["WhatsApp", whatsapp]] as [string, string][]) : []),
-                  ...(notes ? ([[text("Notes", "Примечание", "Эскертүү"), notes]] as [string, string][]) : []),
-                  [text("Price per person", "Цена за человека", "Адамга баа"), `$${tour.price_per_person}`],
+                  ...(notes
+                    ? ([[text("Notes", "Примечание", "Эскертүү"), notes]] as [string, string][])
+                    : []),
+                  [
+                    text("Price per person", "Цена за человека", "Адамга баа"),
+                    `$${tour.price_per_person}`,
+                  ],
                 ].map(([label, value]) => (
                   <div key={label} className="flex justify-between gap-6 py-3">
                     <dt className="text-muted-foreground">{label}</dt>
@@ -621,7 +686,11 @@ function BookingFlow() {
                   <span className="font-display text-5xl">${total}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {text("Paid on the day — no payment is taken now.", "Оплата в день поездки — сейчас платить не нужно.", "Сапар болгон күнү төлөйсүз — азыр төлөө керек эмес.")}
+                  {text(
+                    "Paid on the day — no payment is taken now.",
+                    "Оплата в день поездки — сейчас платить не нужно.",
+                    "Сапар болгон күнү төлөйсүз — азыр төлөө керек эмес.",
+                  )}
                 </p>
               </div>
             </div>
@@ -656,7 +725,11 @@ function BookingFlow() {
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 {submitting
                   ? text("Confirming…", "Подтверждаем…", "Ырасталууда…")
-                  : text(`Confirm booking · $${total}`, `Подтвердить бронирование · $${total}`, `Брондоону ырастоо · $${total}`)}
+                  : text(
+                      `Confirm booking · $${total}`,
+                      `Подтвердить бронирование · $${total}`,
+                      `Брондоону ырастоо · $${total}`,
+                    )}
               </button>
             )}
           </div>
@@ -683,7 +756,15 @@ function BookingFlow() {
               <li className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" />
                 {guests}{" "}
-                {language === "ru" ? (guests === 1 ? "гость" : "гостей") : language === "ky" ? "конок" : guests === 1 ? "guest" : "guests"}
+                {language === "ru"
+                  ? guests === 1
+                    ? "гость"
+                    : "гостей"
+                  : language === "ky"
+                    ? "конок"
+                    : guests === 1
+                      ? "guest"
+                      : "guests"}
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

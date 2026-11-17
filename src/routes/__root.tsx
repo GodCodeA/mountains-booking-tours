@@ -39,7 +39,11 @@ function NotFoundComponent() {
           {text("Page not found", "Страница не найдена", "Барак табылган жок")}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          {text("The page you're looking for doesn't exist or has been moved.", "Страница, которую вы ищете, не существует или была перемещена.", "Сиз издеп жаткан барак жок же башка жакка жылдырылган.")}
+          {text(
+            "The page you're looking for doesn't exist or has been moved.",
+            "Страница, которую вы ищете, не существует или была перемещена.",
+            "Сиз издеп жаткан барак жок же башка жакка жылдырылган.",
+          )}
         </p>
         <div className="mt-6">
           <Link
@@ -71,7 +75,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           {text("This page didn't load", "Страница не загрузилась", "Бул барак жүктөлгөн жок")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {text("Something went wrong on our end. You can try refreshing or head back home.", "Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную.", "Бир нерсе туура эмес кетти. Баракты жаңыртып же башкы бетке кайтып көрүңүз.")}
+          {text(
+            "Something went wrong on our end. You can try refreshing or head back home.",
+            "Что-то пошло не так. Попробуйте обновить страницу или вернуться на главную.",
+            "Бир нерсе туура эмес кетти. Баракты жаңыртып же башкы бетке кайтып көрүңүз.",
+          )}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button

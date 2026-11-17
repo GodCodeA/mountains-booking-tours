@@ -270,12 +270,18 @@ function ToursPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <p className="text-eyebrow">{text("Six trips, one guide", "Шесть поездок, одна команда", "Алты сапар, бир команда")}</p>
+      <p className="text-eyebrow">
+        {text("Six trips, one guide", "Шесть поездок, одна команда", "Алты сапар, бир команда")}
+      </p>
       <h1 className="mt-3 font-display text-6xl sm:text-7xl">
         {text("Choose your mountains", "Выберите свои горы", "Өз тооңузду тандаңыз")}
       </h1>
       <p className="mt-4 max-w-xl text-muted-foreground">
-        {text("Prices are per person and include transport from the meeting point, guiding and the meals listed on each trip.", "Цены указаны за человека и включают транспорт от места встречи, услуги гида и питание, указанное в описании тура.", "Баалар бир адамга көрсөтүлгөн жана жолугушуу жеринен транспортту, гид кызматын жана тур сүрөттөмөсүндө көрсөтүлгөн тамакты камтыйт.")}
+        {text(
+          "Prices are per person and include transport from the meeting point, guiding and the meals listed on each trip.",
+          "Цены указаны за человека и включают транспорт от места встречи, услуги гида и питание, указанное в описании тура.",
+          "Баалар бир адамга көрсөтүлгөн жана жолугушуу жеринен транспортту, гид кызматын жана тур сүрөттөмөсүндө көрсөтүлгөн тамакты камтыйт.",
+        )}
       </p>
 
       {/* Search + sort + mobile filter trigger */}
@@ -285,7 +291,11 @@ function ToursPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={text("Search tours, regions, lakes…", "Поиск туров, регионов, озёр…", "Турларды, аймактарды, көлдөрдү издөө…")}
+            placeholder={text(
+              "Search tours, regions, lakes…",
+              "Поиск туров, регионов, озёр…",
+              "Турларды, аймактарды, көлдөрдү издөө…",
+            )}
             aria-label={text("Search tours", "Поиск туров", "Турларды издөө")}
             className="h-11 pl-9 pr-9"
           />
@@ -339,7 +349,11 @@ function ToursPage() {
                   {text("Reset", "Сбросить", "Тазалоо")}
                 </Button>
                 <Button className="flex-1" onClick={() => setSheetOpen(false)}>
-                  {text(`Show ${visible.length} ${visible.length === 1 ? "tour" : "tours"}`, `Показать: ${visible.length}`, `Көрсөтүү: ${visible.length}`)}
+                  {text(
+                    `Show ${visible.length} ${visible.length === 1 ? "tour" : "tours"}`,
+                    `Показать: ${visible.length}`,
+                    `Көрсөтүү: ${visible.length}`,
+                  )}
                 </Button>
               </SheetFooter>
             </SheetContent>
@@ -362,13 +376,21 @@ function ToursPage() {
         <div>
           {!isLoading && !toursQ.isError ? (
             <p className="mb-4 text-sm text-muted-foreground">
-              {text(`${visible.length} of ${tours.length} tours`, `Показано: ${visible.length} из ${tours.length}`, `${tours.length} турдун ${visible.length} көрсөтүлдү`)}
+              {text(
+                `${visible.length} of ${tours.length} tours`,
+                `Показано: ${visible.length} из ${tours.length}`,
+                `${tours.length} турдун ${visible.length} көрсөтүлдү`,
+              )}
             </p>
           ) : null}
 
           {noDatesAnywhere ? (
             <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-              {text("No departure dates are open right now. New dates are added regularly — check back soon.", "Сейчас нет свободных дат. Мы регулярно добавляем новые — загляните позже.", "Азыр бош даталар жок. Жаңы даталарды дайыма кошуп турабыз — кийинчерээк кириңиз.")}
+              {text(
+                "No departure dates are open right now. New dates are added regularly — check back soon.",
+                "Сейчас нет свободных дат. Мы регулярно добавляем новые — загляните позже.",
+                "Азыр бош даталар жок. Жаңы даталарды дайыма кошуп турабыз — кийинчерээк кириңиз.",
+              )}
             </div>
           ) : null}
 
@@ -390,7 +412,11 @@ function ToursPage() {
 
           {toursQ.isError ? (
             <p className="mt-8 text-sm text-destructive">
-              {text("We couldn't load the tours. Please refresh the page and try again.", "Не удалось загрузить туры. Обновите страницу и попробуйте снова.", "Турларды жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.")}
+              {text(
+                "We couldn't load the tours. Please refresh the page and try again.",
+                "Не удалось загрузить туры. Обновите страницу и попробуйте снова.",
+                "Турларды жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.",
+              )}
             </p>
           ) : null}
 
@@ -399,16 +425,32 @@ function ToursPage() {
               <Mountain className="h-10 w-10 text-primary" />
               <h2 className="mt-4 font-display text-3xl">
                 {debounced && searched.length === 0
-                  ? text(`Nothing found for "${query.trim()}"`, `Ничего не найдено: «${query.trim()}»`, `«${query.trim()}» боюнча эч нерсе табылган жок`)
+                  ? text(
+                      `Nothing found for "${query.trim()}"`,
+                      `Ничего не найдено: «${query.trim()}»`,
+                      `«${query.trim()}» боюнча эч нерсе табылган жок`,
+                    )
                   : text("No tours match", "Нет подходящих туров", "Ылайыктуу турлар жок")}
               </h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 {debounced && searched.length === 0
-                  ? text("Try a tour name, a region like Issyk-Kul, or a word like lake or yurt.", "Попробуйте название тура, регион, например Иссык-Куль, или слово «озеро» либо «юрта».", "Турдун атын, Ысык-Көл сыяктуу аймакты же «көл», «боз үй» деген сөздөрдү издеп көрүңүз.")
-                  : text("Try widening the price range or removing a filter.", "Расширьте диапазон цен или уберите один из фильтров.", "Баа аралыгын кеңейтип же бир чыпканы алып салыңыз.")}
+                  ? text(
+                      "Try a tour name, a region like Issyk-Kul, or a word like lake or yurt.",
+                      "Попробуйте название тура, регион, например Иссык-Куль, или слово «озеро» либо «юрта».",
+                      "Турдун атын, Ысык-Көл сыяктуу аймакты же «көл», «боз үй» деген сөздөрдү издеп көрүңүз.",
+                    )
+                  : text(
+                      "Try widening the price range or removing a filter.",
+                      "Расширьте диапазон цен или уберите один из фильтров.",
+                      "Баа аралыгын кеңейтип же бир чыпканы алып салыңыз.",
+                    )}
               </p>
               <Button variant="outline" className="mt-6" onClick={resetAll}>
-                {text("Clear search & filters", "Очистить поиск и фильтры", "Издөө менен чыпкаларды тазалоо")}
+                {text(
+                  "Clear search & filters",
+                  "Очистить поиск и фильтры",
+                  "Издөө менен чыпкаларды тазалоо",
+                )}
               </Button>
             </div>
           ) : null}

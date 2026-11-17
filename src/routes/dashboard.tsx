@@ -155,7 +155,11 @@ function Dashboard() {
           >
             {sendingLink
               ? text("Sending…", "Отправляем…", "Жөнөтүлүүдө…")
-              : text("Email me a sign-in link", "Отправить ссылку для входа", "Кирүү шилтемесин жөнөтүү")}
+              : text(
+                  "Email me a sign-in link",
+                  "Отправить ссылку для входа",
+                  "Кирүү шилтемесин жөнөтүү",
+                )}
           </button>
         </form>
       )}
@@ -196,7 +200,13 @@ function OwnerDashboard() {
       invalidate();
     },
     onError: () =>
-      toast.error(text("Couldn't cancel that booking.", "Не удалось отменить бронирование.", "Брондоону жокко чыгаруу мүмкүн болгон жок.")),
+      toast.error(
+        text(
+          "Couldn't cancel that booking.",
+          "Не удалось отменить бронирование.",
+          "Брондоону жокко чыгаруу мүмкүн болгон жок.",
+        ),
+      ),
   });
 
   const today = bishkekToday();
@@ -241,9 +251,22 @@ function OwnerDashboard() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <Stat label={text("Departures today", "Выезды сегодня", "Бүгүнкү сапарлар")} value={todays.length} />
-        <Stat label={text("Upcoming bookings", "Ближайшие бронирования", "Алдыдагы брондоолор")} value={upcoming.length} />
-        <Stat label={text("Guests booked ahead", "Забронировано гостей", "Алдын ала брондолгон коноктор")} value={guestsUpcoming} />
+        <Stat
+          label={text("Departures today", "Выезды сегодня", "Бүгүнкү сапарлар")}
+          value={todays.length}
+        />
+        <Stat
+          label={text("Upcoming bookings", "Ближайшие бронирования", "Алдыдагы брондоолор")}
+          value={upcoming.length}
+        />
+        <Stat
+          label={text(
+            "Guests booked ahead",
+            "Забронировано гостей",
+            "Алдын ала брондолгон коноктор",
+          )}
+          value={guestsUpcoming}
+        />
       </div>
 
       <div className="mt-10 flex gap-2">
@@ -258,7 +281,11 @@ function OwnerDashboard() {
                 : "rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
             }
           >
-            {text(t, { Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t, { Today: "Бүгүн", Upcoming: "Алдыдагы", All: "Баары" }[t] ?? t)}
+            {text(
+              t,
+              { Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t,
+              { Today: "Бүгүн", Upcoming: "Алдыдагы", All: "Баары" }[t] ?? t,
+            )}
           </button>
         ))}
       </div>
@@ -274,17 +301,31 @@ function OwnerDashboard() {
           <p className="text-sm text-destructive">
             {bookingsError instanceof Error
               ? bookingsError.message
-              : text("Couldn't load bookings.", "Не удалось загрузить бронирования.", "Брондоолорду жүктөө мүмкүн болгон жок.")}
+              : text(
+                  "Couldn't load bookings.",
+                  "Не удалось загрузить бронирования.",
+                  "Брондоолорду жүктөө мүмкүн болгон жок.",
+                )}
           </p>
         ) : null}
 
         {!isLoading && visible.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border p-10 text-center">
-            <p className="font-semibold">{text("Nothing here yet", "Пока здесь пусто", "Азырынча бул жерде эч нерсе жок")}</p>
+            <p className="font-semibold">
+              {text("Nothing here yet", "Пока здесь пусто", "Азырынча бул жерде эч нерсе жок")}
+            </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {tab === "Today"
-                ? text("No departures today — enjoy the morning.", "Сегодня выездов нет — можно спокойно начать утро.", "Бүгүн саякатка чыгуулар жок — таңды шашпай, жайбаракат баштасаңыз болот.")
-                : text("New bookings will appear here as soon as they come in.", "Новые бронирования появятся здесь сразу после оформления.", "Жаңы брондоолор катталгандан кийин дароо бул жерде көрүнөт.")}
+                ? text(
+                    "No departures today — enjoy the morning.",
+                    "Сегодня выездов нет — можно спокойно начать утро.",
+                    "Бүгүн саякатка чыгуулар жок — таңды шашпай, жайбаракат баштасаңыз болот.",
+                  )
+                : text(
+                    "New bookings will appear here as soon as they come in.",
+                    "Новые бронирования появятся здесь сразу после оформления.",
+                    "Жаңы брондоолор катталгандан кийин дароо бул жерде көрүнөт.",
+                  )}
             </p>
           </div>
         ) : null}
@@ -341,7 +382,8 @@ function OwnerDashboard() {
                 onClick={() => setRescheduling(row)}
                 className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-40"
               >
-                <RefreshCw className="h-4 w-4" /> {text("Reschedule", "Перенести", "Башка күнгө жылдыруу")}
+                <RefreshCw className="h-4 w-4" />{" "}
+                {text("Reschedule", "Перенести", "Башка күнгө жылдыруу")}
               </button>
               <button
                 type="button"
@@ -387,8 +429,9 @@ function StatusBadge({ status }: { status: string }) {
       {localText(
         language,
         status,
-        ({ confirmed: "подтверждено", pending: "ожидает", cancelled: "отменено" }[status] ?? status),
-        ({ confirmed: "тастыкталды", pending: "күтүлүүдө", cancelled: "жокко чыгарылды" }[status] ?? status),
+        { confirmed: "подтверждено", pending: "ожидает", cancelled: "отменено" }[status] ?? status,
+        { confirmed: "тастыкталды", pending: "күтүлүүдө", cancelled: "жокко чыгарылды" }[status] ??
+          status,
       )}
     </span>
   );
@@ -438,7 +481,13 @@ function RescheduleDialog({
         onClose();
       }
     } catch {
-      toast.error(text("Couldn't move that booking.", "Не удалось перенести это бронирование.", "Бул брондоону жылдыруу мүмкүн болгон жок."));
+      toast.error(
+        text(
+          "Couldn't move that booking.",
+          "Не удалось перенести это бронирование.",
+          "Бул брондоону жылдыруу мүмкүн болгон жок.",
+        ),
+      );
     } finally {
       setSaving(false);
     }

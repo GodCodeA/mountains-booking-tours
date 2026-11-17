@@ -59,7 +59,11 @@ function Confirmation() {
           {text("Booking not found", "Бронирование не найдено", "Брондоо табылган жок")}
         </h1>
         <p className="mt-3 text-muted-foreground">
-          {text("We couldn't find that booking. Please check your confirmation link.", "Мы не нашли это бронирование. Проверьте ссылку в подтверждении.", "Бул брондоо табылган жок. Ырастоо шилтемесин текшериңиз.")}
+          {text(
+            "We couldn't find that booking. Please check your confirmation link.",
+            "Мы не нашли это бронирование. Проверьте ссылку в подтверждении.",
+            "Бул брондоо табылган жок. Ырастоо шилтемесин текшериңиз.",
+          )}
         </p>
         <Link
           to="/tours"
@@ -76,7 +80,9 @@ function Confirmation() {
       <div className="flex items-center gap-3">
         <CheckCircle2 className="h-9 w-9 text-success" />
         <div>
-          <p className="text-eyebrow">{text("You're booked", "Вы забронированы", "Сиз брондодуңуз")}</p>
+          <p className="text-eyebrow">
+            {text("You're booked", "Вы забронированы", "Сиз брондодуңуз")}
+          </p>
           <h1 className="font-display text-5xl">
             {text("See you in the mountains", "До встречи в горах", "Тоодо жолугушканча")}
           </h1>
