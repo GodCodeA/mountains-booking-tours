@@ -293,16 +293,36 @@ export const rescheduleBooking = createServerFn({ method: "POST" })
 export function formatDate(value: string, language: "en" | "ru" | "ky" = "en") {
   // Midday UTC always maps to the same calendar day in Bishkek, avoiding the
   // host/browser time zone changing a date-only database value.
-  return new Date(`${value}T12:00:00Z`).toLocaleDateString(
-    language === "ru" ? "ru-RU" : language === "ky" ? "ky-KG" : "en-GB",
-    {
+  const date = new Date(`${value}T12:00:00Z`);
+
+  // Some browsers fall back to English when their ICU data does not include
+  // Kyrgyz. Keep the date visibly Kyrgyz instead of rendering “Thu, Nov”.
+  if (language === "ky") {
+    const weekdays = ["жек.", "дүй.", "шейш.", "шарш.", "бейш.", "жума", "ишм."];
+    const months = [
+      "янв",
+      "фев",
+      "мар",
+      "апр",
+      "май",
+      "июн",
+      "июл",
+      "авг",
+      "сен",
+      "окт",
+      "ноя",
+      "дек",
+    ];
+    return `${date.getUTCFullYear()}-ж. ${date.getUTCDate()}-${months[date.getUTCMonth()]}. ${weekdays[date.getUTCDay()]}`;
+  }
+
+  return date.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
     timeZone: BISHKEK_TIME_ZONE,
     weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric",
-    },
-  );
+  });
 }
 
 /** Keep bearer-token references readable without weakening their stored entropy. */
@@ -312,14 +332,17 @@ export function displayBookingReference(reference: string) {
 }
 
 export function formatBishkekDateTime(value: string, language: "en" | "ru" | "ky" = "en") {
-  return new Date(value).toLocaleString(language === "ru" ? "ru-RU" : language === "ky" ? "ky-KG" : "en-GB", {
-    timeZone: BISHKEK_TIME_ZONE,
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return new Date(value).toLocaleString(
+    language === "ru" ? "ru-RU" : language === "ky" ? "ky-KG" : "en-GB",
+    {
+      timeZone: BISHKEK_TIME_ZONE,
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+  );
 }
 
 export function spotsLeft(departure: Departure) {
@@ -352,12 +375,17 @@ export function availabilityOf(departure: Departure): AvailabilityState {
 }
 
 /** "Few spots left" shows the exact count; otherwise only the state is shown. */
-export function availabilityLabel(departure: Departure, language: "en" | "ru" | "ky" = "en"): string {
+export function availabilityLabel(
+  departure: Departure,
+  language: "en" | "ru" | "ky" = "en",
+): string {
   const state = availabilityOf(departure);
-  if (state === "full") return language === "ru" ? "Мест нет" : language === "ky" ? "Орун жок" : "Fully booked";
+  if (state === "full")
+    return language === "ru" ? "Мест нет" : language === "ky" ? "Орун жок" : "Fully booked";
   if (state === "few") {
     const left = spotsLeft(departure);
-    if (language === "ru") return `Осталось ${left} ${left === 1 ? "место" : left < 5 ? "места" : "мест"}`;
+    if (language === "ru")
+      return `Осталось ${left} ${left === 1 ? "место" : left < 5 ? "места" : "мест"}`;
     if (language === "ky") return `${left} ${left === 1 ? "орун" : "орун"} калды`;
     return `Only ${left} ${left === 1 ? "spot" : "spots"} left`;
   }
