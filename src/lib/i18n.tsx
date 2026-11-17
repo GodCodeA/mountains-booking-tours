@@ -155,6 +155,31 @@ export function localText(language: Language, english: string, russian: string, 
   return language === "ru" ? russian : language === "ky" ? kyrgyz : english;
 }
 
+function russianPlural(count: number, one: string, few: string, many: string) {
+  const lastTwo = count % 100;
+  const last = count % 10;
+  if (lastTwo >= 11 && lastTwo <= 14) return many;
+  if (last === 1) return one;
+  if (last >= 2 && last <= 4) return few;
+  return many;
+}
+
+export function dayLabel(count: number, language: Language) {
+  if (language === "ru") return russianPlural(count, "день", "дня", "дней");
+  if (language === "ky") return "күн";
+  return count === 1 ? "day" : "days";
+}
+
+export function guestLabel(count: number, language: Language) {
+  if (language === "ru") return russianPlural(count, "гость", "гостя", "гостей");
+  if (language === "ky") return "конок";
+  return count === 1 ? "guest" : "guests";
+}
+
+export function maxGroupSizeLabel(count: number, language: Language) {
+  return localText(language, `Max: ${count}`, `Макс.: ${count}`, `Эң көп: ${count}`);
+}
+
 export function useI18n() {
   const value = useContext(I18nContext);
   if (!value) throw new Error("useI18n must be used within I18nProvider");

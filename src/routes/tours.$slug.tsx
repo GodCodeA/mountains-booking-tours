@@ -38,7 +38,7 @@ import {
   type AvailabilityState,
 } from "@/lib/bookings";
 import { tourGallery } from "@/lib/tour-images";
-import { localText, useI18n } from "@/lib/i18n";
+import { dayLabel, localText, maxGroupSizeLabel, useI18n } from "@/lib/i18n";
 import { localizeTour } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/tours/$slug")({
@@ -153,7 +153,7 @@ function TourBody({
     [
       <Clock key="c" className="h-4 w-4 text-primary" />,
       text("Duration", "Длительность", "Узактыгы"),
-      `${tour.duration_days} ${language === "ru" ? (tour.duration_days === 1 ? "день" : "дней") : language === "ky" ? "күн" : tour.duration_days === 1 ? "day" : "days"}`,
+      `${tour.duration_days} ${dayLabel(tour.duration_days, language)}`,
     ],
     [
       <Mountain key="m" className="h-4 w-4 text-primary" />,
@@ -163,11 +163,7 @@ function TourBody({
     [
       <Users key="u" className="h-4 w-4 text-primary" />,
       text("Group size", "Размер группы", "Топтун көлөмү"),
-      text(
-        `Max ${tour.max_group_size}`,
-        `Макс. ${tour.max_group_size}`,
-        `Макс. ${tour.max_group_size}`,
-      ),
+      maxGroupSizeLabel(tour.max_group_size, language),
     ],
     [
       <MapPin key="p" className="h-4 w-4 text-primary" />,
@@ -520,9 +516,9 @@ function TourBody({
                 ? text("Checking dates…", "Проверяем даты…", "Даталар текшерилүүдө…")
                 : openCount > 0
                   ? language === "ru"
-                    ? `${openCount} ${openCount === 1 ? "свободная дата" : "свободных дат"}${next ? ` · ближайшая ${formatDate(next.departure_date, language)}` : ""}`
+                    ? `${openCount} ${openCount === 1 ? "свободная дата" : openCount < 5 ? "свободные даты" : "свободных дат"}${next ? ` · ближайшая ${formatDate(next.departure_date, language)}` : ""}`
                     : language === "ky"
-                      ? `${openCount} бош дата${next ? ` · жакынкысы ${formatDate(next.departure_date, language)}` : ""}`
+                      ? `${openCount} бош күн${next ? ` · жакынкысы ${formatDate(next.departure_date, language)}` : ""}`
                       : `${openCount} open ${openCount === 1 ? "date" : "dates"}${next ? ` · next ${formatDate(next.departure_date, language)}` : ""}`
                   : text(
                       "No open dates right now",

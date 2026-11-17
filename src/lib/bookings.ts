@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { bookingFormSchema, validateBookingForm } from "./booking-validation";
 import { BISHKEK_TIME_ZONE, bishkekToday } from "./bishkek-time";
+import { localText, type Language } from "./i18n";
 
 export { BISHKEK_TIME_ZONE, bishkekToday } from "./bishkek-time";
 
@@ -132,6 +133,7 @@ export const adminMembershipQuery = (userId: string | undefined) => ({
 const bookingInputSchema = bookingFormSchema.extend({
   departureId: z.string().uuid("Please pick a valid date."),
   website: z.string().max(0).optional(),
+  language: z.enum(["en", "ru", "ky"]).optional(),
 });
 
 async function databaseAdmin() {
@@ -152,12 +154,20 @@ async function assertBookingAdmin(context: { supabase: typeof supabase; userId: 
 export const createBooking = createServerFn({ method: "POST" })
   .validator((data) => bookingInputSchema.parse(data))
   .handler(async ({ data }) => {
+    const language: Language = data.language ?? "en";
+    const message = (english: string, russian: string, kyrgyz: string) =>
+      localText(language, english, russian, kyrgyz);
+
     // A field that real guests never see. Reject automated form fills without
     // exposing a useful signal to bots.
     if (data.website) {
       return {
         status: "invalid" as const,
-        error: "We couldn't save that booking. Please try again.",
+        error: message(
+          "We couldn't save that booking. Please try again.",
+          "Не удалось сохранить бронирование. Попробуйте ещё раз.",
+          "Брондоону сактоо мүмкүн болбоду. Кайра аракет кылыңыз.",
+        ),
       };
     }
 
@@ -172,7 +182,11 @@ export const createBooking = createServerFn({ method: "POST" })
     if ((recentBookings ?? 0) >= 3) {
       return {
         status: "invalid" as const,
-        error: "Too many booking attempts. Please wait 15 minutes and try again.",
+        error: message(
+          "Too many booking attempts. Please wait 15 minutes and try again.",
+          "Слишком много попыток бронирования. Подождите 15 минут и попробуйте снова.",
+          "Брондоо аракеттери өтө көп болду. 15 мүнөт күтүп, кайра аракет кылыңыз.",
+        ),
       };
     }
 
@@ -183,7 +197,14 @@ export const createBooking = createServerFn({ method: "POST" })
       .maybeSingle();
     const departure = departureData as Departure | null;
     if (departureError || !departure) {
-      return { status: "invalid" as const, error: "That date is unavailable." };
+      return {
+        status: "invalid" as const,
+        error: message(
+          "That date is unavailable.",
+          "Эта дата недоступна.",
+          "Бул дата жеткиликсиз.",
+        ),
+      };
     }
 
     const { data: tourData, error: tourError } = await db
@@ -193,12 +214,19 @@ export const createBooking = createServerFn({ method: "POST" })
       .maybeSingle();
     const tour = tourData as Tour | null;
     if (tourError || !tour) {
-      return { status: "invalid" as const, error: "That tour is unavailable." };
+      return {
+        status: "invalid" as const,
+        error: message("That tour is unavailable.", "Этот тур недоступен.", "Бул тур жеткиликсиз."),
+      };
     }
 
-    const errors = validateBookingForm({ ...data, maxGuests: spotsLeft(departure) });
+    const errors = validateBookingForm({ ...data, maxGuests: spotsLeft(departure), language });
     if (departure.departure_date < bishkekToday()) {
-      errors.departureId = "This date has already passed.";
+      errors.departureId = message(
+        "This date has already passed.",
+        "Эта дата уже прошла.",
+        "Бул дата өтүп кеткен.",
+      );
     }
     const firstError = Object.values(errors)[0];
     if (firstError) return { status: "invalid" as const, error: firstError };

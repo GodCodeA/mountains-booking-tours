@@ -6,7 +6,7 @@ import { Check, CheckCircle2, Copy, CalendarDays, MapPin, Users } from "lucide-r
 import { Skeleton } from "@/components/ui/skeleton";
 import { bookingQuery, displayBookingReference, formatDate } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
-import { localText, useI18n } from "@/lib/i18n";
+import { guestLabel, localText, useI18n } from "@/lib/i18n";
 import { localizeMeetingPoint, localizeTourName } from "@/lib/tour-localization";
 
 export const Route = createFileRoute("/booking/$reference")({
@@ -118,7 +118,7 @@ function Confirmation() {
             </span>
             <span className="inline-flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" /> {booking.guests}{" "}
-              {booking.guests === 1 ? t("guest") : t("guests")}
+              {guestLabel(booking.guests, language)}
             </span>
             <span className="inline-flex items-center gap-2 sm:col-span-2">
               <MapPin className="h-4 w-4 text-primary" />{" "}

@@ -32,7 +32,7 @@ import {
 } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
 import { validateBookingForm, validateField, type BookingField } from "@/lib/booking-validation";
-import { localText, useI18n } from "@/lib/i18n";
+import { guestLabel, localText, useI18n } from "@/lib/i18n";
 import { localizeTour } from "@/lib/tour-localization";
 
 type Search = { departure?: string };
@@ -260,7 +260,17 @@ function BookingFlow() {
     setSubmitting(true);
     try {
       const result = await submitBooking({
-        data: { departureId: departure.id, name, email, phone, whatsapp, guests, notes, website },
+        data: {
+          departureId: departure.id,
+          name,
+          email,
+          phone,
+          whatsapp,
+          guests,
+          notes,
+          website,
+          language,
+        },
       });
       if (result.status === "full") {
         toast.error(
@@ -521,17 +531,7 @@ function BookingFlow() {
               <div className="mt-6 rounded-lg border border-border p-4 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>
-                    {guests}{" "}
-                    {language === "ru"
-                      ? guests === 1
-                        ? "гость"
-                        : "гостей"
-                      : language === "ky"
-                        ? "конок"
-                        : guests === 1
-                          ? "guest"
-                          : "guests"}{" "}
-                    × ${tour.price_per_person}
+                    {guests} {guestLabel(guests, language)} × ${tour.price_per_person}
                   </span>
                   <span>${total}</span>
                 </div>
@@ -755,16 +755,7 @@ function BookingFlow() {
               </li>
               <li className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" />
-                {guests}{" "}
-                {language === "ru"
-                  ? guests === 1
-                    ? "гость"
-                    : "гостей"
-                  : language === "ky"
-                    ? "конок"
-                    : guests === 1
-                      ? "guest"
-                      : "guests"}
+                {guests} {guestLabel(guests, language)}
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

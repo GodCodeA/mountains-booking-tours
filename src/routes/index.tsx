@@ -9,7 +9,7 @@ import { toursQuery, type Tour } from "@/lib/bookings";
 import { siteContent } from "@/lib/site-content";
 import { localizeTour } from "@/lib/tour-localization";
 import { tourImage } from "@/lib/tour-images";
-import { localText, useI18n } from "@/lib/i18n";
+import { dayLabel, localText, useI18n } from "@/lib/i18n";
 import {
   Accordion,
   AccordionContent,
@@ -375,17 +375,8 @@ function Home() {
                     {localizeTour(tour, language).name}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {tour.duration_days}{" "}
-                    {language === "ru"
-                      ? tour.duration_days === 1
-                        ? "день"
-                        : "дня/дней"
-                      : language === "ky"
-                        ? "күн"
-                        : tour.duration_days === 1
-                          ? "day"
-                          : "days"}{" "}
-                    · {localizeTour(tour, language).difficulty} · {text("from", "от", "баштап")} $
+                    {tour.duration_days} {dayLabel(tour.duration_days, language)} ·{" "}
+                    {localizeTour(tour, language).difficulty} · {text("from", "от", "баштап")} $
                     {tour.price_per_person}
                   </p>
                 </div>

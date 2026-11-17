@@ -4,7 +4,7 @@ import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { formatDate, spotsLeft, type Departure, type Tour } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
 import { localizeTour } from "@/lib/tour-localization";
-import { useI18n } from "@/lib/i18n";
+import { dayLabel, maxGroupSizeLabel, useI18n } from "@/lib/i18n";
 
 export function TourCard({
   tour,
@@ -47,10 +47,10 @@ export function TourCard({
           </span>
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5" />
-            {tour.duration_days} {tour.duration_days === 1 ? t("day") : t("days")}
+            {tour.duration_days} {dayLabel(tour.duration_days, language)}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5" /> {t("max")} {tour.max_group_size}
+            <Users className="h-3.5 w-3.5" /> {maxGroupSizeLabel(tour.max_group_size, language)}
           </span>
         </div>
         {showAvailability ? (

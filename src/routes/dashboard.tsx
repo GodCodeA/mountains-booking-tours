@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { localText, useI18n } from "@/lib/i18n";
+import { guestLabel, localText, useI18n } from "@/lib/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -350,7 +350,7 @@ function OwnerDashboard() {
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-primary" /> {row.guests}{" "}
-                    {text("guests", "гостей", "конок")}
+                    {guestLabel(row.guests, language)}
                   </span>
                   <span className="font-semibold text-foreground">${row.total_price}</span>
                 </div>
@@ -502,7 +502,7 @@ function RescheduleDialog({
           </DialogTitle>
           <DialogDescription>
             {row
-              ? `${row.customer_name} · ${row.guests} ${text("guests", "гостей", "конок")} · ${localizeTour(row.tours, language).name}`
+              ? `${row.customer_name} · ${row.guests} ${guestLabel(row.guests, language)} · ${localizeTour(row.tours, language).name}`
               : ""}
           </DialogDescription>
         </DialogHeader>
