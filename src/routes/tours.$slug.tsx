@@ -378,7 +378,7 @@ function TourBody({
                 : null}
               {!loadingDates && openCount === 0 ? (
                 <p className="rounded-lg border border-border p-5 text-sm text-muted-foreground">
-                  {text("No open dates right now. Message Azamat on WhatsApp and he'll add one.", "Сейчас нет свободных дат. Напишите Азамату в WhatsApp, и он добавит новую.", "Азыр бош даталар жок. Азаматка WhatsApp аркылуу жазыңыз, ал жаңысын кошот.")}
+                  {text("No open dates right now. Please check back later.", "Сейчас нет свободных дат. Загляните позже.", "Азыр бош даталар жок. Кийинчерээк кайра кириңиз.")}
                 </p>
               ) : null}
               {list.map((d) => {

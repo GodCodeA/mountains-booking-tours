@@ -283,7 +283,7 @@ function OwnerDashboard() {
             <p className="font-semibold">{text("Nothing here yet", "Пока здесь пусто", "Азырынча бул жерде эч нерсе жок")}</p>
             <p className="mt-1 text-sm text-muted-foreground">
               {tab === "Today"
-                ? text("No departures today — enjoy the morning.", "Сегодня выездов нет — можно спокойно начать утро.", "Бүгүн сапарлар жок — эртең мененди жай баштаңыз.")
+                ? text("No departures today — enjoy the morning.", "Сегодня выездов нет — можно спокойно начать утро.", "Бүгүн саякатка чыгуулар жок — таңды шашпай, жайбаракат баштасаңыз болот.")
                 : text("New bookings will appear here as soon as they come in.", "Новые бронирования появятся здесь сразу после оформления.", "Жаңы брондоолор катталгандан кийин дароо бул жерде көрүнөт.")}
             </p>
           </div>

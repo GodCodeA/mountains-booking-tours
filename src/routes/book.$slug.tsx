@@ -475,7 +475,7 @@ function BookingFlow() {
               </div>
               {guests >= maxGuests ? (
                 <p className="mt-3 text-xs text-muted-foreground">
-                  {text("That's the most we can take on this date.", "Это максимальное число гостей для этой даты.", "Бул дата үчүн коноктордун эң көп саны ушундай.")}
+                  {text("That's the most we can take on this date.", "Это максимальное число гостей для этой даты.", "Бул күнгө карата коноктордун эң көп санына жетти.")}
                 </p>
               ) : null}
               {formErrors.guests ? (
