@@ -186,7 +186,7 @@ function Home() {
             {text("Guided mountain tours from Bishkek", "Горные туры с гидом из Бишкека", "Бишкектен гид менен тоо турлары")}
           </p>
           <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
-            {text("Walk the Tian Shan with people who call it home.", "Откройте Тянь-Шань с теми, кто называет его домом.", "Теңир-Тоону аны өз үйү деп атагандар менен кыдырыңыз.")}
+            {text("Walk the Tian Shan with people who call it home.", "Откройте Тянь-Шань с теми, кто называет его домом.", "Теңир-Тоону өз үйү деп атагандар менен кыдырыңыз.")}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
             {text("Small-group day hikes, yurt nights and multi-day treks across Kyrgyzstan. See real dates, book in minutes and pay on the day.", "Походы одного дня, ночёвки в юртах и многодневные треки по Кыргызстану. Выберите дату, забронируйте за несколько минут и оплатите в день поездки.", "Кыргызстан боюнча бир күндүк жөө жүрүштөр, боз үйдөгү түндөр жана көп күндүк тректер. Чыныгы даталарды көрүп, бир нече мүнөттө брондоп, сапар күнү төлөңүз.")}
