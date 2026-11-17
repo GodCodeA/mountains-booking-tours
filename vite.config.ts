@@ -22,6 +22,8 @@ export default defineConfig({
         nodeCompat: true,
         deployConfig: true,
         wrangler: {
+          // Keep generated deployments attached to the public demo URL in README.
+          name: "mountains-booking-tours",
           compatibility_flags: ["nodejs_compat_populate_process_env"],
           // Dashboard-managed Worker values must survive `wrangler deploy`.
           keep_vars: true,
