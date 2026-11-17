@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 
 export function SiteFooter() {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
@@ -23,7 +23,7 @@ export function SiteFooter() {
         </div>
         <div className="text-sm text-muted-foreground">
           <p className="text-eyebrow">{t("contact")}</p>
-          <p className="mt-3">Bishkek, Kyrgyzstan</p>
+          <p className="mt-3">{language === "ru" ? "Бишкек, Кыргызстан" : "Bishkek, Kyrgyzstan"}</p>
           <p>WhatsApp +996 555 000 000</p>
           <p>hello@alatoo-adventures.example</p>
         </div>

@@ -17,7 +17,7 @@ A mountain-tour booking platform for a small owner-run tour business in Bishkek,
 - Four-step booking flow with inline validation
 - Booking confirmation page with a booking reference
 - Owner dashboard: today / upcoming / all bookings, reschedule, cancel, reminder status
-- English/Russian language switcher. It translates navigation, home content, sample reviews and FAQ, tour cards, filters, tour details, packing lists, booking flow, confirmation, and owner dashboard
+- English/Russian language switcher. It translates navigation, interface copy, guides, FAQ, tour cards, filters, tour details, packing lists, booking flow, confirmation, and owner dashboard; guest reviews remain in each author's original language
 - Dates are formatted in the selected language while all departure logic remains on Bishkek time
 
 ## Tech stack
@@ -42,7 +42,7 @@ No payment is taken online; guests pay on the day.
 
 The language control in the site header switches between English and Russian. The selection is stored in the visitor's browser, so it stays selected after navigation and refreshes.
 
-Tour records remain canonical in Supabase in English. Russian display copy for the six current sample tours lives in `src/lib/tour-localization.ts`; homepage sample reviews, countries, guides and FAQ are in `src/lib/site-content.ts`; itinerary and packing-list translations are in `src/lib/tour-content.ts`.
+Tour records remain canonical in Supabase in English. Russian display copy for the six current sample tours lives in `src/lib/tour-localization.ts`; homepage guides and FAQ, plus reviews in their authors' original languages, are in `src/lib/site-content.ts`; itinerary and packing-list translations are in `src/lib/tour-content.ts`.
 
 When adding a real tour, add its Russian display copy in those files before presenting it as fully bilingual. Real customer reviews should normally be shown in their original language, with a clearly labelled translation only when one is provided.
 
