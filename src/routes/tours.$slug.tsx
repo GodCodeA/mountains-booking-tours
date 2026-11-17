@@ -234,7 +234,7 @@ function TourBody({
                       bring: "Что взять",
                       meeting: "Встреча",
                       availability: "Даты",
-                      faq: "FAQ",
+                      faq: "Частые вопросы",
                     }[id] ?? label)
                   : ({
                       overview: "Сереп",
@@ -243,7 +243,7 @@ function TourBody({
                       bring: "Эмне алуу керек",
                       meeting: "Жолугушуу",
                       availability: "Даталар",
-                      faq: "FAQ",
+                      faq: "Көп берилүүчү суроолор",
                     }[id] ?? label)}
             </a>
           ))}
@@ -494,7 +494,9 @@ function TourBody({
           </section>
 
           <section id="faq" className="scroll-mt-32">
-            <h2 className="font-display text-4xl">FAQ</h2>
+            <h2 className="font-display text-4xl">
+              {text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
+            </h2>
             <Accordion type="single" collapsible className="mt-4">
               {content.faqs.map((f) => (
                 <AccordionItem key={f.q} value={f.q}>
