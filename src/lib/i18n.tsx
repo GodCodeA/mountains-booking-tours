@@ -69,7 +69,7 @@ const copy = {
     signingOut: "Выходим…",
     day: "день",
     days: "дней",
-    max: "макс.",
+    max: "Эң көп",
     next: "Ближайшая дата",
     spot: "место",
     spots: "места",
