@@ -376,7 +376,10 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
-        <SectionHeading eyebrow="FAQ" title={text("Good to know", "Полезно знать", "Билип коюңуз")} />
+        <SectionHeading
+          eyebrow={text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
+          title={text("Good to know", "Полезно знать", "Билип коюңуз")}
+        />
         <Accordion type="single" collapsible className="mt-6">
           {content.faqs.map((f) => (
             <AccordionItem key={f.q} value={f.q}>
