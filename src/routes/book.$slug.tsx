@@ -423,9 +423,9 @@ function BookingFlow() {
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {text(
-                  "Demo availability. Start times are Bishkek time.",
-                  "Демо-доступность. Время указано по Бишкеку.",
-                  "Демо-жеткиликтүүлүк. Убакыт Бишкек убактысы менен көрсөтүлгөн.",
+                  "Demo availability. Bookings close on the day of departure; start times are Bishkek time.",
+                  "Демо-доступность. Бронирование закрывается в день выезда; время указано по Бишкеку.",
+                  "Демо-жеткиликтүүлүк. Брондоо сапар болгон күнү жабылат; убакыт Бишкек убактысы менен көрсөтүлгөн.",
                 )}
               </p>
               <div className="mt-4 space-y-2">

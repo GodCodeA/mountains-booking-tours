@@ -3,10 +3,20 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { bookingFormSchema, validateBookingForm } from "./booking-validation";
-import { BISHKEK_TIME_ZONE, bishkekToday } from "./bishkek-time";
+import {
+  BISHKEK_TIME_ZONE,
+  bishkekToday,
+  bishkekTomorrow,
+  isPubliclyBookableDate,
+} from "./bishkek-time";
 import { localText, type Language } from "./i18n";
 
-export { BISHKEK_TIME_ZONE, bishkekToday } from "./bishkek-time";
+export {
+  BISHKEK_TIME_ZONE,
+  bishkekToday,
+  bishkekTomorrow,
+  isPubliclyBookableDate,
+} from "./bishkek-time";
 
 export type Tour = {
   id: string;
@@ -92,12 +102,12 @@ export const departuresQuery = (tourId: string | undefined) => ({
   queryKey: ["departures", tourId],
   enabled: Boolean(tourId),
   queryFn: async (): Promise<Departure[]> => {
-    const today = bishkekToday();
+    const firstBookableDate = bishkekTomorrow();
     const { data, error } = await supabase
       .from("departures")
       .select("*")
       .eq("tour_id", tourId!)
-      .gte("departure_date", today)
+      .gte("departure_date", firstBookableDate)
       .order("departure_date", { ascending: true });
     if (error) throw error;
     return (data ?? []) as Departure[];
@@ -266,11 +276,11 @@ export const createBooking = createServerFn({ method: "POST" })
     }
 
     const errors = validateBookingForm({ ...data, maxGuests: spotsLeft(departure), language });
-    if (departure.departure_date < bishkekToday()) {
+    if (!isPubliclyBookableDate(departure.departure_date)) {
       errors.departureId = message(
-        "This date has already passed.",
-        "Эта дата уже прошла.",
-        "Бул дата өтүп кеткен.",
+        "Bookings close on the day of departure. Please choose tomorrow or later.",
+        "Бронирование закрывается в день выезда. Выберите дату на завтра или позже.",
+        "Брондоо сапар болгон күнү жабылат. Эртеңки же андан кийинки күндү тандаңыз.",
       );
     }
     const firstError = Object.values(errors)[0];
@@ -426,11 +436,11 @@ export function spotsLeft(departure: Departure) {
 export const upcomingDeparturesQuery = {
   queryKey: ["departures", "upcoming"],
   queryFn: async (): Promise<Departure[]> => {
-    const today = bishkekToday();
+    const firstBookableDate = bishkekTomorrow();
     const { data, error } = await supabase
       .from("departures")
       .select("*")
-      .gte("departure_date", today)
+      .gte("departure_date", firstBookableDate)
       .order("departure_date", { ascending: true });
     if (error) throw error;
     return (data ?? []) as Departure[];
