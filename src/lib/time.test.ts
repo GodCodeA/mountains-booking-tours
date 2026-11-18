@@ -4,7 +4,9 @@ import { test } from "node:test";
 import {
   bishkekToday,
   bishkekTomorrow,
+  hasDepartureStarted,
   isBookingChangeAllowed,
+  isEmergencyCancellationAvailable,
   isPubliclyBookableDate,
 } from "./bishkek-time.ts";
 
@@ -40,4 +42,22 @@ test("allows a booking change exactly 48 hours before a Bishkek departure", () =
     isBookingChangeAllowed(departureDate, departureTime, new Date("2026-11-04T02:00:01Z")),
     false,
   );
+});
+
+test("offers emergency cancellation only inside the future 48-hour window", () => {
+  const date = "2026-11-06";
+  const time = "08:00:00";
+  assert.equal(
+    isEmergencyCancellationAvailable(date, time, new Date("2026-11-04T02:00:01Z")),
+    true,
+  );
+  assert.equal(
+    isEmergencyCancellationAvailable(date, time, new Date("2026-11-04T02:00:00Z")),
+    false,
+  );
+  assert.equal(
+    isEmergencyCancellationAvailable(date, time, new Date("2026-11-06T02:00:00Z")),
+    false,
+  );
+  assert.equal(hasDepartureStarted(date, time, new Date("2026-11-06T02:00:00Z")), true);
 });

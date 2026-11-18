@@ -7,7 +7,9 @@ import {
   BISHKEK_TIME_ZONE,
   bishkekToday,
   bishkekTomorrow,
+  hasDepartureStarted,
   isBookingChangeAllowed,
+  isEmergencyCancellationAvailable,
   isPubliclyBookableDate,
 } from "./bishkek-time";
 import { localText, type Language } from "./i18n";
@@ -16,7 +18,9 @@ export {
   BISHKEK_TIME_ZONE,
   bishkekToday,
   bishkekTomorrow,
+  hasDepartureStarted,
   isBookingChangeAllowed,
+  isEmergencyCancellationAvailable,
   isPubliclyBookableDate,
 } from "./bishkek-time";
 

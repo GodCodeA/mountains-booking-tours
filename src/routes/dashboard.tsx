@@ -33,7 +33,9 @@ import {
   displayBookingReference,
   emergencyCancelBooking,
   formatDate,
+  hasDepartureStarted,
   isBookingChangeAllowed,
+  isEmergencyCancellationAvailable,
   listDashboardBookings,
   rescheduleBooking,
   spotsLeft,
@@ -358,7 +360,17 @@ function OwnerDashboard() {
             row.departures.departure_date,
             row.departures.departure_time,
           );
+          const departed = hasDepartureStarted(
+            row.departures.departure_date,
+            row.departures.departure_time,
+          );
           const actionsDisabled = row.status === "cancelled" || changesClosed;
+          const emergencyCancellationAvailable =
+            row.status !== "cancelled" &&
+            isEmergencyCancellationAvailable(
+              row.departures.departure_date,
+              row.departures.departure_time,
+            );
 
           return (
             <article key={row.id} className="surface-panel p-5">
@@ -427,19 +439,27 @@ function OwnerDashboard() {
                   <>
                     <p className="w-full text-xs text-muted-foreground">
                       {text(
-                        "Changes close 48 hours before departure.",
-                        "Изменения закрываются за 48 часов до выезда.",
-                        "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
+                        departed
+                          ? "This trip has already departed."
+                          : "Changes close 48 hours before departure.",
+                        departed
+                          ? "Этот тур уже начался."
+                          : "Изменения закрываются за 48 часов до выезда.",
+                        departed
+                          ? "Бул тур башталып калды."
+                          : "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
                       )}
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => setEmergencyCancelling(row)}
-                      className="inline-flex items-center gap-2 rounded-md border border-destructive/60 px-4 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
-                    >
-                      <AlertTriangle className="h-4 w-4" />
-                      {text("Emergency cancel", "Экстренная отмена", "Шашылыш жокко чыгаруу")}
-                    </button>
+                    {emergencyCancellationAvailable ? (
+                      <button
+                        type="button"
+                        onClick={() => setEmergencyCancelling(row)}
+                        className="inline-flex items-center gap-2 rounded-md border border-destructive/60 px-4 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        {text("Emergency cancel", "Экстренная отмена", "Шашылыш жокко чыгаруу")}
+                      </button>
+                    ) : null}
                   </>
                 ) : null}
               </div>

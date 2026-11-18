@@ -46,3 +46,17 @@ export function isBookingChangeAllowed(date: string, time: string, now = new Dat
     CHANGE_CUTOFF_HOURS * 60 * 60 * 1000
   );
 }
+
+/** Emergency cancellation is available only for a future trip inside the cutoff window. */
+export function isEmergencyCancellationAvailable(
+  date: string,
+  time: string,
+  now = new Date(),
+): boolean {
+  const remaining = bishkekDepartureInstant(date, time).getTime() - now.getTime();
+  return remaining > 0 && remaining < CHANGE_CUTOFF_HOURS * 60 * 60 * 1000;
+}
+
+export function hasDepartureStarted(date: string, time: string, now = new Date()): boolean {
+  return bishkekDepartureInstant(date, time).getTime() <= now.getTime();
+}
