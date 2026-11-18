@@ -7,6 +7,7 @@ import {
   BISHKEK_TIME_ZONE,
   bishkekToday,
   bishkekTomorrow,
+  isBookingChangeAllowed,
   isPubliclyBookableDate,
 } from "./bishkek-time";
 import { localText, type Language } from "./i18n";
@@ -15,6 +16,7 @@ export {
   BISHKEK_TIME_ZONE,
   bishkekToday,
   bishkekTomorrow,
+  isBookingChangeAllowed,
   isPubliclyBookableDate,
 } from "./bishkek-time";
 
@@ -328,11 +330,31 @@ export const cancelBooking = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertBookingAdmin(context);
     const db = await databaseAdmin();
+    const { data: booking, error: bookingError } = await db
+      .from("bookings")
+      .select("id, status, departure_id")
+      .eq("id", data.bookingId)
+      .maybeSingle();
+    if (bookingError || !booking) throw new Error("Booking not found");
+    if (booking.status === "cancelled") return { status: "cancelled" as const };
+
+    const { data: departure, error: departureError } = await db
+      .from("departures")
+      .select("departure_date, departure_time")
+      .eq("id", booking.departure_id)
+      .maybeSingle();
+    if (departureError || !departure) throw new Error("Departure not found");
+    if (!isBookingChangeAllowed(departure.departure_date, departure.departure_time)) {
+      return { status: "closed" as const };
+    }
+
     const { error } = await db
       .from("bookings")
       .update({ status: "cancelled" })
       .eq("id", data.bookingId);
+    if (error?.message.includes("BOOKING_CHANGE_CLOSED")) return { status: "closed" as const };
     if (error) throw error;
+    return { status: "cancelled" as const };
   });
 
 export const rescheduleBooking = createServerFn({ method: "POST" })
@@ -345,12 +367,12 @@ export const rescheduleBooking = createServerFn({ method: "POST" })
     const db = await databaseAdmin();
     const { data: booking, error: bookingError } = await db
       .from("bookings")
-      .select("tour_id")
+      .select("tour_id, status, departure_id")
       .eq("id", data.bookingId)
       .maybeSingle();
     const { data: departure, error: departureError } = await db
       .from("departures")
-      .select("tour_id")
+      .select("tour_id, departure_date, departure_time")
       .eq("id", data.departureId)
       .maybeSingle();
     if (
@@ -362,10 +384,26 @@ export const rescheduleBooking = createServerFn({ method: "POST" })
     ) {
       throw new Error("Invalid reschedule request");
     }
+    if (booking.status === "cancelled") throw new Error("Cancelled bookings cannot be rescheduled");
+    if (!isPubliclyBookableDate(departure.departure_date)) {
+      throw new Error("The new date is no longer available for booking");
+    }
+
+    const { data: currentDeparture, error: currentDepartureError } = await db
+      .from("departures")
+      .select("departure_date, departure_time")
+      .eq("id", booking.departure_id)
+      .maybeSingle();
+    if (currentDepartureError || !currentDeparture) throw new Error("Current departure not found");
+    if (!isBookingChangeAllowed(currentDeparture.departure_date, currentDeparture.departure_time)) {
+      return { status: "closed" as const };
+    }
+
     const { error } = await db
       .from("bookings")
       .update({ departure_id: data.departureId })
       .eq("id", data.bookingId);
+    if (error?.message.includes("BOOKING_CHANGE_CLOSED")) return { status: "closed" as const };
     if (error?.message.includes("NOT_ENOUGH_SPOTS")) {
       return { status: "full" as const };
     }

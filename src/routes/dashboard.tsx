@@ -22,6 +22,7 @@ import {
   departuresQuery,
   displayBookingReference,
   formatDate,
+  isBookingChangeAllowed,
   listDashboardBookings,
   rescheduleBooking,
   spotsLeft,
@@ -195,7 +196,17 @@ function OwnerDashboard() {
   const cancel = useMutation({
     mutationFn: async (row: Row) =>
       runCancel({ data: { bookingId: row.id }, ...(await ownerAuthHeaders()) }),
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.status === "closed") {
+        toast.error(
+          text(
+            "Changes close 48 hours before departure.",
+            "Изменения закрываются за 48 часов до выезда.",
+            "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
+          ),
+        );
+        return;
+      }
       toast.success(text("Booking cancelled", "Бронирование отменено", "Брондоо жокко чыгарылды"));
       invalidate();
     },
@@ -330,72 +341,89 @@ function OwnerDashboard() {
           </div>
         ) : null}
 
-        {visible.map((row) => (
-          <article key={row.id} className="surface-panel p-5">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="font-display text-3xl">
-                    {localizeTour(row.tours, language).name}
-                  </h2>
-                  <StatusBadge status={row.status} />
-                  <span className="rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
-                    {text("Ref", "Код", "Код")} {displayBookingReference(row.reference)}
-                  </span>
+        {visible.map((row) => {
+          const changesClosed = !isBookingChangeAllowed(
+            row.departures.departure_date,
+            row.departures.departure_time,
+          );
+          const actionsDisabled = row.status === "cancelled" || changesClosed;
+
+          return (
+            <article key={row.id} className="surface-panel p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-3xl">
+                      {localizeTour(row.tours, language).name}
+                    </h2>
+                    <StatusBadge status={row.status} />
+                    <span className="rounded bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground">
+                      {text("Ref", "Код", "Код")} {displayBookingReference(row.reference)}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
+                      <CalendarDays className="h-4 w-4 text-primary" />
+                      {formatDate(row.departures.departure_date, language)}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Users className="h-4 w-4 text-primary" /> {row.guests}{" "}
+                      {guestLabel(row.guests, language)}
+                    </span>
+                    <span className="font-semibold text-foreground">${row.total_price}</span>
+                  </div>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays className="h-4 w-4 text-primary" />
-                    {formatDate(row.departures.departure_date, language)}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Users className="h-4 w-4 text-primary" /> {row.guests}{" "}
-                    {guestLabel(row.guests, language)}
-                  </span>
-                  <span className="font-semibold text-foreground">${row.total_price}</span>
+                <div className="text-sm">
+                  <p className="font-semibold">{row.customer_name}</p>
+                  <p className="inline-flex items-center gap-1.5 text-muted-foreground">
+                    <Mail className="h-3.5 w-3.5" /> {row.customer_email}
+                  </p>
+                  <p className="inline-flex items-center gap-1.5 text-muted-foreground">
+                    <Phone className="h-3.5 w-3.5" /> {row.customer_phone}
+                  </p>
+                  {row.customer_whatsapp ? (
+                    <p className="text-muted-foreground">WhatsApp: {row.customer_whatsapp}</p>
+                  ) : null}
                 </div>
               </div>
-              <div className="text-sm">
-                <p className="font-semibold">{row.customer_name}</p>
-                <p className="inline-flex items-center gap-1.5 text-muted-foreground">
-                  <Mail className="h-3.5 w-3.5" /> {row.customer_email}
+
+              {row.notes ? (
+                <p className="mt-3 rounded-md bg-secondary p-3 text-sm text-secondary-foreground">
+                  {row.notes}
                 </p>
-                <p className="inline-flex items-center gap-1.5 text-muted-foreground">
-                  <Phone className="h-3.5 w-3.5" /> {row.customer_phone}
-                </p>
-                {row.customer_whatsapp ? (
-                  <p className="text-muted-foreground">WhatsApp: {row.customer_whatsapp}</p>
+              ) : null}
+
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+                <button
+                  type="button"
+                  disabled={actionsDisabled}
+                  onClick={() => setRescheduling(row)}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-40"
+                >
+                  <RefreshCw className="h-4 w-4" />{" "}
+                  {text("Reschedule", "Перенести", "Башка күнгө жылдыруу")}
+                </button>
+                <button
+                  type="button"
+                  disabled={actionsDisabled || cancel.isPending}
+                  onClick={() => cancel.mutate(row)}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-destructive disabled:opacity-40"
+                >
+                  <X className="h-4 w-4" /> {text("Cancel", "Отменить", "Жокко чыгаруу")}
+                </button>
+                {changesClosed && row.status !== "cancelled" ? (
+                  <p className="w-full text-xs text-muted-foreground">
+                    {text(
+                      "Changes close 48 hours before departure.",
+                      "Изменения закрываются за 48 часов до выезда.",
+                      "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
+                    )}
+                  </p>
                 ) : null}
               </div>
-            </div>
-
-            {row.notes ? (
-              <p className="mt-3 rounded-md bg-secondary p-3 text-sm text-secondary-foreground">
-                {row.notes}
-              </p>
-            ) : null}
-
-            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
-              <button
-                type="button"
-                disabled={row.status === "cancelled"}
-                onClick={() => setRescheduling(row)}
-                className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-40"
-              >
-                <RefreshCw className="h-4 w-4" />{" "}
-                {text("Reschedule", "Перенести", "Башка күнгө жылдыруу")}
-              </button>
-              <button
-                type="button"
-                disabled={row.status === "cancelled" || cancel.isPending}
-                onClick={() => cancel.mutate(row)}
-                className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-destructive disabled:opacity-40"
-              >
-                <X className="h-4 w-4" /> {text("Cancel", "Отменить", "Жокко чыгаруу")}
-              </button>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
       <RescheduleDialog
@@ -467,6 +495,14 @@ function RescheduleDialog({
             "That date no longer has enough spots.",
             "На этой дате больше недостаточно мест.",
             "Бул датага орун жетишсиз болуп калды.",
+          ),
+        );
+      } else if (result.status === "closed") {
+        toast.error(
+          text(
+            "Changes close 48 hours before departure.",
+            "Изменения закрываются за 48 часов до выезда.",
+            "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
           ),
         );
       } else {
