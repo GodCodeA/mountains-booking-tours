@@ -19,6 +19,10 @@ BEGIN
     RETURN NEW;
   END IF;
 
+  IF current_setting('app.emergency_booking_change', true) = 'true' THEN
+    RETURN NEW;
+  END IF;
+
   SELECT (d.departure_date + d.departure_time) AT TIME ZONE 'Asia/Bishkek'
     INTO current_departure_at
     FROM public.departures d

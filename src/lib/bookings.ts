@@ -357,6 +357,33 @@ export const cancelBooking = createServerFn({ method: "POST" })
     return { status: "cancelled" as const };
   });
 
+/**
+ * Emergency cancellation is intentionally separate from the normal 48-hour
+ * policy. It is limited to approved owners, requires a reason, and PostgreSQL
+ * records the actor and reason in the immutable audit table.
+ */
+export const emergencyCancelBooking = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((data) =>
+    z
+      .object({
+        bookingId: z.string().uuid(),
+        reason: z.string().trim().min(10).max(500),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertBookingAdmin(context);
+    const db = await databaseAdmin();
+    const { data: cancelled, error } = await db.rpc("emergency_cancel_booking", {
+      _booking_id: data.bookingId,
+      _reason: data.reason,
+      _actor_user_id: context.userId,
+    });
+    if (error) throw error;
+    return { status: cancelled ? ("cancelled" as const) : ("already-cancelled" as const) };
+  });
+
 export const rescheduleBooking = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data) =>

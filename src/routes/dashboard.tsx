@@ -1,13 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { CalendarDays, LogOut, Mail, Phone, Users, X, RefreshCw } from "lucide-react";
+import {
+  AlertTriangle,
+  CalendarDays,
+  LogOut,
+  Mail,
+  Phone,
+  RefreshCw,
+  Users,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { guestLabel, localText, useI18n } from "@/lib/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +31,7 @@ import {
   bishkekToday,
   departuresQuery,
   displayBookingReference,
+  emergencyCancelBooking,
   formatDate,
   isBookingChangeAllowed,
   listDashboardBookings,
@@ -187,6 +198,7 @@ function OwnerDashboard() {
   });
   const [tab, setTab] = useState<(typeof tabs)[number]>("Upcoming");
   const [rescheduling, setRescheduling] = useState<Row | null>(null);
+  const [emergencyCancelling, setEmergencyCancelling] = useState<Row | null>(null);
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
@@ -412,13 +424,23 @@ function OwnerDashboard() {
                   <X className="h-4 w-4" /> {text("Cancel", "Отменить", "Жокко чыгаруу")}
                 </button>
                 {changesClosed && row.status !== "cancelled" ? (
-                  <p className="w-full text-xs text-muted-foreground">
-                    {text(
-                      "Changes close 48 hours before departure.",
-                      "Изменения закрываются за 48 часов до выезда.",
-                      "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
-                    )}
-                  </p>
+                  <>
+                    <p className="w-full text-xs text-muted-foreground">
+                      {text(
+                        "Changes close 48 hours before departure.",
+                        "Изменения закрываются за 48 часов до выезда.",
+                        "Өзгөртүүлөр сапарга 48 саат калганда жабылат.",
+                      )}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setEmergencyCancelling(row)}
+                      className="inline-flex items-center gap-2 rounded-md border border-destructive/60 px-4 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                      {text("Emergency cancel", "Экстренная отмена", "Шашылыш жокко чыгаруу")}
+                    </button>
+                  </>
                 ) : null}
               </div>
             </article>
@@ -431,7 +453,131 @@ function OwnerDashboard() {
         onClose={() => setRescheduling(null)}
         onDone={invalidate}
       />
+      <EmergencyCancelDialog
+        row={emergencyCancelling}
+        onClose={() => setEmergencyCancelling(null)}
+        onDone={invalidate}
+      />
     </div>
+  );
+}
+
+function EmergencyCancelDialog({
+  row,
+  onClose,
+  onDone,
+}: {
+  row: Row | null;
+  onClose: () => void;
+  onDone: () => void;
+}) {
+  const { language } = useI18n();
+  const text = (english: string, russian: string, kyrgyz: string) =>
+    localText(language, english, russian, kyrgyz);
+  const runEmergencyCancel = useServerFn(emergencyCancelBooking);
+  const [reason, setReason] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => setReason(""), [row?.id]);
+
+  async function confirmEmergencyCancellation() {
+    if (!row || reason.trim().length < 10) return;
+    setSaving(true);
+    try {
+      const result = await runEmergencyCancel({
+        data: { bookingId: row.id, reason: reason.trim() },
+        ...(await ownerAuthHeaders()),
+      });
+      if (result.status === "cancelled") {
+        toast.success(
+          text(
+            "Booking cancelled and the reason was recorded.",
+            "Бронирование отменено, причина сохранена.",
+            "Брондоо жокко чыгарылды, себеби сакталды.",
+          ),
+        );
+        onDone();
+      } else {
+        toast.info(
+          text(
+            "This booking was already cancelled.",
+            "Это бронирование уже отменено.",
+            "Бул брондоо мурунтан эле жокко чыгарылган.",
+          ),
+        );
+      }
+      onClose();
+    } catch {
+      toast.error(
+        text(
+          "Couldn't cancel that booking in an emergency.",
+          "Не удалось экстренно отменить бронирование.",
+          "Брондоону шашылыш жокко чыгаруу мүмкүн болгон жок.",
+        ),
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Dialog open={Boolean(row)} onOpenChange={(open) => (open ? null : onClose())}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="font-display text-3xl">
+            {text("Emergency cancellation", "Экстренная отмена", "Шашылыш жокко чыгаруу")}
+          </DialogTitle>
+          <DialogDescription>
+            {text(
+              "Use this only for events such as unsafe weather, route closure, or an operator emergency. The reason is saved in the booking audit log.",
+              "Используйте только при небезопасной погоде, закрытии маршрута или экстренной ситуации у организатора. Причина сохранится в журнале бронирования.",
+              "Муну кооптуу аба ырайында, маршрут жабылганда же уюштуруучуда шашылыш жагдай болгондо гана колдонуңуз. Себеби брондоо журналына сакталат.",
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <div>
+          <label htmlFor="emergency-cancel-reason" className="text-sm font-semibold">
+            {text("Reason", "Причина", "Себеби")}
+          </label>
+          <Textarea
+            id="emergency-cancel-reason"
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            className="mt-1.5"
+            maxLength={500}
+            placeholder={text(
+              "e.g. Route closed because of severe weather",
+              "например: маршрут закрыт из-за сильной непогоды",
+              "мисалы: аба ырайы кескин начарлагандыктан маршрут жабылды",
+            )}
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            {text("At least 10 characters.", "Минимум 10 символов.", "Кеминде 10 белги.")}
+          </p>
+        </div>
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={saving}
+            className="rounded-md border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50"
+          >
+            {text("Keep booking", "Оставить бронирование", "Брондоону калтыруу")}
+          </button>
+          <button
+            type="button"
+            onClick={confirmEmergencyCancellation}
+            disabled={saving || reason.trim().length < 10}
+            className="inline-flex items-center gap-2 rounded-md bg-destructive px-4 py-2 text-sm font-bold text-destructive-foreground disabled:opacity-50"
+          >
+            <AlertTriangle className="h-4 w-4" />
+            {saving
+              ? text("Cancelling…", "Отменяем…", "Жокко чыгарылууда…")
+              : text("Emergency cancel", "Экстренно отменить", "Шашылыш жокко чыгаруу")}
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

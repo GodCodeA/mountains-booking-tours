@@ -223,6 +223,10 @@ export type Database = {
           id: string;
         }[];
       };
+      emergency_cancel_booking: {
+        Args: { _actor_user_id: string; _booking_id: string; _reason: string };
+        Returns: boolean;
+      };
     };
     Enums: {
       [_ in never]: never;
