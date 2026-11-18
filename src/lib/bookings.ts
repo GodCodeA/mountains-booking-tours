@@ -134,7 +134,27 @@ const bookingInputSchema = bookingFormSchema.extend({
   departureId: z.string().uuid("Please pick a valid date."),
   website: z.string().max(0).optional(),
   language: z.enum(["en", "ru", "ky"]).optional(),
+  // The token is intentionally verified inside the server handler; validating
+  // only in the browser would let an automated client bypass Turnstile.
+  turnstileToken: z.string().max(2048).optional(),
 });
+
+type TurnstileVerification = { success?: boolean };
+
+async function verifyTurnstile(token: string, secret: string): Promise<boolean> {
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret, response: token }),
+    });
+    if (!response.ok) return false;
+    const result = (await response.json()) as TurnstileVerification;
+    return result.success === true;
+  } catch {
+    return false;
+  }
+}
 
 async function databaseAdmin() {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -167,6 +187,31 @@ export const createBooking = createServerFn({ method: "POST" })
           "We couldn't save that booking. Please try again.",
           "Не удалось сохранить бронирование. Попробуйте ещё раз.",
           "Брондоону сактоо мүмкүн болбоду. Кайра аракет кылыңыз.",
+        ),
+      };
+    }
+
+    const turnstileSecret = process.env["TURNSTILE_SECRET_KEY"];
+    if (!turnstileSecret) {
+      console.error("[Turnstile] Missing TURNSTILE_SECRET_KEY runtime secret.");
+      return {
+        status: "invalid" as const,
+        error: message(
+          "Booking verification is temporarily unavailable. Please try again later.",
+          "Проверка бронирования временно недоступна. Попробуйте позже.",
+          "Брондоону текшерүү убактылуу жеткиликсиз. Кийинчерээк кайра аракет кылыңыз.",
+        ),
+      };
+    }
+
+    const turnstileToken = data.turnstileToken?.trim();
+    if (!turnstileToken || !(await verifyTurnstile(turnstileToken, turnstileSecret))) {
+      return {
+        status: "invalid" as const,
+        error: message(
+          "Please complete the security check and try again.",
+          "Пройдите проверку безопасности и попробуйте ещё раз.",
+          "Коопсуздук текшерүүсүнөн өтүп, кайра аракет кылыңыз.",
         ),
       };
     }

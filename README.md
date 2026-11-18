@@ -77,21 +77,23 @@ Create local configuration outside Git. Never put real secrets in source code or
 # Browser build-time values. These are public by design.
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+VITE_TURNSTILE_SITE_KEY=0x...
 
 # Server/Worker runtime values. Keep the service key secret.
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
+TURNSTILE_SECRET_KEY=0x...
 ```
 
-`VITE_*` variables become part of the browser bundle. Never use the service-role key with a `VITE_` prefix.
+`VITE_*` variables become part of the browser bundle. Never use a service key or `TURNSTILE_SECRET_KEY` with a `VITE_` prefix.
 
 ## Production checklist
 
 - Apply all migrations in `supabase/migrations` in order.
 - Configure `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and the server-only `SUPABASE_SERVICE_ROLE_KEY` in the deployment environment.
 - Configure the Supabase Auth redirect URL for `https://your-domain/dashboard` and add the owner UUID to `admin_users`.
-- The booking form includes a honeypot and a per-email limit of three attempts per 15 minutes; add Cloudflare Turnstile with server-side validation before opening the public booking form to meaningful traffic.
+- The booking form uses Cloudflare Turnstile with mandatory server-side Siteverify validation, plus a honeypot and a per-email limit of three attempts per 15 minutes.
 - Replace sample tours, guides, reviews, contact details and placeholder email addresses before a real launch.
 
 ## Deploy to Cloudflare Workers
@@ -99,8 +101,8 @@ SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
 This repository builds to a Cloudflare Worker through Nitro. The generated Worker configuration is written to `.output/server/wrangler.json` during the build.
 
 1. In Cloudflare, create a Worker from this GitHub repository, or deploy locally with `bun run deploy:cloudflare` after `wrangler login`.
-2. Add runtime values to the Worker: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and secret `SUPABASE_SERVICE_ROLE_KEY`. Do not put the service-role key in the repository or in a Vite variable.
-3. Make the public `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` available during the Worker build, because Vite embeds `VITE_*` values into the browser bundle.
+2. Add runtime values to the Worker: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and the encrypted secrets `SUPABASE_SERVICE_ROLE_KEY` and `TURNSTILE_SECRET_KEY`. Do not put either secret in the repository or in a Vite variable.
+3. Make the public `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, and `VITE_TURNSTILE_SITE_KEY` available during the Worker build, because Vite embeds `VITE_*` values into the browser bundle.
 4. Deploy, then add the Worker domain as an allowed redirect URL in Supabase Auth. Add the custom domain there too before switching DNS.
 
 The generated Wrangler configuration has `keep_vars: true`. This is intentional: it prevents a Git/CLI deployment from deleting runtime values you added in the Cloudflare dashboard. A new or edited runtime value still requires a new deployment before the Worker can use it.
@@ -109,11 +111,11 @@ Cloudflare Pages is not used: Workers hosts both the React interface and the ser
 
 ## Useful project locations
 
-| Location | Responsibility |
-| --- | --- |
-| `src/lib/bookings.ts` | Supabase queries, protected booking/owner server functions, capacity helpers |
-| `src/lib/tour-localization.ts` | Russian and Kyrgyz display copy for core tour facts |
-| `src/lib/tour-content.ts` | Itineraries, packing lists and cancellation policy |
-| `src/lib/site-content.ts` | Sample guides, reviews and FAQ |
-| `supabase/migrations/` | Database schema, capacity trigger and security policy migrations |
-| `src/routes/dashboard.tsx` | Authenticated owner dashboard |
+| Location                       | Responsibility                                                               |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `src/lib/bookings.ts`          | Supabase queries, protected booking/owner server functions, capacity helpers |
+| `src/lib/tour-localization.ts` | Russian and Kyrgyz display copy for core tour facts                          |
+| `src/lib/tour-content.ts`      | Itineraries, packing lists and cancellation policy                           |
+| `src/lib/site-content.ts`      | Sample guides, reviews and FAQ                                               |
+| `supabase/migrations/`         | Database schema, capacity trigger and security policy migrations             |
+| `src/routes/dashboard.tsx`     | Authenticated owner dashboard                                                |

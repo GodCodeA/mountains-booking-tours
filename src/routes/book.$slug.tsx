@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Turnstile } from "@/components/turnstile";
 import {
   availabilityLabel,
   availabilityOf,
@@ -116,6 +117,8 @@ function BookingFlow() {
   const [whatsapp, setWhatsapp] = useState("");
   const [notes, setNotes] = useState("");
   const [website, setWebsite] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileAttempt, setTurnstileAttempt] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<BookingField, string>>>({});
   const restored = useRef(false);
@@ -154,6 +157,12 @@ function BookingFlow() {
   const departure: Departure | undefined = open.find((d) => d.id === departureId);
   const maxGuests = departure ? Math.min(spotsLeft(departure), tour?.max_group_size ?? 99) : 1;
   const total = tour ? guests * tour.price_per_person : 0;
+  const turnstileSiteKey = import.meta.env["VITE_TURNSTILE_SITE_KEY"];
+
+  function resetTurnstile() {
+    setTurnstileToken("");
+    setTurnstileAttempt((attempt) => attempt + 1);
+  }
 
   // If the restored/preset date is no longer bookable, send the guest back to pick one.
   useEffect(() => {
@@ -270,6 +279,7 @@ function BookingFlow() {
           notes,
           website,
           language,
+          turnstileToken,
         },
       });
       if (result.status === "full") {
@@ -282,11 +292,13 @@ function BookingFlow() {
         );
         await queryClient.invalidateQueries({ queryKey: ["departures"] });
         setStep(0);
+        resetTurnstile();
         setSubmitting(false);
         return;
       }
       if (result.status === "invalid") {
         toast.error(result.error);
+        resetTurnstile();
         setSubmitting(false);
         return;
       }
@@ -302,6 +314,7 @@ function BookingFlow() {
           "Брондоону сактоо мүмкүн болбоду. Кайра аракет кылыңыз.",
         ),
       );
+      resetTurnstile();
       setSubmitting(false);
       return;
     }
@@ -693,6 +706,40 @@ function BookingFlow() {
                   )}
                 </p>
               </div>
+              <section
+                className="mt-5 rounded-lg border border-border p-4"
+                aria-labelledby="security-check"
+              >
+                <h3 id="security-check" className="font-semibold">
+                  {text("Security check", "Проверка безопасности", "Коопсуздук текшерүүсү")}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {text(
+                    "Complete this check to confirm your booking.",
+                    "Пройдите проверку, чтобы подтвердить бронирование.",
+                    "Брондоону ырастоо үчүн бул текшерүүдөн өтүңүз.",
+                  )}
+                </p>
+                {turnstileSiteKey ? (
+                  <div className="mt-3">
+                    <Turnstile
+                      key={turnstileAttempt}
+                      siteKey={turnstileSiteKey}
+                      onVerify={setTurnstileToken}
+                      onExpire={resetTurnstile}
+                      onError={resetTurnstile}
+                    />
+                  </div>
+                ) : (
+                  <p role="alert" className="mt-3 text-sm text-destructive">
+                    {text(
+                      "Booking verification is temporarily unavailable. Please try again later.",
+                      "Проверка бронирования временно недоступна. Попробуйте позже.",
+                      "Брондоону текшерүү убактылуу жеткиликсиз. Кийинчерээк кайра аракет кылыңыз.",
+                    )}
+                  </p>
+                )}
+              </section>
             </div>
           ) : null}
 
@@ -719,7 +766,14 @@ function BookingFlow() {
               <button
                 type="button"
                 onClick={confirm}
-                disabled={submitting || !departure || !contactValid || !guestsValid}
+                disabled={
+                  submitting ||
+                  !departure ||
+                  !contactValid ||
+                  !guestsValid ||
+                  !turnstileSiteKey ||
+                  !turnstileToken
+                }
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-60"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
