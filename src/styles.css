@@ -20,9 +20,7 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  /* Bebas Neue has no Cyrillic glyphs. Oswald keeps RU/KY headings condensed
-     and display-like instead of falling through to the body font (Manrope). */
-  --font-display: "Bebas Neue", "Oswald", "Manrope", sans-serif;
+  --font-display: "Bebas Neue", sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
