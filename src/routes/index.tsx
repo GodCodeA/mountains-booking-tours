@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck, Compass, Map, Mountain, MousePointerClick, Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  CalendarCheck,
+  Compass,
+  Map,
+  Mountain,
+  MousePointerClick,
+  RotateCcw,
+  SlidersHorizontal,
+  Users,
+} from "lucide-react";
 
 import heroImage from "@/assets/hero-mountains.jpg";
 import { TourCard } from "@/components/tour-card";
@@ -168,6 +178,53 @@ function pickRecommended(tours: Tour[]) {
   return picks.filter((p): p is { label: string; tour: Tour } => Boolean(p.tour));
 }
 
+const finderDurations = ["any", "1", "2-3", "4+"] as const;
+const finderDifficulties = ["any", "Easy", "Moderate", "Challenging"] as const;
+const finderBudgets = ["any", "under-200", "200-350", "350-plus"] as const;
+
+type FinderDuration = (typeof finderDurations)[number];
+type FinderDifficulty = (typeof finderDifficulties)[number];
+type FinderBudget = (typeof finderBudgets)[number];
+
+function matchesFinderDuration(days: number, duration: FinderDuration) {
+  if (duration === "1") return days === 1;
+  if (duration === "2-3") return days >= 2 && days <= 3;
+  if (duration === "4+") return days >= 4;
+  return true;
+}
+
+function matchesFinderBudget(price: number, budget: FinderBudget) {
+  if (budget === "under-200") return price < 200;
+  if (budget === "200-350") return price >= 200 && price <= 350;
+  if (budget === "350-plus") return price > 350;
+  return true;
+}
+
+function FinderChoice({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={
+        active
+          ? "rounded-full bg-primary px-3 py-1.5 text-sm font-bold text-primary-foreground"
+          : "rounded-full border border-border bg-background/60 px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground"
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
 function SectionHeading({
   eyebrow,
   title,
@@ -197,6 +254,29 @@ function Home() {
   const localizedSteps = ru ? russianHowItWorks : ky ? kyrgyzHowItWorks : howItWorks;
   const { data: tours, isLoading, isError } = useQuery(toursQuery);
   const recommended = tours ? pickRecommended(tours) : [];
+  const [finderDuration, setFinderDuration] = useState<FinderDuration>("any");
+  const [finderDifficulty, setFinderDifficulty] = useState<FinderDifficulty>("any");
+  const [finderBudget, setFinderBudget] = useState<FinderBudget>("any");
+  const finderResults = useMemo(
+    () =>
+      (tours ?? [])
+        .filter(
+          (tour) =>
+            matchesFinderDuration(tour.duration_days, finderDuration) &&
+            (finderDifficulty === "any" || tour.difficulty === finderDifficulty) &&
+            matchesFinderBudget(tour.price_per_person, finderBudget),
+        )
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .slice(0, 3),
+    [tours, finderBudget, finderDifficulty, finderDuration],
+  );
+  const finderHasSelection =
+    finderDuration !== "any" || finderDifficulty !== "any" || finderBudget !== "any";
+  const resetFinder = () => {
+    setFinderDuration("any");
+    setFinderDifficulty("any");
+    setFinderBudget("any");
+  };
 
   return (
     <div>
@@ -244,6 +324,164 @@ function Home() {
             >
               {text("Check availability", "Проверить даты", "Даталарды көрүү")}
             </a>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="trip-finder-title" className="border-b border-border bg-surface">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+            <SectionHeading
+              eyebrow={text("Trip finder", "Подбор тура", "Тур тандоо")}
+              title={text(
+                "Find a trip that fits",
+                "Найдите подходящий тур",
+                "Өзүңүзгө ылайыктуу турду табыңыз",
+              )}
+            >
+              {text(
+                "Tell us what kind of time, pace and budget you have. We’ll narrow the demo tours down to a few good matches.",
+                "Выберите свободное время, желаемую сложность и бюджет — мы покажем несколько подходящих демо-туров.",
+                "Бош убактыңызды, каалаган татаалдыкты жана бюджетиңизди тандаңыз — биз ылайыктуу демо-турларды көрсөтөбүз.",
+              )}
+            </SectionHeading>
+
+            <div className="surface-panel p-5 sm:p-6" data-testid="trip-finder">
+              <div className="space-y-5">
+                <fieldset>
+                  <legend className="text-sm font-bold">
+                    {text(
+                      "How much time do you have?",
+                      "Сколько у вас времени?",
+                      "Канча убактыңыз бар?",
+                    )}
+                  </legend>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {finderDurations.map((duration) => (
+                      <FinderChoice
+                        key={duration}
+                        active={finderDuration === duration}
+                        onClick={() => setFinderDuration(duration)}
+                      >
+                        {
+                          {
+                            any: text("Any length", "Любая длительность", "Каалаган узактык"),
+                            "1": text("1 day", "1 день", "1 күн"),
+                            "2-3": text("2–3 days", "2–3 дня", "2–3 күн"),
+                            "4+": text("4+ days", "4+ дней", "4+ күн"),
+                          }[duration]
+                        }
+                      </FinderChoice>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend className="text-sm font-bold">
+                    {text("Preferred pace", "Желаемая сложность", "Каалаган татаалдык")}
+                  </legend>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {finderDifficulties.map((difficulty) => (
+                      <FinderChoice
+                        key={difficulty}
+                        active={finderDifficulty === difficulty}
+                        onClick={() => setFinderDifficulty(difficulty)}
+                      >
+                        {
+                          {
+                            any: text("Any level", "Любой уровень", "Каалаган деңгээл"),
+                            Easy: text("Easy", "Лёгкий", "Жеңил"),
+                            Moderate: text("Moderate", "Средний", "Орточо"),
+                            Challenging: text("Challenging", "Сложный", "Татаал"),
+                          }[difficulty]
+                        }
+                      </FinderChoice>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend className="text-sm font-bold">
+                    {text("Budget per person", "Бюджет на человека", "Адамга бюджет")}
+                  </legend>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {finderBudgets.map((budget) => (
+                      <FinderChoice
+                        key={budget}
+                        active={finderBudget === budget}
+                        onClick={() => setFinderBudget(budget)}
+                      >
+                        {
+                          {
+                            any: text("Any budget", "Любой бюджет", "Каалаган бюджет"),
+                            "under-200": text("Under $200", "До $200", "$200 чейин"),
+                            "200-350": text("$200–350", "$200–350", "$200–350"),
+                            "350-plus": text("$350+", "От $350", "$350+"),
+                          }[budget]
+                        }
+                      </FinderChoice>
+                    ))}
+                  </div>
+                </fieldset>
+              </div>
+
+              <div className="mt-6 border-t border-border pt-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="inline-flex items-center gap-2 text-sm font-bold">
+                    <SlidersHorizontal className="h-4 w-4 text-primary" />
+                    {text(
+                      finderHasSelection ? "Your matches" : "A few places to start",
+                      finderHasSelection ? "Подходящие варианты" : "Несколько вариантов для начала",
+                      finderHasSelection
+                        ? "Сизге ылайыктуу турлар"
+                        : "Баштоо үчүн бир нече вариант",
+                    )}
+                  </p>
+                  {finderHasSelection ? (
+                    <button
+                      type="button"
+                      onClick={resetFinder}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      {text("Reset", "Сбросить", "Тазалоо")}
+                    </button>
+                  ) : null}
+                </div>
+                {isLoading ? <Skeleton className="mt-4 h-36 rounded-lg" /> : null}
+                {!isLoading && finderResults.length === 0 ? (
+                  <p className="mt-4 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+                    {text(
+                      "No demo tour matches all of those choices. Try changing one filter.",
+                      "Среди демо-туров нет точного совпадения. Измените один из фильтров.",
+                      "Демо-турлардын арасында так дал келген вариант жок. Чыпкалардын бирин өзгөртүңүз.",
+                    )}
+                  </p>
+                ) : null}
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {finderResults.map((tour) => {
+                    const localizedTour = localizeTour(tour, language);
+                    return (
+                      <Link
+                        key={tour.id}
+                        to="/tours/$slug"
+                        params={{ slug: tour.slug }}
+                        className="rounded-lg border border-border bg-background p-4 transition-colors hover:border-primary/60 hover:bg-secondary"
+                      >
+                        <p className="font-bold leading-tight">{localizedTour.name}</p>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {tour.duration_days} {dayLabel(tour.duration_days, language)} ·{" "}
+                          {localizedTour.difficulty}
+                        </p>
+                        <p className="mt-2 text-sm font-bold text-primary">
+                          ${tour.price_per_person}
+                        </p>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
