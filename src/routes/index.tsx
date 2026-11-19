@@ -458,7 +458,7 @@ function Home() {
                     )}
                   </p>
                 ) : null}
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <div data-testid="trip-finder-results" className="mt-4 grid gap-3 sm:grid-cols-3">
                   {finderResults.map((tour) => {
                     const localizedTour = localizeTour(tour, language);
                     return (
