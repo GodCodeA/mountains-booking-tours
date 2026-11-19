@@ -286,34 +286,36 @@ function TourBody({
                 className="aspect-[16/9] w-full object-cover"
               />
             </div>
-            <div className="mt-3 grid grid-cols-3 gap-3">
-              {photos.map((src, i) => (
-                <button
-                  key={src}
-                  type="button"
-                  onClick={() => setActive(i)}
-                  aria-label={text(
-                    `Show photo ${i + 1}`,
-                    `Показать фото ${i + 1}`,
-                    `${i + 1}-сүрөттү көрсөтүү`,
-                  )}
-                  className={
-                    i === active
-                      ? "overflow-hidden rounded-lg ring-2 ring-primary"
-                      : "overflow-hidden rounded-lg opacity-70 transition-opacity hover:opacity-100"
-                  }
-                >
-                  <img
-                    src={src}
-                    alt=""
-                    loading="lazy"
-                    width={1280}
-                    height={864}
-                    className="aspect-[4/3] w-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+            {photos.length > 1 ? (
+              <div className="mt-3 grid grid-cols-3 gap-3">
+                {photos.map((src, i) => (
+                  <button
+                    key={src}
+                    type="button"
+                    onClick={() => setActive(i)}
+                    aria-label={text(
+                      `Show photo ${i + 1}`,
+                      `Показать фото ${i + 1}`,
+                      `${i + 1}-сүрөттү көрсөтүү`,
+                    )}
+                    className={
+                      i === active
+                        ? "overflow-hidden rounded-lg ring-2 ring-primary"
+                        : "overflow-hidden rounded-lg opacity-70 transition-opacity hover:opacity-100"
+                    }
+                  >
+                    <img
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      width={1280}
+                      height={864}
+                      className="aspect-[4/3] w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </section>
 
           <section id="overview" className="scroll-mt-32">
