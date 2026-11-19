@@ -271,7 +271,7 @@ function ToursPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
       <p className="text-eyebrow">
-        {text("Six trips, one guide", "Шесть поездок, одна команда", "Алты сапар, бир команда")}
+        {text("Trips for every pace", "Поездки в вашем темпе", "Ар бир темпке ылайык сапарлар")}
       </p>
       <h1 className="mt-3 font-display text-6xl sm:text-7xl">
         {text("Choose your mountains", "Выберите свои горы", "Өз тооңузду тандаңыз")}

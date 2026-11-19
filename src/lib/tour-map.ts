@@ -53,6 +53,34 @@ const points: Record<string, MapPoint> = {
     russian: "Южный берег Иссык-Куля",
     kyrgyz: "Ысык-Көлдүн түштүк жээги",
   },
+  "chon-kemin-valley-escape": {
+    latitude: 42.7,
+    longitude: 75.95,
+    english: "Chon-Kemin valley",
+    russian: "Долина Чон-Кемин",
+    kyrgyz: "Чоң-Кемин өрөөнү",
+  },
+  "kegety-waterfall-hike": {
+    latitude: 42.48,
+    longitude: 75.18,
+    english: "Kegety Gorge",
+    russian: "Ущелье Кегеты",
+    kyrgyz: "Кегети капчыгайы",
+  },
+  "suusamyr-jailoo-weekend": {
+    latitude: 42.16,
+    longitude: 73.93,
+    english: "Suusamyr Valley",
+    russian: "Суусамырская долина",
+    kyrgyz: "Суусамыр өрөөнү",
+  },
+  "karakol-lakes-trek": {
+    latitude: 42.326,
+    longitude: 78.478,
+    english: "Karakol alpine lakes area",
+    russian: "Район Каракольских озёр",
+    kyrgyz: "Каракол көлдөрүнүн аймагы",
+  },
 };
 
 export function tourMapPoint(slug: string, language: Language) {

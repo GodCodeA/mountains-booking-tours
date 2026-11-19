@@ -164,6 +164,81 @@ const content: Record<string, TourExtras> = {
     ],
     whatToBring: [...baseKit, "Swimwear"],
   },
+  "chon-kemin-valley-escape": {
+    itinerary: [
+      {
+        time: "Day 1",
+        title: "Into Chon-Kemin",
+        body: "08:00 pick-up in Bishkek. Drive east to the valley, settle into a family guesthouse and take an easy riverside walk.",
+      },
+      {
+        time: "Day 2",
+        title: "Forest and pasture walk",
+        body: "A relaxed morning walk through spruce forest and open pasture, then return to Bishkek after lunch.",
+      },
+    ],
+    whatToBring: overnightKit,
+  },
+  "kegety-waterfall-hike": {
+    itinerary: [
+      {
+        time: "07:00",
+        title: "Leave Bishkek",
+        body: "Meet at Ala-Too Square and drive to Kegety Gorge.",
+      },
+      {
+        time: "09:00",
+        title: "Walk to the waterfall",
+        body: "Follow the stream into the gorge at a steady pace, with rests and a picnic before returning.",
+      },
+      {
+        time: "18:00",
+        title: "Back in Bishkek",
+        body: "Return to Ala-Too Square by early evening.",
+      },
+    ],
+    whatToBring: baseKit,
+  },
+  "suusamyr-jailoo-weekend": {
+    itinerary: [
+      {
+        time: "Day 1",
+        title: "Bishkek to Suusamyr",
+        body: "08:00 pick-up. Drive over the Too-Ashuu pass, arrive at the yurt camp and walk across the pasture before dinner.",
+      },
+      {
+        time: "Day 2",
+        title: "Morning on the jailoo",
+        body: "Slow breakfast, a short valley walk and return to Bishkek in the afternoon.",
+      },
+    ],
+    whatToBring: [...overnightKit, "Comfortable clothes for the yurt camp"],
+  },
+  "karakol-lakes-trek": {
+    itinerary: [
+      {
+        time: "Day 1",
+        title: "Karakol to high camp",
+        body: "08:00 start from Karakol. Transfer to the trailhead and hike up the valley to camp.",
+      },
+      {
+        time: "Day 2",
+        title: "Alpine lake day",
+        body: "The longest day: walk to the high lakes beneath the ridge, then return to camp.",
+      },
+      {
+        time: "Day 3",
+        title: "Descend to Karakol",
+        body: "Break camp and descend through the valley, arriving in Karakol by afternoon.",
+      },
+    ],
+    whatToBring: [
+      ...overnightKit,
+      "Broken-in hiking boots",
+      "Trekking poles (recommended)",
+      "Personal sleeping bag",
+    ],
+  },
 };
 
 const russianBaseKit = [
@@ -318,6 +393,81 @@ const russianContent: Record<string, TourExtras> = {
       },
     ],
     whatToBring: [...russianBaseKit, "Купальник"],
+  },
+  "chon-kemin-valley-escape": {
+    itinerary: [
+      {
+        time: "День 1",
+        title: "В Чон-Кемин",
+        body: "Выезд из Бишкека в 08:00. Едем на восток в долину, размещаемся в семейном гостевом доме и гуляем у реки.",
+      },
+      {
+        time: "День 2",
+        title: "Лес и пастбища",
+        body: "Неторопливая утренняя прогулка по еловому лесу и пастбищам, после обеда возвращаемся в Бишкек.",
+      },
+    ],
+    whatToBring: russianOvernightKit,
+  },
+  "kegety-waterfall-hike": {
+    itinerary: [
+      {
+        time: "07:00",
+        title: "Выезд из Бишкека",
+        body: "Встречаемся на площади Ала-Тоо и едем в ущелье Кегеты.",
+      },
+      {
+        time: "09:00",
+        title: "К водопаду",
+        body: "Идём вдоль ручья вглубь ущелья в комфортном темпе, с остановками и пикником.",
+      },
+      {
+        time: "18:00",
+        title: "Возвращение в Бишкек",
+        body: "К вечеру возвращаемся на площадь Ала-Тоо.",
+      },
+    ],
+    whatToBring: russianBaseKit,
+  },
+  "suusamyr-jailoo-weekend": {
+    itinerary: [
+      {
+        time: "День 1",
+        title: "Бишкек — Суусамыр",
+        body: "Выезд в 08:00. Едем через перевал Тоо-Ашуу, приезжаем в юрточный лагерь и гуляем по пастбищам до ужина.",
+      },
+      {
+        time: "День 2",
+        title: "Утро на джайлоо",
+        body: "Неспешный завтрак, короткая прогулка по долине и возвращение в Бишкек после обеда.",
+      },
+    ],
+    whatToBring: [...russianOvernightKit, "Удобная одежда для юрточного лагеря"],
+  },
+  "karakol-lakes-trek": {
+    itinerary: [
+      {
+        time: "День 1",
+        title: "Каракол — высокий лагерь",
+        body: "Старт в 08:00 из Каракола. Доезжаем до начала тропы и поднимаемся по долине к лагерю.",
+      },
+      {
+        time: "День 2",
+        title: "День высокогорных озёр",
+        body: "Самый длинный день: идём к озёрам под хребтом и возвращаемся в лагерь.",
+      },
+      {
+        time: "День 3",
+        title: "Спуск в Каракол",
+        body: "Собираем лагерь, спускаемся по долине и к вечеру возвращаемся в Каракол.",
+      },
+    ],
+    whatToBring: [
+      ...russianOvernightKit,
+      "Разношенные треккинговые ботинки",
+      "Треккинговые палки",
+      "Личный спальный мешок",
+    ],
   },
 };
 
@@ -480,6 +630,77 @@ const kyrgyzContent: Record<string, TourExtras> = {
       },
     ],
     whatToBring: [...kyrgyzBaseKit, "Купальник"],
+  },
+  "chon-kemin-valley-escape": {
+    itinerary: [
+      {
+        time: "1-күн",
+        title: "Чоң-Кеминге жол",
+        body: "08:00дө Бишкектен чыгабыз. Өрөөнгө барып, үй-бүлөлүк конок үйүнө жайгашып, дарыянын боюнда сейилдейбиз.",
+      },
+      {
+        time: "2-күн",
+        title: "Токой жана жайлоо",
+        body: "Карагайлуу токой жана жайлоодо эртең менен жай сейилдеп, түштөн кийин Бишкекке кайтабыз.",
+      },
+    ],
+    whatToBring: kyrgyzOvernightKit,
+  },
+  "kegety-waterfall-hike": {
+    itinerary: [
+      {
+        time: "07:00",
+        title: "Бишкектен чыгуу",
+        body: "Ала-Тоо аянтында жолугуп, Кегети капчыгайына барабыз.",
+      },
+      {
+        time: "09:00",
+        title: "Шаркыратмага жөө жүрүш",
+        body: "Капчыгайдын ичине тоо суусун бойлой жай темпте басып, тыныгуу жана пикник кылабыз.",
+      },
+      { time: "18:00", title: "Бишкекке кайтуу", body: "Кечкисин Ала-Тоо аянтына кайтабыз." },
+    ],
+    whatToBring: kyrgyzBaseKit,
+  },
+  "suusamyr-jailoo-weekend": {
+    itinerary: [
+      {
+        time: "1-күн",
+        title: "Бишкек — Суусамыр",
+        body: "08:00дө чыгабыз. Тоо-Ашуу ашуусу аркылуу боз үй лагерине жетип, кечки тамакка чейин жайлоодо сейилдейбиз.",
+      },
+      {
+        time: "2-күн",
+        title: "Жайлоодогу эртең менен",
+        body: "Шашпай эртең мененки тамак, өрөөндө кыска сейил жана түштөн кийин Бишкекке кайтуу.",
+      },
+    ],
+    whatToBring: [...kyrgyzOvernightKit, "Боз үй лагери үчүн ыңгайлуу кийим"],
+  },
+  "karakol-lakes-trek": {
+    itinerary: [
+      {
+        time: "1-күн",
+        title: "Каракол — бийик лагерь",
+        body: "08:00дө Караколдон чыгабыз. Чыйырдын башына чейин барып, өрөөн менен лагерге көтөрүлөбүз.",
+      },
+      {
+        time: "2-күн",
+        title: "Бийик тоо көлдөрүнүн күнү",
+        body: "Эң узак күн: кырдын алдындагы көлдөргө чейин барып, кайра лагерге кайтабыз.",
+      },
+      {
+        time: "3-күн",
+        title: "Караколго түшүү",
+        body: "Лагерди жыйнап, өрөөн менен түшүп, түштөн кийин Караколго жетебиз.",
+      },
+    ],
+    whatToBring: [
+      ...kyrgyzOvernightKit,
+      "Бутка кийилип көнгөн треккинг бут кийим",
+      "Треккинг таяктары",
+      "Жеке уктоочу баштык",
+    ],
   },
 };
 
