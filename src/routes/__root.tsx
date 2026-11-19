@@ -108,6 +108,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // The project intentionally uses sample tours, prices and reviews until launch.
+      // Keep every route out of search results while the public demo is being tested.
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Ala-Too Adventures — Mountain tours from Bishkek" },
       {
         name: "description",
