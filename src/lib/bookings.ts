@@ -83,6 +83,19 @@ export type BookingConfirmation = {
 
 export type DashboardBooking = Booking & { tours: Tour; departures: Departure };
 
+export type EmergencyCancellationAudit = {
+  id: string;
+  booking_id: string;
+  actor_user_id: string;
+  action: "emergency_cancel";
+  reason: string;
+  created_at: string;
+  bookings: Pick<Booking, "reference" | "customer_name"> & {
+    tours: Tour;
+    departures: Pick<Departure, "departure_date" | "departure_time">;
+  };
+};
+
 export const toursQuery = {
   queryKey: ["tours"],
   queryFn: async (): Promise<Tour[]> => {
@@ -326,6 +339,22 @@ export const listDashboardBookings = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data ?? []) as DashboardBooking[];
+  });
+
+/** Emergency exceptions are visible to owners but stay off the public API. */
+export const listEmergencyCancellationAudit = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertBookingAdmin(context);
+    const db = await databaseAdmin();
+    const { data, error } = await db
+      .from("booking_change_audit")
+      .select(
+        "*, bookings(reference, customer_name, tours(*), departures(departure_date, departure_time))",
+      )
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as EmergencyCancellationAudit[];
   });
 
 export const cancelBooking = createServerFn({ method: "POST" })

@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   CalendarDays,
+  Download,
   LogOut,
   Mail,
   Phone,
   RefreshCw,
+  Search,
   Users,
   X,
 } from "lucide-react";
@@ -18,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { guestLabel, localText, useI18n } from "@/lib/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -33,14 +36,17 @@ import {
   displayBookingReference,
   emergencyCancelBooking,
   formatDate,
+  formatBishkekDateTime,
   hasDepartureStarted,
   isBookingChangeAllowed,
   isEmergencyCancellationAvailable,
+  listEmergencyCancellationAudit,
   listDashboardBookings,
   rescheduleBooking,
   spotsLeft,
   type Booking,
   type Departure,
+  type EmergencyCancellationAudit,
   type Tour,
 } from "@/lib/bookings";
 import { localizeTour } from "@/lib/tour-localization";
@@ -79,6 +85,58 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const tabs = ["Today", "Upcoming", "All"] as const;
+
+function escapeCsv(value: string | number) {
+  return `"${String(value).replaceAll('"', '""')}"`;
+}
+
+function downloadBookingsCsv(rows: Row[]) {
+  const headings = [
+    "Reference",
+    "Status",
+    "Tour",
+    "Departure date",
+    "Departure time",
+    "Guests",
+    "Total price",
+    "Customer name",
+    "Customer email",
+    "Customer phone",
+    "WhatsApp",
+    "Notes",
+    "Created at",
+  ];
+  const data = rows.map((row) =>
+    [
+      row.reference,
+      row.status,
+      row.tours.name,
+      row.departures.departure_date,
+      row.departures.departure_time,
+      row.guests,
+      row.total_price,
+      row.customer_name,
+      row.customer_email,
+      row.customer_phone,
+      row.customer_whatsapp ?? "",
+      row.notes ?? "",
+      row.created_at,
+    ]
+      .map(escapeCsv)
+      .join(","),
+  );
+  const file = new Blob([[headings.map(escapeCsv).join(","), ...data].join("\n")], {
+    type: "text/csv;charset=utf-8",
+  });
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `ala-too-bookings-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
 
 function Dashboard() {
   const { language } = useI18n();
@@ -188,6 +246,7 @@ function OwnerDashboard() {
   const text = (english: string, russian: string, kyrgyz: string) =>
     localText(language, english, russian, kyrgyz);
   const fetchBookings = useServerFn(listDashboardBookings);
+  const fetchEmergencyAudit = useServerFn(listEmergencyCancellationAudit);
   const runCancel = useServerFn(cancelBooking);
   const {
     data: bookings,
@@ -198,12 +257,21 @@ function OwnerDashboard() {
     queryKey: ["dashboard-bookings"],
     queryFn: async () => fetchBookings(await ownerAuthHeaders()),
   });
+  const emergencyAudit = useQuery({
+    queryKey: ["emergency-cancellation-audit"],
+    queryFn: async () => fetchEmergencyAudit(await ownerAuthHeaders()),
+  });
   const [tab, setTab] = useState<(typeof tabs)[number]>("Upcoming");
   const [rescheduling, setRescheduling] = useState<Row | null>(null);
   const [emergencyCancelling, setEmergencyCancelling] = useState<Row | null>(null);
+  const [search, setSearch] = useState("");
+  const [tourFilter, setTourFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("");
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
+    void queryClient.invalidateQueries({ queryKey: ["emergency-cancellation-audit"] });
     void queryClient.invalidateQueries({ queryKey: ["departures"] });
   };
 
@@ -239,8 +307,31 @@ function OwnerDashboard() {
   const todays = active.filter((b) => b.departures.departure_date === today);
   const upcoming = active.filter((b) => b.departures.departure_date >= today);
   const guestsUpcoming = upcoming.reduce((sum, b) => sum + b.guests, 0);
-
-  const visible = tab === "Today" ? todays : tab === "Upcoming" ? upcoming : (bookings ?? []);
+  const tourOptions = useMemo(
+    () =>
+      [
+        ...new Map((bookings ?? []).map((booking) => [booking.tours.id, booking.tours])).values(),
+      ].sort((a, b) => a.sort_order - b.sort_order),
+    [bookings],
+  );
+  const visible = useMemo(() => {
+    const tabRows = tab === "Today" ? todays : tab === "Upcoming" ? upcoming : (bookings ?? []);
+    const normalizedSearch = search.trim().toLowerCase();
+    return tabRows.filter((row) => {
+      const matchesSearch =
+        !normalizedSearch ||
+        [row.customer_name, row.customer_email, row.reference]
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedSearch);
+      return (
+        matchesSearch &&
+        (tourFilter === "all" || row.tour_id === tourFilter) &&
+        (statusFilter === "all" || row.status === statusFilter) &&
+        (!dateFilter || row.departures.departure_date === dateFilter)
+      );
+    });
+  }, [bookings, dateFilter, search, statusFilter, tab, todays, tourFilter, upcoming]);
 
   async function signOut() {
     setSigningOut(true);
@@ -294,25 +385,92 @@ function OwnerDashboard() {
         />
       </div>
 
-      <div className="mt-10 flex gap-2">
-        {tabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={
-              t === tab
-                ? "rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground"
-                : "rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
-            }
-          >
-            {text(
-              t,
-              { Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t,
-              { Today: "Бүгүн", Upcoming: "Алдыдагы", All: "Баары" }[t] ?? t,
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTab(t)}
+              className={
+                t === tab
+                  ? "rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground"
+                  : "rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+              }
+            >
+              {text(
+                t,
+                { Today: "Сегодня", Upcoming: "Ближайшие", All: "Все" }[t] ?? t,
+                { Today: "Бүгүн", Upcoming: "Алдыдагы", All: "Баары" }[t] ?? t,
+              )}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          disabled={visible.length === 0}
+          onClick={() => downloadBookingsCsv(visible)}
+          className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <Download className="h-4 w-4" />
+          {text("Export CSV", "Скачать CSV", "CSV жүктөп алуу")}
+        </button>
+      </div>
+
+      <div className="mt-4 grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-4">
+        <label className="relative block">
+          <span className="sr-only">
+            {text("Search bookings", "Поиск бронирований", "Брондоолорду издөө")}
+          </span>
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className="pl-9"
+            placeholder={text(
+              "Name, email or reference",
+              "Имя, email или код",
+              "Аты, email же код",
             )}
-          </button>
-        ))}
+          />
+        </label>
+        <label>
+          <span className="sr-only">{text("Tour", "Тур", "Тур")}</span>
+          <select
+            value={tourFilter}
+            onChange={(event) => setTourFilter(event.target.value)}
+            className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+          >
+            <option value="all">{text("All tours", "Все туры", "Бардык турлар")}</option>
+            {tourOptions.map((tour) => (
+              <option key={tour.id} value={tour.id}>
+                {localizeTour(tour, language).name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span className="sr-only">{text("Status", "Статус", "Абалы")}</span>
+          <select
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value)}
+            className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+          >
+            <option value="all">{text("All statuses", "Все статусы", "Бардык абалдар")}</option>
+            <option value="confirmed">{text("Confirmed", "Подтверждено", "Тастыкталды")}</option>
+            <option value="pending">{text("Pending", "Ожидает", "Күтүлүүдө")}</option>
+            <option value="cancelled">{text("Cancelled", "Отменено", "Жокко чыгарылды")}</option>
+          </select>
+        </label>
+        <label>
+          <span className="sr-only">{text("Departure date", "Дата выезда", "Сапар күнү")}</span>
+          <Input
+            type="date"
+            value={dateFilter}
+            onChange={(event) => setDateFilter(event.target.value)}
+            aria-label={text("Departure date", "Дата выезда", "Сапар күнү")}
+          />
+        </label>
       </div>
 
       <div className="mt-6 space-y-3">
@@ -467,6 +625,90 @@ function OwnerDashboard() {
           );
         })}
       </div>
+
+      <section
+        className="mt-12 border-t border-border pt-10"
+        aria-labelledby="emergency-audit-title"
+      >
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-eyebrow">
+              {text("Owner record", "Журнал владельца", "Ээсинин журналы")}
+            </p>
+            <h2 id="emergency-audit-title" className="mt-2 font-display text-4xl">
+              {text(
+                "Emergency cancellation log",
+                "Журнал экстренных отмен",
+                "Шашылыш жокко чыгаруу журналы",
+              )}
+            </h2>
+          </div>
+          <p className="max-w-md text-sm text-muted-foreground">
+            {text(
+              "Each exception records its reason and time. This is separate from regular cancellations.",
+              "Для каждого исключения сохраняются причина и время. Это отдельный журнал от обычных отмен.",
+              "Ар бир өзгөчө учурдун себеби жана убактысы сакталат. Бул кадимки жокко чыгаруулардан өзүнчө журнал.",
+            )}
+          </p>
+        </div>
+        <div className="mt-5 space-y-3">
+          {emergencyAudit.isLoading ? <Skeleton className="h-28 rounded-xl" /> : null}
+          {emergencyAudit.isError ? (
+            <p className="text-sm text-destructive">
+              {text(
+                "Couldn't load the emergency cancellation log.",
+                "Не удалось загрузить журнал экстренных отмен.",
+                "Шашылыш жокко чыгаруу журналын жүктөө мүмкүн болгон жок.",
+              )}
+            </p>
+          ) : null}
+          {!emergencyAudit.isLoading &&
+          !emergencyAudit.isError &&
+          emergencyAudit.data?.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+              {text(
+                "No emergency cancellations have been recorded.",
+                "Экстренных отмен пока не было.",
+                "Азырынча шашылыш жокко чыгаруулар болгон жок.",
+              )}
+            </div>
+          ) : null}
+          {emergencyAudit.data?.map((entry: EmergencyCancellationAudit) => (
+            <article key={entry.id} className="surface-panel p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="font-semibold">
+                    {entry.bookings?.customer_name ??
+                      text("Unknown guest", "Неизвестный гость", "Белгисиз конок")}
+                    {" · "}
+                    {entry.bookings?.reference
+                      ? `${text("Ref", "Код", "Код")} ${displayBookingReference(entry.bookings.reference)}`
+                      : text(
+                          "Booking unavailable",
+                          "Бронирование недоступно",
+                          "Брондоо жеткиликсиз",
+                        )}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {entry.bookings?.tours?.name
+                      ? localizeTour(entry.bookings.tours as Tour, language).name
+                      : "—"}
+                    {entry.bookings?.departures?.departure_date
+                      ? ` · ${formatDate(entry.bookings.departures.departure_date, language)}`
+                      : ""}
+                  </p>
+                </div>
+                <time className="text-sm text-muted-foreground" dateTime={entry.created_at}>
+                  {formatBishkekDateTime(entry.created_at, language)}
+                </time>
+              </div>
+              <p className="mt-4 rounded-md bg-secondary p-3 text-sm text-secondary-foreground">
+                {entry.reason}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <RescheduleDialog
         row={rescheduling}

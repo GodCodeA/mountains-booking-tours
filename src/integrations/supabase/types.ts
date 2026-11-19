@@ -98,6 +98,41 @@ export type Database = {
           },
         ];
       };
+      booking_change_audit: {
+        Row: {
+          action: string;
+          actor_user_id: string;
+          booking_id: string;
+          created_at: string;
+          id: string;
+          reason: string;
+        };
+        Insert: {
+          action: string;
+          actor_user_id: string;
+          booking_id: string;
+          created_at?: string;
+          id?: string;
+          reason: string;
+        };
+        Update: {
+          action?: string;
+          actor_user_id?: string;
+          booking_id?: string;
+          created_at?: string;
+          id?: string;
+          reason?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "booking_change_audit_booking_id_fkey";
+            columns: ["booking_id"];
+            isOneToOne: false;
+            referencedRelation: "bookings";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       departures: {
         Row: {
           created_at: string;
