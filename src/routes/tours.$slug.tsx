@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Backpack,
   CalendarDays,
   Check,
+  Circle,
+  CircleCheck,
   Clock,
   ExternalLink,
   MapPin,
@@ -42,6 +44,7 @@ import { tourGallery } from "@/lib/tour-images";
 import { dayLabel, localText, maxGroupSizeLabel, useI18n } from "@/lib/i18n";
 import { googleMapsEmbedUrl, googleMapsUrl, tourMapPoint } from "@/lib/tour-map";
 import { localizeTour } from "@/lib/tour-localization";
+import { readinessItems } from "@/lib/tour-readiness";
 
 export const Route = createFileRoute("/tours/$slug")({
   head: ({ params }) => {
@@ -118,6 +121,7 @@ const SECTIONS = [
   ["itinerary", "Itinerary"],
   ["included", "Included"],
   ["bring", "What to bring"],
+  ["readiness", "Readiness"],
   ["meeting", "Meeting point"],
   ["map", "Map"],
   ["availability", "Dates"],
@@ -149,9 +153,17 @@ function TourBody({
   const mapPoint = tourMapPoint(tour.slug, language);
   const photos = tourGallery(tour.image_key);
   const [active, setActive] = useState(0);
+  const [checkedReadiness, setCheckedReadiness] = useState<string[]>([]);
   const list = departures ?? [];
   const openCount = list.filter((d) => availabilityOf(d) !== "full").length;
   const next = list.find((d) => availabilityOf(d) !== "full");
+  const readiness = readinessItems(language, tour.difficulty, tour.duration_days);
+  const completedReadiness = readiness.filter((item) => checkedReadiness.includes(item.id)).length;
+  const isReady = completedReadiness === readiness.length;
+
+  useEffect(() => {
+    setCheckedReadiness([]);
+  }, [tour.slug]);
 
   const facts: [React.ReactNode, string, string][] = [
     [
@@ -232,6 +244,7 @@ function TourBody({
                       itinerary: "Программа",
                       included: "Включено",
                       bring: "Что взять",
+                      readiness: "Готовность",
                       meeting: "Встреча",
                       map: "Карта",
                       availability: "Даты",
@@ -242,6 +255,7 @@ function TourBody({
                       itinerary: "Программа",
                       included: "Камтылган",
                       bring: "Эмне алуу керек",
+                      readiness: "Даярдык",
                       meeting: "Жолугушуу",
                       map: "Карта",
                       availability: "Даталар",
@@ -390,6 +404,101 @@ function TourBody({
                 </li>
               ))}
             </ul>
+          </section>
+
+          <section
+            id="readiness"
+            className="scroll-mt-32 rounded-xl border border-border bg-surface p-5 sm:p-6"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-eyebrow">
+                  {text("Before you book", "Перед бронированием", "Брондоодон мурун")}
+                </p>
+                <h2 className="mt-1 font-display text-4xl">
+                  {text(
+                    "Ready for this route?",
+                    "Готовы к этому маршруту?",
+                    "Бул маршрутка даярсызбы?",
+                  )}
+                </h2>
+              </div>
+              <p className="rounded-full border border-border bg-background px-3 py-1.5 text-sm font-bold">
+                {text(
+                  `${completedReadiness} of ${readiness.length} checked`,
+                  `Отмечено: ${completedReadiness} из ${readiness.length}`,
+                  `${completedReadiness}/${readiness.length} белгиленди`,
+                )}
+              </p>
+            </div>
+            <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+              {text(
+                "A quick personal check, not a medical assessment. The guide makes the final safety decision on the day.",
+                "Короткая самопроверка, а не медицинская оценка. Окончательное решение по безопасности в день поездки принимает гид.",
+                "Бул кыска өзүн-өзү текшерүү, медициналык баалоо эмес. Коопсуздук боюнча акыркы чечимди сапар күнү гид кабыл алат.",
+              )}
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {readiness.map((item) => {
+                const checked = checkedReadiness.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="checkbox"
+                    aria-checked={checked}
+                    onClick={() =>
+                      setCheckedReadiness((current) =>
+                        checked ? current.filter((id) => id !== item.id) : [...current, item.id],
+                      )
+                    }
+                    className={
+                      checked
+                        ? "flex items-start gap-3 rounded-lg border border-success/50 bg-success/10 p-4 text-left"
+                        : "flex items-start gap-3 rounded-lg border border-border bg-background p-4 text-left transition-colors hover:border-primary/60"
+                    }
+                  >
+                    {checked ? (
+                      <CircleCheck
+                        className="mt-0.5 h-5 w-5 shrink-0 text-success"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Circle
+                        className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span>
+                      <span className="block text-sm font-bold">{item.label}</span>
+                      <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                        {item.detail}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <p
+              aria-live="polite"
+              className={
+                isReady
+                  ? "mt-5 rounded-lg bg-success/15 px-4 py-3 text-sm font-semibold text-success"
+                  : "mt-5 rounded-lg bg-background px-4 py-3 text-sm text-muted-foreground"
+              }
+            >
+              {isReady
+                ? text(
+                    "You look ready to choose a date.",
+                    "Похоже, вы готовы выбрать дату.",
+                    "Датаны тандоого даяр окшойсуз.",
+                  )
+                : text(
+                    "Check the remaining items before choosing a date.",
+                    "Проверьте оставшиеся пункты перед выбором даты.",
+                    "Датаны тандоодон мурун калган пункттарды текшериңиз.",
+                  )}
+            </p>
           </section>
 
           <section id="meeting" className="grid scroll-mt-32 gap-8 sm:grid-cols-2">

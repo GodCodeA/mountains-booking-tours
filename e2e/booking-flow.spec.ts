@@ -95,6 +95,33 @@ test("trip finder narrows the homepage to matching tours", async ({ page }) => {
   await expect(results.getByRole("link", { name: /Kel-Suu Adventure/ })).toHaveCount(0);
 });
 
+test("adventure calendar switches seasons and links to matching tours", async ({ page }) => {
+  await page.goto("/");
+
+  const calendar = page.locator("#adventure-calendar");
+  await expect(calendar.getByRole("heading", { name: "Choose your mountain season" })).toBeVisible();
+  await expect(calendar.getByRole("link", { name: /Kel-Suu Adventure/ })).toBeVisible();
+
+  await calendar.getByRole("tab", { name: /Autumn/ }).click();
+  await expect(calendar.getByRole("link", { name: /Ala-Archa Day Hike/ })).toBeVisible();
+  await expect(calendar.getByRole("link", { name: /Kel-Suu Adventure/ })).toHaveCount(0);
+});
+
+test("tour readiness checklist gives feedback once every item is checked", async ({ page }) => {
+  await page.goto("/tours/ala-archa-day-hike");
+
+  const checklist = page.locator("#readiness");
+  await expect(checklist.getByRole("heading", { name: "Ready for this route?" })).toBeVisible();
+
+  const checks = checklist.getByRole("checkbox");
+  await expect(checks).toHaveCount(4);
+  for (let index = 0; index < 4; index += 1) {
+    await checks.nth(index).click();
+  }
+
+  await expect(checklist.getByText("You look ready to choose a date.")).toBeVisible();
+});
+
 test("guest reaches the verified booking review with an available future date", async ({
   page,
 }) => {

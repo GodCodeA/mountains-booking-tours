@@ -3,12 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
   CalendarCheck,
+  CalendarRange,
   Compass,
+  Leaf,
   Map,
   Mountain,
   MousePointerClick,
   RotateCcw,
   SlidersHorizontal,
+  Snowflake,
+  SunMedium,
   Users,
 } from "lucide-react";
 
@@ -186,6 +190,23 @@ type FinderDuration = (typeof finderDurations)[number];
 type FinderDifficulty = (typeof finderDifficulties)[number];
 type FinderBudget = (typeof finderBudgets)[number];
 
+const seasons = ["spring", "summer", "autumn", "winter"] as const;
+type Season = (typeof seasons)[number];
+
+const seasonTourSlugs: Record<Season, string[]> = {
+  spring: ["ala-archa-day-hike", "kegety-waterfall-hike", "chon-kemin-valley-escape"],
+  summer: [
+    "song-kul-adventure",
+    "kel-suu-adventure",
+    "altyn-arashan-escape",
+    "jyrgalan-mountain-trek",
+    "suusamyr-jailoo-weekend",
+    "karakol-lakes-trek",
+  ],
+  autumn: ["issyk-kul-mountain-escape", "ala-archa-day-hike", "chon-kemin-valley-escape"],
+  winter: [],
+};
+
 function matchesFinderDuration(days: number, duration: FinderDuration) {
   if (duration === "1") return days === 1;
   if (duration === "2-3") return days >= 2 && days <= 3;
@@ -257,6 +278,7 @@ function Home() {
   const [finderDuration, setFinderDuration] = useState<FinderDuration>("any");
   const [finderDifficulty, setFinderDifficulty] = useState<FinderDifficulty>("any");
   const [finderBudget, setFinderBudget] = useState<FinderBudget>("any");
+  const [activeSeason, setActiveSeason] = useState<Season>("summer");
   const finderResults = useMemo(
     () =>
       (tours ?? [])
@@ -277,6 +299,92 @@ function Home() {
     setFinderDifficulty("any");
     setFinderBudget("any");
   };
+  const seasonTours = (tours ?? [])
+    .filter((tour) => seasonTourSlugs[activeSeason].includes(tour.slug))
+    .sort(
+      (a, b) =>
+        seasonTourSlugs[activeSeason].indexOf(a.slug) -
+        seasonTourSlugs[activeSeason].indexOf(b.slug),
+    )
+    .slice(0, 3);
+  const seasonInfo: Record<
+    Season,
+    { icon: typeof Leaf; months: string; title: string; body: string; empty: string }
+  > = {
+    spring: {
+      icon: Leaf,
+      months: text("Mar–May", "март–май", "март–май"),
+      title: text(
+        "Green gorges and first waterfalls",
+        "Зелёные ущелья и первые водопады",
+        "Жашыл капчыгайлар жана алгачкы шаркыратмалар",
+      ),
+      body: text(
+        "A good season for lower-elevation walks close to Bishkek, with fresh streams and changing mountain weather.",
+        "Лучшее время для прогулок в невысоких ущельях рядом с Бишкеком: свежие ручьи и быстро меняющаяся горная погода.",
+        "Бишкекке жакын, бийиктиги төмөн капчыгайларда сейилдөө үчүн жакшы мезгил: тунук суулар жана тез өзгөргөн тоо аба ырайы.",
+      ),
+      empty: text(
+        "New spring departures will appear here when they are added.",
+        "Новые весенние даты появятся здесь после добавления.",
+        "Жаңы жазгы даталар кошулганда бул жерде чыгат.",
+      ),
+    },
+    summer: {
+      icon: SunMedium,
+      months: text("Jun–Aug", "июнь–август", "июнь–август"),
+      title: text(
+        "High lakes, jailoo and long mountain days",
+        "Высокогорные озёра, джайлоо и длинные дни",
+        "Бийик тоолуу көлдөр, жайлоо жана узун күндөр",
+      ),
+      body: text(
+        "The main season for high-altitude routes, yurt stays and multi-day treks. Book early for the smallest groups.",
+        "Главный сезон для высокогорных маршрутов, юрт и многодневных треков. Для маленьких групп лучше бронировать заранее.",
+        "Бийик тоолуу маршруттар, боз үй жана көп күндүк тректер үчүн негизги мезгил. Чакан топтор үчүн алдын ала брондогон жакшы.",
+      ),
+      empty: text(
+        "New summer departures will appear here when they are added.",
+        "Новые летние даты появятся здесь после добавления.",
+        "Жаңы жайкы даталар кошулганда бул жерде чыгат.",
+      ),
+    },
+    autumn: {
+      icon: CalendarRange,
+      months: text("Sep–Nov", "сентябрь–ноябрь", "сентябрь–ноябрь"),
+      title: text(
+        "Clear air and quieter trails",
+        "Чистый воздух и тихие тропы",
+        "Таза аба жана тынч чыйырлар",
+      ),
+      body: text(
+        "A calmer window for lake escapes and day hikes, with crisp mornings and earlier sunsets.",
+        "Более спокойный сезон для поездок к озеру и однодневных походов: прохладное утро и ранние закаты.",
+        "Көл жакка сапарлар жана бир күндүк жөө жүрүштөр үчүн тынчыраак мезгил: салкын эртең менен жана эрте баткан күн.",
+      ),
+      empty: text(
+        "New autumn departures will appear here when they are added.",
+        "Новые осенние даты появятся здесь после добавления.",
+        "Жаңы күзгү даталар кошулганда бул жерде чыгат.",
+      ),
+    },
+    winter: {
+      icon: Snowflake,
+      months: text("Dec–Feb", "декабрь–февраль", "декабрь–февраль"),
+      title: text("Planning season", "Сезон планирования", "Пландоо мезгили"),
+      body: text(
+        "This demo does not list winter departures. Use the quieter months to plan a spring or summer mountain trip.",
+        "В этой демо-версии нет зимних выездов. Используйте спокойные месяцы, чтобы запланировать весеннюю или летнюю поездку.",
+        "Бул демо-нускада кышкы чыгуу даталары жок. Тынч айларды жазгы же жайкы сапарды пландоого колдонуңуз.",
+      ),
+      empty: text(
+        "There are no winter demo tours at the moment.",
+        "Сейчас зимних демо-туров нет.",
+        "Азыр кышкы демо-турлар жок.",
+      ),
+    },
+  };
+  const activeSeasonInfo = seasonInfo[activeSeason];
 
   return (
     <div>
@@ -524,6 +632,137 @@ function Home() {
           {tours?.slice(0, 3).map((tour) => (
             <TourCard key={tour.id} tour={tour} />
           ))}
+        </div>
+      </section>
+
+      <section id="adventure-calendar" className="border-y border-border bg-surface">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-start">
+            <SectionHeading
+              eyebrow={text("Adventure calendar", "Календарь приключений", "Саякат календары")}
+              title={text(
+                "Choose your mountain season",
+                "Выберите свой горный сезон",
+                "Өзүңүздүн тоо мезгилиңизди тандаңыз",
+              )}
+            >
+              {text(
+                "A quick seasonal guide to the demo routes. Check each tour page for its actual departure dates.",
+                "Короткий сезонный гид по демо-маршрутам. Фактические даты смотрите на странице каждого тура.",
+                "Демо-маршруттар боюнча кыска сезондук гид. Так чыгуу даталарын ар бир турдун барагынан көрүңүз.",
+              )}
+            </SectionHeading>
+
+            <div className="surface-panel overflow-hidden">
+              <div
+                role="tablist"
+                aria-label={text("Mountain seasons", "Горные сезоны", "Тоо мезгилдери")}
+                className="grid grid-cols-2 border-b border-border sm:grid-cols-4"
+              >
+                {seasons.map((season) => {
+                  const info = seasonInfo[season];
+                  const Icon = info.icon;
+                  const selected = activeSeason === season;
+                  return (
+                    <button
+                      key={season}
+                      type="button"
+                      role="tab"
+                      aria-selected={selected}
+                      onClick={() => setActiveSeason(season)}
+                      className={
+                        selected
+                          ? "border-b-2 border-primary bg-primary/10 px-4 py-4 text-left text-foreground"
+                          : "border-b-2 border-transparent px-4 py-4 text-left text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                      }
+                    >
+                      <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                      <span className="mt-2 block text-sm font-bold">
+                        {text(
+                          season === "spring"
+                            ? "Spring"
+                            : season === "summer"
+                              ? "Summer"
+                              : season === "autumn"
+                                ? "Autumn"
+                                : "Winter",
+                          season === "spring"
+                            ? "Весна"
+                            : season === "summer"
+                              ? "Лето"
+                              : season === "autumn"
+                                ? "Осень"
+                                : "Зима",
+                          season === "spring"
+                            ? "Жаз"
+                            : season === "summer"
+                              ? "Жай"
+                              : season === "autumn"
+                                ? "Күз"
+                                : "Кыш",
+                        )}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-muted-foreground">
+                        {info.months}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start gap-3">
+                  <activeSeasonInfo.icon
+                    className="mt-1 h-6 w-6 shrink-0 text-accent"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p className="text-eyebrow">{activeSeasonInfo.months}</p>
+                    <h3 className="mt-1 font-display text-3xl">{activeSeasonInfo.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {activeSeasonInfo.body}
+                    </p>
+                  </div>
+                </div>
+
+                {seasonTours.length > 0 ? (
+                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    {seasonTours.map((tour) => {
+                      const localizedTour = localizeTour(tour, language);
+                      return (
+                        <Link
+                          key={tour.id}
+                          to="/tours/$slug"
+                          params={{ slug: tour.slug }}
+                          className="group overflow-hidden rounded-lg border border-border bg-background transition-colors hover:border-primary/60"
+                        >
+                          <img
+                            src={tourImage(tour.image_key)}
+                            alt=""
+                            loading="lazy"
+                            className="aspect-[16/9] w-full object-cover"
+                          />
+                          <div className="p-3">
+                            <p className="font-bold leading-tight group-hover:text-primary">
+                              {localizedTour.name}
+                            </p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {tour.duration_days} {dayLabel(tour.duration_days, language)} · $
+                              {tour.price_per_person}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="mt-6 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+                    {activeSeasonInfo.empty}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
