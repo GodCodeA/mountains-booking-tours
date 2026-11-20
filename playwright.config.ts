@@ -1,5 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const projects = [
+  { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+  { name: "webkit", use: { ...devices["Desktop Safari"] } },
+];
+
+// Firefox is opt-in while its locally installed Nightly build cannot create a
+// headless profile on this Mac. It remains easy to enable on CI or another machine.
+if (process.env["PLAYWRIGHT_INCLUDE_FIREFOX"] === "true") {
+  projects.splice(1, 0, { name: "firefox", use: { ...devices["Desktop Firefox"] } });
+}
+
 export default defineConfig({
   testDir: "./e2e",
   // The Vite development server serves TanStack's generated client modules;
@@ -13,11 +24,7 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:4173",
     trace: "on-first-retry",
   },
-  projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
-    { name: "webkit", use: { ...devices["Desktop Safari"] } },
-  ],
+  projects,
   webServer: {
     command: "npm run dev -- --host 127.0.0.1 --port 4173",
     url: "http://127.0.0.1:4173",
