@@ -259,7 +259,7 @@ function SectionHeading({
   return (
     <div className="max-w-2xl">
       <p className="text-eyebrow">{eyebrow}</p>
-      <h2 className="mt-2 font-display text-5xl">{title}</h2>
+      <h2 className="mt-2 font-display text-4xl sm:text-5xl">{title}</h2>
       {children ? <p className="mt-3 text-muted-foreground">{children}</p> : null}
     </div>
   );

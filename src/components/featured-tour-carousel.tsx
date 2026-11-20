@@ -73,6 +73,7 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
   return (
     <div
       data-testid="featured-tour-carousel"
+      className="overflow-x-hidden"
       role="region"
       aria-roledescription="carousel"
       aria-label={text("Featured tours", "Популярные туры", "Тандалган турлар")}
@@ -88,7 +89,7 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
         data-testid="featured-tour-track"
         onPointerDown={pauseForManualInteraction}
         onTouchStart={pauseForManualInteraction}
-        className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {tours.map((tour) => (
           <div
