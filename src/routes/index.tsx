@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import heroImage from "@/assets/hero-mountains.jpg";
+import { FeaturedTourCarousel } from "@/components/featured-tour-carousel";
 import { TourCard } from "@/components/tour-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toursQuery, type Tour } from "@/lib/bookings";
@@ -625,10 +626,13 @@ function Home() {
             )}
           </Link>
         </div>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8">
           {isLoading
             ? Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-[430px] rounded-xl" />
+                <Skeleton
+                  key={i}
+                  className="inline-block h-[430px] w-full rounded-xl sm:mr-6 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+                />
               ))
             : null}
           {isError ? (
@@ -640,9 +644,7 @@ function Home() {
               )}
             </p>
           ) : null}
-          {tours?.slice(0, 3).map((tour) => (
-            <TourCard key={tour.id} tour={tour} />
-          ))}
+          {tours && tours.length > 0 ? <FeaturedTourCarousel tours={tours} /> : null}
         </div>
       </section>
 

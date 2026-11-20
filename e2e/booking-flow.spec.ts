@@ -31,6 +31,27 @@ const longerTour = {
   sort_order: 2,
 };
 
+const carouselTours = [
+  tour,
+  longerTour,
+  {
+    ...tour,
+    id: "b9c95f92-67ce-481b-9d80-d0393f1c8a1d",
+    slug: "song-kul-adventure",
+    name: "Song-Kul Adventure",
+    image_key: "song-kul",
+    sort_order: 3,
+  },
+  {
+    ...tour,
+    id: "c6ffb1df-74f5-4d74-bc6c-902ecb41f120",
+    slug: "altyn-arashan-escape",
+    name: "Altyn-Arashan Escape",
+    image_key: "altyn-arashan",
+    sort_order: 4,
+  },
+];
+
 const departure = {
   id: "7ba7d79c-8c35-4d0a-a3e1-f7e092234b1e",
   tour_id: tour.id,
@@ -112,6 +133,23 @@ test("shows a quiet progress line when the catalog takes noticeable time to load
   const progress = page.getByTestId("navigation-progress");
   await expect(progress).toHaveClass(/opacity-100/);
   await expect(page.getByRole("heading", { name: /Walk the Tian Shan/ })).toBeVisible();
+});
+
+test("featured carousel keeps every tour reachable and moves on manual control", async ({
+  page,
+}) => {
+  await page.unroute("**/rest/v1/tours*");
+  await page.route("**/rest/v1/tours*", (route) =>
+    route.fulfill({ contentType: "application/json", body: JSON.stringify(carouselTours) }),
+  );
+  await page.goto("/");
+
+  const carousel = page.getByTestId("featured-tour-carousel");
+  const track = page.getByTestId("featured-tour-track");
+  await expect(carousel.getByRole("link")).toHaveCount(4);
+
+  await carousel.getByRole("button", { name: "Next" }).click();
+  await expect.poll(() => track.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
 });
 
 test("adventure calendar switches seasons and links to matching tours", async ({ page }) => {
