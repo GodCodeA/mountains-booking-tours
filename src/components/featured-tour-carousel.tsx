@@ -4,7 +4,7 @@ import { type Tour } from "@/lib/bookings";
 import { localText, useI18n } from "@/lib/i18n";
 import { TourCard } from "@/components/tour-card";
 
-const AUTO_ADVANCE_MS = 6_000;
+const AUTO_ADVANCE_MS = 8_000;
 const RESUME_AFTER_INTERACTION_MS = 7_000;
 
 /**
