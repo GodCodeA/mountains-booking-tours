@@ -95,11 +95,32 @@ test("trip finder narrows the homepage to matching tours", async ({ page }) => {
   await expect(results.getByRole("link", { name: /Kel-Suu Adventure/ })).toHaveCount(0);
 });
 
+test("shows a quiet progress line when the catalog takes noticeable time to load", async ({
+  page,
+}) => {
+  await page.unroute("**/rest/v1/tours*");
+  await page.route("**/rest/v1/tours*", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify([tour, longerTour]),
+    });
+  });
+
+  await page.goto("/");
+
+  const progress = page.getByTestId("navigation-progress");
+  await expect(progress).toHaveClass(/opacity-100/);
+  await expect(page.getByRole("heading", { name: /Walk the Tian Shan/ })).toBeVisible();
+});
+
 test("adventure calendar switches seasons and links to matching tours", async ({ page }) => {
   await page.goto("/");
 
   const calendar = page.locator("#adventure-calendar");
-  await expect(calendar.getByRole("heading", { name: "Choose your mountain season" })).toBeVisible();
+  await expect(
+    calendar.getByRole("heading", { name: "Choose your mountain season" }),
+  ).toBeVisible();
   await expect(calendar.getByRole("link", { name: /Kel-Suu Adventure/ })).toBeVisible();
 
   await calendar.getByRole("tab", { name: /Autumn/ }).click();

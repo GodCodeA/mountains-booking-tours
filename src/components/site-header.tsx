@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Mountain, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { NavigationProgress } from "@/components/navigation-progress";
 
 const nav = [
   { to: "/", label: "home" },
@@ -37,7 +38,7 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 relative border-b border-border bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
@@ -97,6 +98,7 @@ export function SiteHeader() {
           ))}
         </nav>
       ) : null}
+      <NavigationProgress />
     </header>
   );
 }
