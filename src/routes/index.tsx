@@ -406,10 +406,21 @@ function Home() {
             )}
           </p>
           <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
-            {text(
-              "Walk the Tian Shan with people who call it home.",
-              "Откройте Тянь-Шань с теми, кто называет его домом.",
-              "Теңир-Тоону өз мекеним дегендер менен бирге ачыңыз.",
+            {language === "en" ? (
+              <>
+                Walk the <span className="text-primary">Tian Shan</span> with people who call it
+                home.
+              </>
+            ) : language === "ru" ? (
+              <>
+                Откройте <span className="text-primary">Тянь-Шань</span> с теми, кто называет его
+                домом.
+              </>
+            ) : (
+              <>
+                <span className="text-primary">Теңир-Тоону</span> өз мекеним дегендер менен бирге
+                ачыңыз.
+              </>
             )}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
