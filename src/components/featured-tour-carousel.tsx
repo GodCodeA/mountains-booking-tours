@@ -116,7 +116,7 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
               pauseForManualInteraction();
               scrollByCard(-1);
             }}
-            className="rounded-md border border-border px-3 py-2 text-sm font-semibold transition-colors ease-out hover:border-primary hover:text-primary"
+            className="rounded-md border border-border px-3 py-2 text-sm font-semibold motion-safe:transition-[color,border-color,background-color,transform] motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 hover:border-primary hover:bg-secondary hover:text-primary"
           >
             {text("Previous", "Назад", "Артка")}
           </button>
@@ -126,7 +126,7 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
               pauseForManualInteraction();
               advance();
             }}
-            className="rounded-md border border-border px-3 py-2 text-sm font-semibold transition-colors ease-out hover:border-primary hover:text-primary"
+            className="rounded-md border border-border px-3 py-2 text-sm font-semibold motion-safe:transition-[color,border-color,background-color,transform] motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 hover:border-primary hover:bg-secondary hover:text-primary"
           >
             {text("Next", "Далее", "Кийинки")}
           </button>
