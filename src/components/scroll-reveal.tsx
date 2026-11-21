@@ -32,7 +32,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
         setIsVisible(true);
         observer.disconnect();
       },
-      { rootMargin: "0px 0px -8%", threshold: 0.08 },
+      { rootMargin: "0px 0px -15%", threshold: 0.1 },
     );
 
     setIsReady(true);
@@ -41,7 +41,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
   }, []);
 
   const revealState =
-    !isReady || isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0";
+    !isReady || isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0";
 
   return (
     <div className={`${className ?? ""} overflow-x-clip`.trim()}>
@@ -49,7 +49,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
         ref={ref}
         className={`${
           isReady
-            ? "motion-safe:transition-[opacity,transform] motion-safe:duration-500 motion-safe:ease-out"
+            ? "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-out"
             : ""
         } ${revealState}`.trim()}
         style={delayMs ? { transitionDelay: `${delayMs}ms` } : undefined}
