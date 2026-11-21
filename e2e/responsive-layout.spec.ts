@@ -149,6 +149,15 @@ async function expectFeaturedCardsToShareHeight(page: Page) {
   expect(new Set(heights)).toEqual(new Set([heights[0]]));
 }
 
+async function expectScrollLinkedReveals(page: Page) {
+  const reveal = await page.locator("#featured > div > div").evaluate((element) => ({
+    supported: CSS.supports("animation-timeline: view()"),
+    animationName: getComputedStyle(element).animationName,
+  }));
+
+  if (reveal.supported) expect(reveal.animationName).toBe("section-rise-with-scroll");
+}
+
 test.beforeEach(async ({ page }) => {
   await mockPublicCatalog(page);
   await page.addInitScript(() => window.localStorage.removeItem("ala-too-language"));
@@ -165,6 +174,7 @@ test("public pages stay readable without horizontal page overflow at common widt
       .toBe("en");
     await page.getByRole("button", { name: "EN", exact: true }).click();
     await expect(page.getByRole("heading", { name: /A new trail begins here/ })).toBeVisible();
+    await expectScrollLinkedReveals(page);
     if (viewport.width === 320) await expectLocalFonts(page);
     await expectNoPageOverflow(page);
 

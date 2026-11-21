@@ -262,3 +262,26 @@
 @utility image-veil {
   background-image: var(--gradient-veil);
 }
+
+@keyframes section-rise-with-scroll {
+  from {
+    opacity: 0.12;
+    transform: translateY(3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The reveal follows the visitor's scroll position in modern browsers. The
+   component falls back to IntersectionObserver where view timelines are not
+   supported, and is disabled for reduced-motion preferences. */
+@supports (animation-timeline: view()) {
+  .scroll-reveal-scroll {
+    animation: section-rise-with-scroll linear both;
+    animation-range: entry 0% entry 45%;
+    animation-timeline: view();
+  }
+}

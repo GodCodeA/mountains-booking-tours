@@ -15,6 +15,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
   const ref = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [usesScrollTimeline, setUsesScrollTimeline] = useState(false);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -23,6 +24,11 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
     if (reduceMotion || !element || !("IntersectionObserver" in window)) {
       setIsReady(true);
       setIsVisible(true);
+      return;
+    }
+
+    if (CSS.supports("animation-timeline: view()")) {
+      setUsesScrollTimeline(true);
       return;
     }
 
@@ -47,11 +53,15 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
     <div className={`${className ?? ""} overflow-x-clip`.trim()}>
       <div
         ref={ref}
-        className={`${
-          isReady
-            ? "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-out"
-            : ""
-        } ${revealState}`.trim()}
+        className={
+          usesScrollTimeline
+            ? "scroll-reveal-scroll"
+            : `${
+                isReady
+                  ? "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-out"
+                  : ""
+              } ${revealState}`.trim()
+        }
         style={delayMs ? { transitionDelay: `${delayMs}ms` } : undefined}
       >
         {children}
