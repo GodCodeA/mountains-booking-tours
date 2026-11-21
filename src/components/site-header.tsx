@@ -44,7 +44,11 @@ export function SiteHeader() {
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Mountain className="h-5 w-5" />
           </span>
-          <span className="font-display text-2xl leading-none">Ala-Too Adventures</span>
+          <span className="font-brand text-[0.7rem] leading-[1.18] sm:text-xs">
+            ALA-TOO
+            <br />
+            ADVENTURES
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-3 sm:flex">

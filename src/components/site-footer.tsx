@@ -7,7 +7,11 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
-          <p className="font-display text-3xl">Ala-Too Adventures</p>
+          <p className="font-brand text-sm leading-[1.3]">
+            ALA-TOO
+            <br />
+            ADVENTURES
+          </p>
           <p className="mt-2 max-w-xs text-sm text-muted-foreground">{t("footerDescription")}</p>
         </div>
         <div className="text-sm">

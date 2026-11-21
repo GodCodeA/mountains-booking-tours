@@ -125,15 +125,19 @@ async function expectLocalFonts(page: Page) {
     return {
       displayLoaded: document.fonts.check("400 16px Oswald"),
       sansLoaded: document.fonts.check("400 16px Manrope"),
+      brandLoaded: document.fonts.check("600 16px Unbounded"),
       headingFamily: getComputedStyle(document.querySelector("h1")!).fontFamily,
       bodyFamily: getComputedStyle(document.body).fontFamily,
+      brandFamily: getComputedStyle(document.querySelector("header a span:last-child")!).fontFamily,
     };
   });
 
   expect(fonts.displayLoaded).toBe(true);
   expect(fonts.sansLoaded).toBe(true);
+  expect(fonts.brandLoaded).toBe(true);
   expect(fonts.headingFamily).toContain("Oswald");
   expect(fonts.bodyFamily).toContain("Manrope");
+  expect(fonts.brandFamily).toContain("Unbounded");
 }
 
 test.beforeEach(async ({ page }) => {
