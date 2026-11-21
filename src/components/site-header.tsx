@@ -73,26 +73,37 @@ export function SiteHeader() {
             aria-label={open ? t("closeMenu") : t("openMenu")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="rounded-md border border-border p-2 transition-colors hover:bg-secondary"
+            className="rounded-md border border-border p-2 transition-colors duration-200 ease-out hover:bg-secondary"
           >
-            <span
-              className={`block motion-safe:transition-transform motion-safe:duration-200 ${
-                open ? "rotate-90 scale-90" : "rotate-0 scale-100"
-              }`}
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className="relative block h-5 w-5" aria-hidden="true">
+              <Menu
+                className={`absolute inset-0 h-5 w-5 motion-safe:transition-[opacity,transform] motion-safe:duration-200 motion-safe:ease-out ${
+                  open ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"
+                }`}
+              />
+              <X
+                className={`absolute inset-0 h-5 w-5 motion-safe:transition-[opacity,transform] motion-safe:duration-200 motion-safe:ease-out ${
+                  open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"
+                }`}
+              />
             </span>
           </button>
         </div>
       </div>
 
-      {open ? (
-        <nav className="flex flex-col gap-1 border-t border-border px-4 py-2 sm:hidden">
+      <div
+        className={`grid overflow-hidden motion-safe:transition-[grid-template-rows,opacity] motion-safe:duration-300 motion-safe:ease-out sm:hidden ${
+          open ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"
+        }`}
+        aria-hidden={!open}
+      >
+        <nav className="min-h-0 overflow-hidden border-t border-border px-4 py-2">
           {nav.map((item) => (
             <Link
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
+              tabIndex={open ? 0 : -1}
               className="w-full rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
               activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
               activeOptions={{ exact: item.to === "/" }}
@@ -101,7 +112,7 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-      ) : null}
+      </div>
       <NavigationProgress />
     </header>
   );
