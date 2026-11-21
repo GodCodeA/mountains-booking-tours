@@ -6,6 +6,10 @@ import { TourCard } from "@/components/tour-card";
 
 const AUTO_ADVANCE_MS = 8_000;
 const RESUME_AFTER_INTERACTION_MS = 7_000;
+const SCROLL_DURATION_MS = 850;
+
+const easeInOutCubic = (progress: number) =>
+  progress < 0.5 ? 4 * progress * progress * progress : 1 - (-2 * progress + 2) ** 3 / 2;
 
 /**
  * A deliberately calm, native-scroll carousel. Every card remains a real link,
@@ -15,10 +19,12 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
   const { language } = useI18n();
   const trackRef = useRef<HTMLDivElement>(null);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const scrollAnimationRef = useRef<number | undefined>(undefined);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [manualPause, setManualPause] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const text = (english: string, russian: string, kyrgyz: string) =>
     localText(language, english, russian, kyrgyz);
 
@@ -33,32 +39,79 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
   useEffect(
     () => () => {
       if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+      if (scrollAnimationRef.current) cancelAnimationFrame(scrollAnimationRef.current);
     },
     [],
   );
 
-  const scrollByCard = useCallback((direction: 1 | -1) => {
-    const track = trackRef.current;
-    const card = track?.firstElementChild as HTMLElement | null;
-    if (!track || !card) return;
+  const animateScrollTo = useCallback(
+    (target: number) => {
+      const track = trackRef.current;
+      if (!track) return;
 
-    const gap = Number.parseFloat(getComputedStyle(track).columnGap || "0") || 0;
-    track.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
-  }, []);
+      if (scrollAnimationRef.current) cancelAnimationFrame(scrollAnimationRef.current);
+      if (reduceMotion) {
+        track.scrollLeft = target;
+        return;
+      }
+
+      const start = track.scrollLeft;
+      const distance = target - start;
+      if (Math.abs(distance) < 1) return;
+      const startedAt = performance.now();
+      setIsAnimating(true);
+
+      const tick = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / SCROLL_DURATION_MS);
+        track.scrollLeft = start + distance * easeInOutCubic(progress);
+        if (progress < 1) {
+          scrollAnimationRef.current = requestAnimationFrame(tick);
+        } else {
+          scrollAnimationRef.current = undefined;
+          setIsAnimating(false);
+        }
+      };
+
+      scrollAnimationRef.current = requestAnimationFrame(tick);
+    },
+    [reduceMotion],
+  );
+
+  const scrollByCard = useCallback(
+    (direction: 1 | -1) => {
+      const track = trackRef.current;
+      const card = track?.firstElementChild as HTMLElement | null;
+      if (!track || !card) return;
+
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap || "0") || 0;
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      const target = Math.min(
+        maxScroll,
+        Math.max(0, track.scrollLeft + direction * (card.offsetWidth + gap)),
+      );
+      animateScrollTo(target);
+    },
+    [animateScrollTo],
+  );
 
   const advance = useCallback(() => {
     const track = trackRef.current;
     if (!track) return;
 
     if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
-      track.scrollTo({ left: 0, behavior: "smooth" });
+      animateScrollTo(0);
       return;
     }
     scrollByCard(1);
-  }, [scrollByCard]);
+  }, [animateScrollTo, scrollByCard]);
 
   const pauseForManualInteraction = () => {
     if (reduceMotion) return;
+    if (scrollAnimationRef.current) {
+      cancelAnimationFrame(scrollAnimationRef.current);
+      scrollAnimationRef.current = undefined;
+      setIsAnimating(false);
+    }
     setManualPause(true);
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => setManualPause(false), RESUME_AFTER_INTERACTION_MS);
@@ -89,7 +142,7 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
         data-testid="featured-tour-track"
         onPointerDown={pauseForManualInteraction}
         onTouchStart={pauseForManualInteraction}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={`flex ${isAnimating ? "snap-none" : "snap-x snap-mandatory"} gap-6 overflow-x-auto pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {tours.map((tour, index) => (
           <div
