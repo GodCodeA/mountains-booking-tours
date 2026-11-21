@@ -50,17 +50,17 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
     !isReady || isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0";
 
   return (
-    <div className={`${className ?? ""} overflow-x-clip`.trim()}>
+    <div className="overflow-x-clip">
       <div
         ref={ref}
         className={
           usesScrollTimeline
-            ? "scroll-reveal-scroll"
+            ? `${className ?? ""} scroll-reveal-scroll`.trim()
             : `${
                 isReady
                   ? "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-out"
                   : ""
-              } ${revealState}`.trim()
+              } ${className ?? ""} ${revealState}`.trim()
         }
         style={delayMs ? { transitionDelay: `${delayMs}ms` } : undefined}
       >

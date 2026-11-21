@@ -960,30 +960,28 @@ function Home() {
       </section>
 
       <section className="border-t border-border bg-surface">
-        <ScrollReveal className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-4">
-              <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
-              <div>
-                <h2 className="font-display text-5xl">
-                  {text("Ready for the mountains?", "Готовы к горам?", "Тоого даярсызбы?")}
-                </h2>
-                <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-                  {text(
-                    "Pick a tour, choose an open date and you're booked.",
-                    "Выберите тур, свободную дату — и бронирование готово.",
-                    "Турду жана бош датаны тандаңыз — брондоо даяр.",
-                  )}
-                </p>
-              </div>
+        <ScrollReveal className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex items-start gap-4">
+            <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
+            <div>
+              <h2 className="font-display text-5xl">
+                {text("Ready for the mountains?", "Готовы к горам?", "Тоого даярсызбы?")}
+              </h2>
+              <p className="mt-2 max-w-lg text-sm text-muted-foreground">
+                {text(
+                  "Pick a tour, choose an open date and you're booked.",
+                  "Выберите тур, свободную дату — и бронирование готово.",
+                  "Турду жана бош датаны тандаңыз — брондоо даяр.",
+                )}
+              </p>
             </div>
-            <Link
-              to="/tours"
-              className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
-            >
-              {text("Explore tours", "Выбрать тур", "Тур тандоо")}
-            </Link>
           </div>
+          <Link
+            to="/tours"
+            className="rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+          >
+            {text("Explore tours", "Выбрать тур", "Тур тандоо")}
+          </Link>
         </ScrollReveal>
       </section>
     </div>
