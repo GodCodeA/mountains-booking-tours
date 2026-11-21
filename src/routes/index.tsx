@@ -409,15 +409,15 @@ function Home() {
           <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
             {language === "en" ? (
               <>
-                Go where the <span className="text-primary">mountains</span> lead.
+                A new <span className="text-primary">trail</span> begins here.
               </>
             ) : language === "ru" ? (
               <>
-                Идите туда, куда ведут <span className="text-primary">горы</span>.
+                Новая <span className="text-primary">тропа</span> начинается здесь.
               </>
             ) : (
               <>
-                <span className="text-primary">Тоолор</span> алып барган жакка барыңыз.
+                Жаңы <span className="text-primary">жол</span> ушул жерден башталат.
               </>
             )}
           </h1>
