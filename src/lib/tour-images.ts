@@ -1,13 +1,13 @@
-import alaArcha from "@/assets/tour-ala-archa.jpg";
-import songKul from "@/assets/tour-song-kul.jpg";
-import kelSuu from "@/assets/tour-kel-suu.jpg";
-import altynArashan from "@/assets/tour-altyn-arashan.jpg";
-import jyrgalan from "@/assets/tour-jyrgalan.jpg";
-import issykKul from "@/assets/tour-issyk-kul.jpg";
-import chonKemin from "@/assets/tour-chon-kemin.jpg";
-import kegety from "@/assets/tour-kegety.jpg";
-import suusamyr from "@/assets/tour-suusamyr.jpg";
-import karakolLakes from "@/assets/tour-karakol-lakes.jpg";
+import alaArcha from "@/assets/tour-ala-archa.webp";
+import songKul from "@/assets/tour-song-kul.webp";
+import kelSuu from "@/assets/tour-kel-suu.webp";
+import altynArashan from "@/assets/tour-altyn-arashan.webp";
+import jyrgalan from "@/assets/tour-jyrgalan.webp";
+import issykKul from "@/assets/tour-issyk-kul.webp";
+import chonKemin from "@/assets/tour-chon-kemin.webp";
+import kegety from "@/assets/tour-kegety.webp";
+import suusamyr from "@/assets/tour-suusamyr.webp";
+import karakolLakes from "@/assets/tour-karakol-lakes.webp";
 
 const images: Record<string, string> = {
   "ala-archa": alaArcha,

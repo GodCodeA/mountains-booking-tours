@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { formatDate, spotsLeft, type Departure, type Tour } from "@/lib/bookings";
 import { tourImage } from "@/lib/tour-images";
@@ -10,12 +11,37 @@ export function TourCard({
   tour,
   nextDeparture,
   showAvailability = false,
+  deferImage = false,
 }: {
   tour: Tour;
   nextDeparture?: Departure | null;
   showAvailability?: boolean;
+  deferImage?: boolean;
 }) {
   const { language, t } = useI18n();
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [imageReady, setImageReady] = useState(!deferImage);
+
+  useEffect(() => {
+    if (!deferImage) {
+      setImageReady(true);
+      return;
+    }
+
+    const image = imageRef.current;
+    if (!image) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setImageReady(true);
+        observer.disconnect();
+      },
+      { rootMargin: "0px 320px" },
+    );
+    observer.observe(image);
+    return () => observer.disconnect();
+  }, [deferImage]);
+
   tour = localizeTour(tour, language);
   const left = nextDeparture ? spotsLeft(nextDeparture) : 0;
   return (
@@ -26,9 +52,11 @@ export function TourCard({
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={tourImage(tour.image_key)}
+          ref={imageRef}
+          src={imageReady ? tourImage(tour.image_key) : undefined}
           alt={tour.name}
           loading="lazy"
+          decoding="async"
           width={1280}
           height={864}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

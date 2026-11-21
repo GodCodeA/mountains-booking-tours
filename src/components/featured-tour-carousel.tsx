@@ -91,12 +91,12 @@ export function FeaturedTourCarousel({ tours }: { tours: Tour[] }) {
         onTouchStart={pauseForManualInteraction}
         className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {tours.map((tour) => (
+        {tours.map((tour, index) => (
           <div
             key={tour.id}
             className="w-[84%] shrink-0 snap-start sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
           >
-            <TourCard tour={tour} />
+            <TourCard tour={tour} deferImage={index > 1} />
           </div>
         ))}
       </div>

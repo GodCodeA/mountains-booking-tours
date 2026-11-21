@@ -16,7 +16,7 @@ import {
   Users,
 } from "lucide-react";
 
-import heroImage from "@/assets/hero-mountains.jpg";
+import heroImage from "@/assets/hero-mountains.webp";
 import { FeaturedTourCarousel } from "@/components/featured-tour-carousel";
 import { TourCard } from "@/components/tour-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -395,6 +395,8 @@ function Home() {
           alt="Snow-capped Tian Shan peaks above a valley at sunrise"
           width={1920}
           height={1088}
+          fetchPriority="high"
+          decoding="async"
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         <div className="absolute inset-0 -z-10 image-veil" />
@@ -750,6 +752,7 @@ function Home() {
                             src={tourImage(tour.image_key)}
                             alt=""
                             loading="lazy"
+                            decoding="async"
                             className="aspect-[16/9] w-full object-cover"
                           />
                           <div className="p-3">
@@ -840,6 +843,7 @@ function Home() {
                   src={tourImage(tour.image_key)}
                   alt={localizeTour(tour, language).name}
                   loading="lazy"
+                  decoding="async"
                   className="h-24 w-24 shrink-0 rounded-lg object-cover"
                 />
                 <div>

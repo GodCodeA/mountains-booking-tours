@@ -235,6 +235,7 @@
   letter-spacing: 0.02em;
   line-height: 0.92;
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 @utility font-brand {
