@@ -132,7 +132,7 @@ test("shows a quiet progress line when the catalog takes noticeable time to load
 
   const progress = page.getByTestId("navigation-progress");
   await expect(progress).toHaveClass(/opacity-100/);
-  await expect(page.getByRole("heading", { name: /Walk the Tian Shan/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Go where the mountains lead/ })).toBeVisible();
 });
 
 test("featured carousel keeps every tour reachable and moves on manual control", async ({

@@ -409,18 +409,15 @@ function Home() {
           <h1 className="mt-4 max-w-3xl font-display text-[2.5rem] leading-[0.96] sm:text-8xl sm:leading-none">
             {language === "en" ? (
               <>
-                Walk the <span className="text-primary">Tian Shan</span> with people who call it
-                home.
+                Go where the <span className="text-primary">mountains</span> lead.
               </>
             ) : language === "ru" ? (
               <>
-                Откройте <span className="text-primary">Тянь-Шань</span> с теми, кто называет его
-                домом.
+                Идите туда, куда ведут <span className="text-primary">горы</span>.
               </>
             ) : (
               <>
-                <span className="text-primary">Теңир-Тоону</span> өз мекеним дегендер менен бирге
-                ачыңыз.
+                <span className="text-primary">Тоолор</span> алып барган жакка барыңыз.
               </>
             )}
           </h1>

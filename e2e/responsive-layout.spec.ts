@@ -151,17 +151,21 @@ test("public pages stay readable without horizontal page overflow at common widt
       .poll(() => page.evaluate(() => window.localStorage.getItem("ala-too-language")))
       .toBe("en");
     await page.getByRole("button", { name: "EN", exact: true }).click();
-    await expect(page.getByRole("heading", { name: /Walk the Tian Shan/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Go where the mountains lead/ })).toBeVisible();
     if (viewport.width === 320) await expectLocalFonts(page);
     await expectNoPageOverflow(page);
 
     if (viewport.width <= 375) {
       await page.getByRole("button", { name: "РУ", exact: true }).click();
-      await expect(page.getByRole("heading", { name: /Откройте Тянь-Шань/ })).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: /Идите туда, куда ведут горы/ }),
+      ).toBeVisible();
       await expectNoPageOverflow(page);
 
       await page.getByRole("button", { name: "КЫ", exact: true }).click();
-      await expect(page.getByRole("heading", { name: /Теңир-Тоону/ })).toBeVisible();
+      await expect(
+        page.getByRole("heading", { name: /Тоолор алып барган жакка барыңыз/ }),
+      ).toBeVisible();
       await expectNoPageOverflow(page);
 
       await page.getByRole("button", { name: "EN", exact: true }).click();
