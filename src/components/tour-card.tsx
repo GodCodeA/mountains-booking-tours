@@ -48,7 +48,7 @@ export function TourCard({
     <Link
       to="/tours/$slug"
       params={{ slug: tour.slug }}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary/60 hover:shadow-[var(--shadow-ridge)]"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-1 hover:border-primary/60 hover:shadow-[var(--shadow-ridge)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
@@ -59,7 +59,7 @@ export function TourCard({
           decoding="async"
           width={1280}
           height={864}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className={`h-full w-full object-cover motion-safe:transition-[transform,opacity] motion-safe:duration-500 motion-safe:ease-out group-hover:scale-105 ${imageReady ? "opacity-100" : "opacity-0"}`}
         />
         <div className="absolute inset-0 image-veil" />
         <span className="absolute left-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent">
