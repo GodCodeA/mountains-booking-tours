@@ -97,21 +97,23 @@ export function SiteHeader() {
         }`}
         aria-hidden={!open}
       >
-        <nav className="min-h-0 overflow-hidden border-t border-border px-4 py-2">
-          {nav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setOpen(false)}
-              tabIndex={open ? 0 : -1}
-              className="w-full rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
-              activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
-              activeOptions={{ exact: item.to === "/" }}
-            >
-              {t(item.label)}
-            </Link>
-          ))}
-        </nav>
+        <div className="min-h-0 overflow-hidden">
+          <nav className="border-t border-border px-4 py-2">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+                className="w-full rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                activeProps={{ className: "bg-secondary text-foreground shadow-sm" }}
+                activeOptions={{ exact: item.to === "/" }}
+              >
+                {t(item.label)}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
       <NavigationProgress />
     </header>
