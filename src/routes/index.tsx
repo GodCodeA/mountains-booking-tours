@@ -18,6 +18,7 @@ import {
 
 import heroImage from "@/assets/hero-mountains.webp";
 import { FeaturedTourCarousel } from "@/components/featured-tour-carousel";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { TourCard } from "@/components/tour-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toursQuery, type Tour } from "@/lib/bookings";
@@ -448,7 +449,7 @@ function Home() {
       </section>
 
       <section aria-labelledby="trip-finder-title" className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
             <SectionHeading
               eyebrow={text("Trip finder", "Подбор тура", "Тур тандоо")}
@@ -602,53 +603,55 @@ function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section id="featured" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading
-            eyebrow={text("Featured tours", "Популярные туры", "Тандалган турлар")}
-            title={text("Where we go", "Куда мы едем", "Кайда барабыз")}
-          >
-            {text(
-              "Pick a trip to see open dates and remaining spots.",
-              "Выберите поездку, чтобы увидеть свободные даты и места.",
-              "Бош даталарды жана калган орундарды көрүү үчүн сапарды тандаңыз.",
-            )}
-          </SectionHeading>
-          <Link to="/tours" className="text-sm font-bold text-primary hover:underline">
-            {text(
-              `See all ${tours?.length ?? ""} tours →`,
-              `Все туры (${tours?.length ?? ""}) →`,
-              `Бардык турлар (${tours?.length ?? ""}) →`,
-            )}
-          </Link>
-        </div>
-        <div className="mt-8">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton
-                  key={i}
-                  className="inline-block h-[430px] w-full rounded-xl sm:mr-6 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
-                />
-              ))
-            : null}
-          {isError ? (
-            <p className="text-sm text-destructive">
+        <ScrollReveal direction="right">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow={text("Featured tours", "Популярные туры", "Тандалган турлар")}
+              title={text("Where we go", "Куда мы едем", "Кайда барабыз")}
+            >
               {text(
-                "We couldn't load the tours just now. Please refresh the page.",
-                "Сейчас не удалось загрузить туры. Обновите страницу и попробуйте ещё раз.",
-                "Турларды азыр жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.",
+                "Pick a trip to see open dates and remaining spots.",
+                "Выберите поездку, чтобы увидеть свободные даты и места.",
+                "Бош даталарды жана калган орундарды көрүү үчүн сапарды тандаңыз.",
               )}
-            </p>
-          ) : null}
-          {tours && tours.length > 0 ? <FeaturedTourCarousel tours={tours} /> : null}
-        </div>
+            </SectionHeading>
+            <Link to="/tours" className="text-sm font-bold text-primary hover:underline">
+              {text(
+                `See all ${tours?.length ?? ""} tours →`,
+                `Все туры (${tours?.length ?? ""}) →`,
+                `Бардык турлар (${tours?.length ?? ""}) →`,
+              )}
+            </Link>
+          </div>
+          <div className="mt-8">
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton
+                    key={i}
+                    className="inline-block h-[430px] w-full rounded-xl sm:mr-6 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+                  />
+                ))
+              : null}
+            {isError ? (
+              <p className="text-sm text-destructive">
+                {text(
+                  "We couldn't load the tours just now. Please refresh the page.",
+                  "Сейчас не удалось загрузить туры. Обновите страницу и попробуйте ещё раз.",
+                  "Турларды азыр жүктөө мүмкүн болбоду. Баракты жаңыртып, кайра аракет кылыңыз.",
+                )}
+              </p>
+            ) : null}
+            {tours && tours.length > 0 ? <FeaturedTourCarousel tours={tours} /> : null}
+          </div>
+        </ScrollReveal>
       </section>
 
       <section id="adventure-calendar" className="border-y border-border bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-start">
             <SectionHeading
               eyebrow={text("Adventure calendar", "Календарь приключений", "Саякат календары")}
@@ -776,11 +779,11 @@ function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="border-y border-border bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal direction="right" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
             eyebrow={text(
               "Why Ala-Too Adventures",
@@ -802,83 +805,87 @@ function Home() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading
-          eyebrow={text("How it works", "Как это работает", "Бул кандай иштейт")}
-          title={text("Booked in three steps", "Бронирование за три шага", "Үч кадамда брондоо")}
-        />
-        <ol className="mt-10 grid gap-6 sm:grid-cols-3">
-          {localizedSteps.map((s) => (
-            <li key={s.n} className="border-t-2 border-primary pt-5">
-              <span className="font-display text-5xl text-primary">{s.n}</span>
-              <h3 className="mt-2 text-lg font-bold">{s.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
-            </li>
-          ))}
-        </ol>
+        <ScrollReveal direction="left">
+          <SectionHeading
+            eyebrow={text("How it works", "Как это работает", "Бул кандай иштейт")}
+            title={text("Booked in three steps", "Бронирование за три шага", "Үч кадамда брондоо")}
+          />
+          <ol className="mt-10 grid gap-6 sm:grid-cols-3">
+            {localizedSteps.map((s) => (
+              <li key={s.n} className="border-t-2 border-primary pt-5">
+                <span className="font-display text-5xl text-primary">{s.n}</span>
+                <h3 className="mt-2 text-lg font-bold">{s.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </ScrollReveal>
       </section>
 
       {recommended.length > 0 ? (
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-          <SectionHeading
-            eyebrow={text("Recommended", "Рекомендации", "Сунуштар")}
-            title={text(
-              "Not sure where to start?",
-              "Не знаете, с чего начать?",
-              "Эмнеден баштаарыңызды билбейсизби?",
-            )}
-          />
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {recommended.map(({ label, tour }) => (
-              <Link
-                key={label}
-                to="/tours/$slug"
-                params={{ slug: tour.slug }}
-                className="group flex gap-4 rounded-xl border border-border bg-card p-4 motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-ridge)]"
-              >
-                <img
-                  src={tourImage(tour.image_key)}
-                  alt={localizeTour(tour, language).name}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-24 w-24 shrink-0 rounded-lg object-cover"
-                />
-                <div>
-                  <p className="text-eyebrow">
-                    {language === "en"
-                      ? label
-                      : language === "ru"
-                        ? ({
-                            "Short on time": "Мало времени",
-                            "A weekend away": "На выходные",
-                            "The big adventure": "Большое приключение",
-                          }[label] ?? label)
-                        : ({
-                            "Short on time": "Убакыт аз болсо",
-                            "A weekend away": "Дем алышка",
-                            "The big adventure": "Чоң саякат",
-                          }[label] ?? label)}
-                  </p>
-                  <p className="mt-1 font-bold group-hover:text-primary">
-                    {localizeTour(tour, language).name}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {tour.duration_days} {dayLabel(tour.duration_days, language)} ·{" "}
-                    {localizeTour(tour, language).difficulty} · {text("from", "от", "баштап")} $
-                    {tour.price_per_person}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ScrollReveal direction="right">
+            <SectionHeading
+              eyebrow={text("Recommended", "Рекомендации", "Сунуштар")}
+              title={text(
+                "Not sure where to start?",
+                "Не знаете, с чего начать?",
+                "Эмнеден баштаарыңызды билбейсизби?",
+              )}
+            />
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {recommended.map(({ label, tour }) => (
+                <Link
+                  key={label}
+                  to="/tours/$slug"
+                  params={{ slug: tour.slug }}
+                  className="group flex gap-4 rounded-xl border border-border bg-card p-4 motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-ridge)]"
+                >
+                  <img
+                    src={tourImage(tour.image_key)}
+                    alt={localizeTour(tour, language).name}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-24 w-24 shrink-0 rounded-lg object-cover"
+                  />
+                  <div>
+                    <p className="text-eyebrow">
+                      {language === "en"
+                        ? label
+                        : language === "ru"
+                          ? ({
+                              "Short on time": "Мало времени",
+                              "A weekend away": "На выходные",
+                              "The big adventure": "Большое приключение",
+                            }[label] ?? label)
+                          : ({
+                              "Short on time": "Убакыт аз болсо",
+                              "A weekend away": "Дем алышка",
+                              "The big adventure": "Чоң саякат",
+                            }[label] ?? label)}
+                    </p>
+                    <p className="mt-1 font-bold group-hover:text-primary">
+                      {localizeTour(tour, language).name}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {tour.duration_days} {dayLabel(tour.duration_days, language)} ·{" "}
+                      {localizeTour(tour, language).difficulty} · {text("from", "от", "баштап")} $
+                      {tour.price_per_person}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </ScrollReveal>
         </section>
       ) : null}
 
       <section className="border-y border-border bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
             eyebrow={text("The team", "Команда", "Команда")}
             title={text("Your guides", "Ваши гиды", "Сиздин гиддер")}
@@ -903,53 +910,60 @@ function Home() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading
-          eyebrow={text("Guest stories", "Отзывы гостей", "Коноктордун пикирлери")}
-          title={text(
-            "What travellers say",
-            "Что говорят путешественники",
-            "Саякатчылар эмне дешет",
-          )}
-        >
-          {text(
-            "Sample reviews for this demo — not verified customers.",
-            "Примеры отзывов для демо-версии, это не подтверждённые клиенты.",
-            "Бул демо-нускадагы мисал пикирлер, алар ырасталган кардарлар эмес.",
-          )}
-        </SectionHeading>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {content.reviews.map((r) => (
-            <figure key={r.name} className="rounded-xl border border-border bg-card p-6">
-              <blockquote className="text-sm leading-relaxed">&ldquo;{r.text}&rdquo;</blockquote>
-              <figcaption className="mt-4 text-xs text-muted-foreground">
-                <span className="font-bold text-foreground">{r.name}</span> · {r.from} · {r.tour}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <ScrollReveal direction="right">
+          <SectionHeading
+            eyebrow={text("Guest stories", "Отзывы гостей", "Коноктордун пикирлери")}
+            title={text(
+              "What travellers say",
+              "Что говорят путешественники",
+              "Саякатчылар эмне дешет",
+            )}
+          >
+            {text(
+              "Sample reviews for this demo — not verified customers.",
+              "Примеры отзывов для демо-версии, это не подтверждённые клиенты.",
+              "Бул демо-нускадагы мисал пикирлер, алар ырасталган кардарлар эмес.",
+            )}
+          </SectionHeading>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {content.reviews.map((r) => (
+              <figure key={r.name} className="rounded-xl border border-border bg-card p-6">
+                <blockquote className="text-sm leading-relaxed">&ldquo;{r.text}&rdquo;</blockquote>
+                <figcaption className="mt-4 text-xs text-muted-foreground">
+                  <span className="font-bold text-foreground">{r.name}</span> · {r.from} · {r.tour}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </ScrollReveal>
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
-        <SectionHeading
-          eyebrow={text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
-          title={text("Good to know", "Полезно знать", "Билип коюңуз")}
-        />
-        <Accordion type="single" collapsible className="mt-6">
-          {content.faqs.map((f) => (
-            <AccordionItem key={f.q} value={f.q}>
-              <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <ScrollReveal direction="left">
+          <SectionHeading
+            eyebrow={text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
+            title={text("Good to know", "Полезно знать", "Билип коюңуз")}
+          />
+          <Accordion type="single" collapsible className="mt-6">
+            {content.faqs.map((f) => (
+              <AccordionItem key={f.q} value={f.q}>
+                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </ScrollReveal>
       </section>
 
       <section className="border-t border-border bg-surface">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <ScrollReveal
+          direction="right"
+          className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+        >
           <div className="flex items-start gap-4">
             <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
             <div>
@@ -971,7 +985,7 @@ function Home() {
           >
             {text("Explore tours", "Выбрать тур", "Тур тандоо")}
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );
