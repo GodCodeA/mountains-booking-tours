@@ -140,6 +140,15 @@ async function expectLocalFonts(page: Page) {
   expect(fonts.brandFamily).toContain("Unbounded");
 }
 
+async function expectFeaturedCardsToShareHeight(page: Page) {
+  const heights = await page
+    .locator("[data-testid='featured-tour-track'] > div > a")
+    .evaluateAll((cards) => cards.map((card) => Math.round(card.getBoundingClientRect().height)));
+
+  expect(heights.length).toBeGreaterThan(1);
+  expect(new Set(heights)).toEqual(new Set([heights[0]]));
+}
+
 test.beforeEach(async ({ page }) => {
   await mockPublicCatalog(page);
   await page.addInitScript(() => window.localStorage.removeItem("ala-too-language"));
@@ -171,6 +180,7 @@ test("public pages stay readable without horizontal page overflow at common widt
         page.getByRole("heading", { name: /Жаңы жол ушул жерден башталат/ }),
       ).toBeVisible();
       await expectNoPageOverflow(page);
+      await expectFeaturedCardsToShareHeight(page);
 
       await page.getByRole("button", { name: "EN", exact: true }).click();
     }

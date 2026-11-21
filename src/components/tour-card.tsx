@@ -48,7 +48,7 @@ export function TourCard({
     <Link
       to="/tours/$slug"
       params={{ slug: tour.slug }}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary/60 hover:shadow-[var(--shadow-ridge)]"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-1 hover:border-primary/60 hover:shadow-[var(--shadow-ridge)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
