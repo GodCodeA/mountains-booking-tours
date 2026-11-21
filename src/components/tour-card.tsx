@@ -48,7 +48,7 @@ export function TourCard({
     <Link
       to="/tours/$slug"
       params={{ slug: tour.slug }}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:-translate-y-1.5 hover:border-primary/70 hover:shadow-[var(--shadow-ridge)]"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card motion-safe:transition-[translate,border-color,box-shadow] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:-translate-y-1.5 hover:border-primary/70 hover:shadow-[var(--shadow-ridge)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
@@ -59,7 +59,7 @@ export function TourCard({
           decoding="async"
           width={1280}
           height={864}
-          className={`h-full w-full object-cover motion-safe:transition-[transform,opacity] motion-safe:duration-700 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${imageReady ? "opacity-100" : "opacity-0"}`}
+          className={`h-full w-full object-cover motion-safe:transition-[scale,opacity] motion-safe:duration-700 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${imageReady ? "opacity-100" : "opacity-0"}`}
         />
         <div className="absolute inset-0 image-veil" />
         <span className="absolute left-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent">
@@ -107,7 +107,7 @@ export function TourCard({
             <span className="text-lg font-bold text-foreground">${tour.price_per_person}</span> /{" "}
             {t("perPerson")}
           </span>
-          <span className="text-sm font-bold text-primary motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-x-1">
+          <span className="text-sm font-bold text-primary motion-safe:transition-[translate] motion-safe:duration-300 motion-safe:ease-out motion-safe:group-hover:translate-x-1">
             {t("viewTrip")} →
           </span>
         </div>
