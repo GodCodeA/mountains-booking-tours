@@ -4,7 +4,6 @@ type ScrollRevealProps = {
   children: ReactNode;
   className?: string;
   delayMs?: number;
-  direction?: "left" | "right";
 };
 
 /**
@@ -12,12 +11,7 @@ type ScrollRevealProps = {
  * server render remains visible, so content is never hidden when JavaScript
  * is unavailable. Motion-sensitive visitors see the final state immediately.
  */
-export function ScrollReveal({
-  children,
-  className,
-  delayMs = 0,
-  direction = "right",
-}: ScrollRevealProps) {
+export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -46,9 +40,8 @@ export function ScrollReveal({
     return () => observer.disconnect();
   }, []);
 
-  const hiddenOffset = direction === "left" ? "-translate-x-6" : "translate-x-6";
   const revealState =
-    !isReady || isVisible ? "translate-x-0 opacity-100" : `${hiddenOffset} opacity-0`;
+    !isReady || isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0";
 
   return (
     <div className={`${className ?? ""} overflow-x-clip`.trim()}>

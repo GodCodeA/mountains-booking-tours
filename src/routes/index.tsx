@@ -449,7 +449,7 @@ function Home() {
       </section>
 
       <section aria-labelledby="trip-finder-title" className="border-b border-border bg-surface">
-        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <ScrollReveal className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
             <SectionHeading
               eyebrow={text("Trip finder", "Подбор тура", "Тур тандоо")}
@@ -607,7 +607,7 @@ function Home() {
       </section>
 
       <section id="featured" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-        <ScrollReveal direction="right">
+        <ScrollReveal>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <SectionHeading
               eyebrow={text("Featured tours", "Популярные туры", "Тандалган турлар")}
@@ -651,7 +651,7 @@ function Home() {
       </section>
 
       <section id="adventure-calendar" className="border-y border-border bg-surface">
-        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-start">
             <SectionHeading
               eyebrow={text("Adventure calendar", "Календарь приключений", "Саякат календары")}
@@ -783,7 +783,7 @@ function Home() {
       </section>
 
       <section className="border-y border-border bg-surface">
-        <ScrollReveal direction="right" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
             eyebrow={text(
               "Why Ala-Too Adventures",
@@ -809,7 +809,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <ScrollReveal direction="left">
+        <ScrollReveal>
           <SectionHeading
             eyebrow={text("How it works", "Как это работает", "Бул кандай иштейт")}
             title={text("Booked in three steps", "Бронирование за три шага", "Үч кадамда брондоо")}
@@ -828,7 +828,7 @@ function Home() {
 
       {recommended.length > 0 ? (
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-          <ScrollReveal direction="right">
+          <ScrollReveal>
             <SectionHeading
               eyebrow={text("Recommended", "Рекомендации", "Сунуштар")}
               title={text(
@@ -885,7 +885,7 @@ function Home() {
       ) : null}
 
       <section className="border-y border-border bg-surface">
-        <ScrollReveal direction="left" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <ScrollReveal className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <SectionHeading
             eyebrow={text("The team", "Команда", "Команда")}
             title={text("Your guides", "Ваши гиды", "Сиздин гиддер")}
@@ -914,7 +914,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <ScrollReveal direction="right">
+        <ScrollReveal>
           <SectionHeading
             eyebrow={text("Guest stories", "Отзывы гостей", "Коноктордун пикирлери")}
             title={text(
@@ -943,7 +943,7 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
-        <ScrollReveal direction="left">
+        <ScrollReveal>
           <SectionHeading
             eyebrow={text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
             title={text("Good to know", "Полезно знать", "Билип коюңуз")}
@@ -960,10 +960,7 @@ function Home() {
       </section>
 
       <section className="border-t border-border bg-surface">
-        <ScrollReveal
-          direction="right"
-          className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-6"
-        >
+        <ScrollReveal className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-start gap-4">
             <Mountain className="mt-1 h-8 w-8 shrink-0 text-primary" />
             <div>
