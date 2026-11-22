@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import {
   getCountries,
   getCountryCallingCode,
@@ -7,6 +7,15 @@ import {
 } from "libphonenumber-js/min";
 import { useEffect, useMemo, useState } from "react";
 
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_COUNTRY: CountryCode = "KG";
@@ -32,6 +41,8 @@ type PhoneInputProps = {
   onBlur: () => void;
   language: "en" | "ru" | "ky";
   countryLabel: string;
+  searchPlaceholder: string;
+  emptyLabel: string;
   placeholder: string;
   "aria-invalid"?: boolean | undefined;
   "aria-describedby"?: string | undefined;
@@ -46,12 +57,15 @@ export function PhoneInput({
   onBlur,
   language,
   countryLabel,
+  searchPlaceholder,
+  emptyLabel,
   placeholder,
   className,
   ...aria
 }: PhoneInputProps) {
   const detectedCountry = parsePhoneNumberFromString(value)?.country;
   const [country, setCountry] = useState<CountryCode>(detectedCountry ?? DEFAULT_COUNTRY);
+  const [countryPickerOpen, setCountryPickerOpen] = useState(false);
 
   useEffect(() => {
     if (detectedCountry) setCountry(detectedCountry);
@@ -103,28 +117,49 @@ export function PhoneInput({
         className,
       )}
     >
-      <label className="relative flex shrink-0 items-center border-r border-input bg-secondary/35">
-        <span className="sr-only">{countryLabel}</span>
-        <span
-          aria-hidden="true"
-          className="pointer-events-none flex items-center gap-1 px-2 text-sm"
-        >
-          {flag(country)} <span className="text-muted-foreground">+{callingCode}</span>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </span>
-        <select
-          value={country}
-          onChange={(event) => selectCountry(event.target.value as CountryCode)}
-          className="absolute inset-0 cursor-pointer opacity-0"
-          aria-label={countryLabel}
-        >
-          {countries.map(({ code, name }) => (
-            <option key={code} value={code}>
-              {flag(code)} +{getCountryCallingCode(code)} — {name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Popover open={countryPickerOpen} onOpenChange={setCountryPickerOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label={countryLabel}
+            className="flex shrink-0 items-center gap-1 border-r border-input bg-secondary/35 px-2 text-sm transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            <span aria-hidden="true">{flag(country)}</span>
+            <span className="text-muted-foreground">+{callingCode}</span>
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-[min(22rem,calc(100vw-2rem))] p-0">
+          <Command>
+            <CommandInput placeholder={searchPlaceholder} />
+            <CommandList className="max-h-64">
+              <CommandEmpty>{emptyLabel}</CommandEmpty>
+              <CommandGroup>
+                {countries.map(({ code, name }) => {
+                  const codeForCountry = getCountryCallingCode(code);
+                  return (
+                    <CommandItem
+                      key={code}
+                      value={`${name} ${code} ${codeForCountry}`}
+                      onSelect={() => {
+                        selectCountry(code);
+                        setCountryPickerOpen(false);
+                      }}
+                    >
+                      <span className="text-base" aria-hidden="true">
+                        {flag(code)}
+                      </span>
+                      <span>{name}</span>
+                      <span className="ml-auto text-muted-foreground">+{codeForCountry}</span>
+                      {code === country ? <Check className="h-4 w-4 text-primary" /> : null}
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
       <input
         id={id}
         value={nationalValue}

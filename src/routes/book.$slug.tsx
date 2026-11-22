@@ -609,6 +609,16 @@ function BookingFlow() {
                     onBlur={() => blur("phone")}
                     language={language}
                     countryLabel={text("Country and calling code", "Страна и код", "Өлкө жана код")}
+                    searchPlaceholder={text(
+                      "Search country or code…",
+                      "Найти страну или код…",
+                      "Өлкөнү же кодду издөө…",
+                    )}
+                    emptyLabel={text(
+                      "No country found.",
+                      "Страна не найдена.",
+                      "Өлкө табылган жок.",
+                    )}
                     placeholder="555 000 000"
                     aria-invalid={Boolean(errors.phone)}
                     aria-describedby={errors.phone ? "phone-error" : undefined}
