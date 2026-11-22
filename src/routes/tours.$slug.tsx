@@ -678,7 +678,7 @@ function TourBody({
                     key={`${review.name}-${review.from}`}
                     className="p-5 [&+article]:border-t"
                   >
-                    <p className="text-sm leading-relaxed text-muted-foreground">“{review.text}”</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{review.text}</p>
                     <p className="mt-4 text-sm font-bold">
                       {review.name}
                       <span className="font-normal text-muted-foreground"> · {review.from}</span>
