@@ -35,6 +35,14 @@ import suusamyrYurts from "@/assets/tour-suusamyr-gallery-yurts.webp";
 import suusamyrMeadow from "@/assets/tour-suusamyr-gallery-meadow.webp";
 import karakolLakesLake from "@/assets/tour-karakol-lakes-gallery-lake.webp";
 import karakolLakesTrail from "@/assets/tour-karakol-lakes-gallery-trail.webp";
+import leninPeakBaseCampTrail from "@/assets/tour-lenin-peak-base-camp-gallery-trail.webp";
+import leninPeakBaseCampCamp from "@/assets/tour-lenin-peak-base-camp-gallery-camp.webp";
+import saryChelekForest from "@/assets/tour-sary-chelek-gallery-forest.webp";
+import saryChelekView from "@/assets/tour-sary-chelek-gallery-view.webp";
+import tashRabatInterior from "@/assets/tour-tash-rabat-gallery-interior.webp";
+import tashRabatValley from "@/assets/tour-tash-rabat-gallery-valley.webp";
+import kochkorFeltWool from "@/assets/tour-kochkor-felt-gallery-wool.webp";
+import kochkorFeltVillage from "@/assets/tour-kochkor-felt-gallery-village.webp";
 
 const images: Record<string, string> = {
   "ala-archa": alaArcha,
@@ -74,10 +82,14 @@ const galleries: Record<string, string[]> = {
   "burana-konorchek": [buranaKonorchek],
   "jeti-oguz-barskoon": [jetiOguzBarskoon],
   arslanbob: [arslanbob],
-  "lenin-peak-base-camp": [leninPeakBaseCamp],
-  "sary-chelek": [saryChelek],
-  "tash-rabat": [tashRabat],
-  "kochkor-felt": [kochkorFelt],
+  "lenin-peak-base-camp": [
+    leninPeakBaseCamp,
+    leninPeakBaseCampTrail,
+    leninPeakBaseCampCamp,
+  ],
+  "sary-chelek": [saryChelek, saryChelekForest, saryChelekView],
+  "tash-rabat": [tashRabat, tashRabatInterior, tashRabatValley],
+  "kochkor-felt": [kochkorFelt, kochkorFeltWool, kochkorFeltVillage],
 };
 
 /**
