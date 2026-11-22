@@ -6,6 +6,7 @@ import { NavigationProgress } from "@/components/navigation-progress";
 
 const nav = [
   { to: "/", label: "home" },
+  { to: "/calendar", label: "calendar" },
   { to: "/tours", label: "tours" },
   { to: "/dashboard", label: "owner" },
 ] as const;

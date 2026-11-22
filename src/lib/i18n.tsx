@@ -5,6 +5,7 @@ export type Language = "en" | "ru" | "ky";
 const copy = {
   en: {
     home: "Home",
+    calendar: "Calendar",
     tours: "Tours",
     owner: "Owner",
     language: "Language",
@@ -43,6 +44,7 @@ const copy = {
   },
   ru: {
     home: "Главная",
+    calendar: "Жылнаама",
     tours: "Туры",
     owner: "Кабинет",
     language: "Язык",
@@ -81,6 +83,7 @@ const copy = {
   },
   ky: {
     home: "Башкы бет",
+    calendar: "Календарь",
     tours: "Турлар",
     owner: "Кабинет",
     language: "Тил",
