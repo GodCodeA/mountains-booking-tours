@@ -28,8 +28,7 @@ import {
   CANCELLATION_POLICY_RU,
   tourExtras,
 } from "@/lib/tour-content";
-import { siteContent } from "@/lib/site-content";
-import { tourRating } from "@/lib/site-content";
+import { reviewTimestamp, siteContent, tourRating } from "@/lib/site-content";
 import { TourRating } from "@/components/tour-rating";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -673,18 +672,25 @@ function TourBody({
                 )}
               </p>
               <div className="mx-auto mt-6 max-w-3xl border border-border bg-card">
-                {rating.reviews.map((review) => (
-                  <article
-                    key={`${review.name}-${review.from}`}
-                    className="p-5 [&+article]:border-t"
-                  >
-                    <p className="text-sm leading-relaxed text-muted-foreground">{review.text}</p>
-                    <p className="mt-4 text-sm font-bold">
-                      {review.name}
-                      <span className="font-normal text-muted-foreground"> · {review.from}</span>
-                    </p>
-                  </article>
-                ))}
+                {rating.reviews.map((review, index) => {
+                  const publishedAt = reviewTimestamp(tour.slug, index);
+                  return (
+                    <article
+                      key={`${review.name}-${review.from}`}
+                      className="p-5 [&+article]:border-t"
+                    >
+                      <p className="text-sm leading-relaxed text-muted-foreground">{review.text}</p>
+                      <p className="mt-4 text-sm font-bold">
+                        {review.name}
+                        <span className="font-normal text-muted-foreground"> · {review.from}</span>
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {text("Published", "Опубликовано", "Жарыяланды")} ·{" "}
+                        {formatDate(publishedAt.date, language)} · {formatTime(publishedAt.time)}
+                      </p>
+                    </article>
+                  );
+                })}
               </div>
             </section>
           ) : null}

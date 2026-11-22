@@ -13,6 +13,28 @@ export type TourRating = {
   isSample: true;
 };
 
+export type ReviewTimestamp = { date: string; time: string };
+
+const REVIEW_MONTHS = [3, 4, 5, 6, 7, 8, 9, 10] as const;
+const REVIEW_MINUTES = ["00", "08", "15", "22", "30", "38", "45", "52"] as const;
+
+/** Stable demo review times: March–October avoids the winter season. */
+export function reviewTimestamp(slug: string, index: number): ReviewTimestamp {
+  const hash = Array.from(`${slug}-${index}`).reduce(
+    (total, character) => (total * 31 + character.charCodeAt(0)) >>> 0,
+    0,
+  );
+  const month = REVIEW_MONTHS[hash % REVIEW_MONTHS.length]!;
+  const day = ((hash >>> 3) % 27) + 1;
+  const hour = 9 + ((hash >>> 7) % 12);
+  const minute = REVIEW_MINUTES[(hash >>> 11) % REVIEW_MINUTES.length]!;
+
+  return {
+    date: `2026-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+    time: `${String(hour).padStart(2, "0")}:${minute}`,
+  };
+}
+
 export const guides: Guide[] = [
   {
     name: "Azamat",
