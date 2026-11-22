@@ -24,6 +24,18 @@ test("rejects invalid customer contact fields", () => {
   assert.match(validateField("name", "A") ?? "", /at least 2/i);
 });
 
+test("enforces the selected country's phone number rules", () => {
+  assert.match(
+    validateField("phone", "+99655512") ?? "",
+    /valid phone number for the selected country/i,
+  );
+  assert.match(
+    validateField("phone", "+996555123456789") ?? "",
+    /valid phone number for the selected country/i,
+  );
+  assert.equal(validateField("phone", "+996555123456"), null);
+});
+
 test("does not allow a party to exceed remaining capacity", () => {
   const errors = validateBookingForm({ ...validValues, guests: 3, maxGuests: 2 });
   assert.equal(errors.guests, "Only 2 spots left on this date.");

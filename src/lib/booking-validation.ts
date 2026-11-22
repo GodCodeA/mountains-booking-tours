@@ -1,7 +1,13 @@
+import { isValidPhoneNumber } from "libphonenumber-js/min";
 import { z } from "zod";
 
 // Accepts international and local formats: +996 555 000 000, 0555 000 000, etc.
 const phoneRegex = /^\+[1-9][0-9]{5,14}$/;
+
+// E.164 alone permits a broad 6–15 digit range. The phone library additionally
+// checks the selected country's actual national-number length and prefix rules.
+const isValidInternationalPhone = (value: string) =>
+  !phoneRegex.test(value) || isValidPhoneNumber(value);
 
 export const bookingFormSchema = z.object({
   name: z
@@ -19,7 +25,10 @@ export const bookingFormSchema = z.object({
     .string()
     .trim()
     .min(1, "Phone number is required.")
-    .regex(phoneRegex, "Please enter a valid phone number, e.g. +996 555 000 000."),
+    .regex(phoneRegex, "Please enter a valid phone number, e.g. +996 555 000 000.")
+    .refine(isValidInternationalPhone, {
+      message: "Please enter a valid phone number for the selected country.",
+    }),
   whatsapp: z
     .string()
     .trim()
@@ -39,7 +48,7 @@ export type BookingField = "name" | "email" | "phone" | "whatsapp" | "notes";
 const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
   name: "Укажите имя (минимум 2 символа).",
   email: "Укажите корректный email.",
-  phone: "Укажите корректный номер телефона, например +996 555 000 000.",
+  phone: "Укажите корректный номер телефона для выбранной страны.",
   whatsapp: "Укажите корректный номер WhatsApp или оставьте поле пустым.",
   notes: "Примечание должно содержать не более 500 символов.",
   guests: "Укажите корректное количество гостей.",
@@ -49,7 +58,7 @@ const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
 const kyrgyzErrors: Record<BookingField | "guests" | "departureId", string> = {
   name: "Атыңызды жазыңыз (кеминде 2 белги).",
   email: "Туура email дарегин жазыңыз.",
-  phone: "Туура телефон номерин жазыңыз, мисалы +996 555 000 000.",
+  phone: "Тандалган өлкө үчүн туура телефон номерин жазыңыз.",
   whatsapp: "Туура WhatsApp номерин жазыңыз же талааны бош калтырыңыз.",
   notes: "Эскертүү 500 белгиден ашпашы керек.",
   guests: "Коноктордун туура санын жазыңыз.",
