@@ -71,7 +71,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Marta",
         from: "Poland",
-        text: "A brilliant first hike near Bishkek. We stopped more than I expected, which was actually great — no one felt left behind.",
+        text: "A brilliant first hike near Bishkek. We stopped more than I expected, which was actually great — no one felt left behind. I was travelling alone and still felt part of the group from the first few minutes. The tea stop with the glacier view was a small thing, but probably my favourite moment of the day.",
         isSample: true,
       },
       {
@@ -89,7 +89,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Алия",
         from: "Кыргызстан",
-        text: "Ходили с друзьями впервые. Всё объяснили заранее, группа была небольшая, а фотки получились просто вау.",
+        text: "Ходили с друзьями впервые. Фотки — вау.",
         isSample: true,
       },
       {
@@ -114,7 +114,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Hannah",
         from: "Australia",
-        text: "The yurt camp, the lake and the long drive over the pass were all memorable. Long day in the car, yes, but totally worth it.",
+        text: "The yurt camp, the lake and the long drive over the pass were all memorable. Long day in the car, yes, but totally worth it. We arrived just before sunset and the whole lake looked unreal. The hosts made us feel welcome straight away, even though we spoke almost no Russian or Kyrgyz.",
         isSample: true,
       },
       {
@@ -126,7 +126,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Chloe",
         from: "Canada",
-        text: "The open landscape was extraordinary. We appreciated having practical packing advice before leaving Bishkek.",
+        text: "The open landscape was extraordinary. Would happily go back.",
         isSample: true,
       },
       {
@@ -151,13 +151,13 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Nora",
         from: "Canada",
-        text: "Remote in the best possible way. The permit information was clear beforehand, and every logistics detail was handled calmly.",
+        text: "Remote in the best possible way. The permit information was clear beforehand, and every logistics detail was handled calmly. We were a little nervous about the road and border paperwork, but it turned out much easier than expected because the team had sent a clear list in advance.",
         isSample: true,
       },
       {
         name: "Арсен",
         from: "Кыргызстан",
-        text: "Маршрут непростой, но организован очень аккуратно. Озеро и ущелье стоят долгой дороги.",
+        text: "Маршрут непростой, но организован очень аккуратно. Озеро стоит долгой дороги.",
         isSample: true,
       },
       {
@@ -188,7 +188,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Elena",
         from: "Spain",
-        text: "The valley was wonderfully quiet. And the hot springs after walking all day? Honestly, exactly what our legs needed.",
+        text: "The valley was wonderfully quiet. And the hot springs after walking all day? Honestly, exactly what our legs needed. We had expected a quick stop, but ended up lingering by the river and changing our plans for the afternoon. No regrets at all.",
         isSample: true,
       },
       {
@@ -200,7 +200,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Maya",
         from: "Singapore",
-        text: "The balance was perfect: a scenic walk, time to slow down, and hot springs at the end of the day.",
+        text: "Great valley, great springs.",
         isSample: true,
       },
       {
@@ -231,7 +231,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Owen",
         from: "Ireland",
-        text: "Three very different days and huge views. The ridge day was tough for me, but completely worth it in the end.",
+        text: "Three very different days and huge views. The ridge day was tough for me, but completely worth it in the end. Bring layers: we had sun, wind and a little rain on the same day. It never felt unsafe or rushed though, which mattered a lot for our group.",
         isSample: true,
       },
       {
@@ -243,7 +243,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Ben",
         from: "New Zealand",
-        text: "The ridge views were outstanding and the campsite routine was easy to settle into. A proper mountain trek.",
+        text: "The ridge views were outstanding. Proper mountain trek.",
         isSample: true,
       },
       {
@@ -268,13 +268,13 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Liam",
         from: "United Kingdom",
-        text: "Really good balance of lake time, easy walks and mountain views. We never felt like we were rushing from place to place.",
+        text: "Really good balance of lake time, easy walks and mountain views. We never felt like we were rushing from place to place. I liked that every overnight stop had a different feel, so it never became repetitive. The canyon day was a surprise favourite for us.",
         isSample: true,
       },
       {
         name: "Сабина",
         from: "Узбекистан",
-        text: "За пять дней увидели совсем разный Иссык-Куль: пляж, каньон, ущелье и горы. Программа не перегружена, что редкость.",
+        text: "За пять дней увидели совсем разный Иссык-Куль. Не перегружено.",
         isSample: true,
       },
       {
@@ -311,13 +311,13 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Freya",
         from: "Germany",
-        text: "The family guesthouse made this trip special. Gentle walks, good food and a lovely green valley close to Bishkek.",
+        text: "The family guesthouse made this trip special. Gentle walks, good food and a lovely green valley close to Bishkek. It was exactly what we needed after a few busy days in the city: no pressure to be constantly doing something, just good air and a very warm welcome.",
         isSample: true,
       },
       {
         name: "Нурбек",
         from: "Кыргызстан",
-        text: "Спокойная поездка для тех, кто хочет выехать из города без сложного треккинга. Очень уютное место.",
+        text: "Спокойная поездка без сложного треккинга. Очень уютно.",
         isSample: true,
       },
       {
@@ -348,7 +348,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Mia",
         from: "Singapore",
-        text: "A refreshing day outside the city. The waterfall was beautiful, and the guide shared lots of little local stories too.",
+        text: "A refreshing day outside the city. The waterfall was beautiful, and the guide shared lots of little local stories too. We didn't know the valley before booking, so those details made the route feel much more personal than simply following a trail.",
         isSample: true,
       },
       {
@@ -360,7 +360,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Ella",
         from: "Singapore",
-        text: "A lovely half-day feeling without the rush. The waterfall was a perfect reward at the end of the trail.",
+        text: "Lovely day out. The waterfall was worth it.",
         isSample: true,
       },
       {
@@ -385,13 +385,13 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Grace",
         from: "New Zealand",
-        text: "A peaceful weekend with wide open landscapes and a genuinely warm welcome at the yurt camp.",
+        text: "A peaceful weekend with wide open landscapes and a genuinely warm welcome at the yurt camp. The pass was windy and we were glad we had brought an extra jacket, but the evening in the yurt was so cosy. Waking up to those views felt a bit unreal.",
         isSample: true,
       },
       {
         name: "Мадина",
         from: "Казахстан",
-        text: "Идеальный формат на выходные: дорога через перевал уже сама по себе впечатляет, а ночёвка в юрте добавляет атмосферы.",
+        text: "Идеальный формат на выходные. Ночёвка в юрте — отдельное впечатление.",
         isSample: true,
       },
       {
@@ -422,7 +422,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Theo",
         from: "France",
-        text: "The alpine lakes were spectacular, even with the weather changing every five minutes. This is a proper trek though — come prepared.",
+        text: "The alpine lakes were spectacular, even with the weather changing every five minutes. This is a proper trek though — come prepared. Our boots got properly muddy and the climb was no joke, but the camp evenings and the views made it feel earned. One of the best routes I have done in Central Asia.",
         isSample: true,
       },
       {
@@ -440,7 +440,7 @@ export const tourRatings: Record<string, TourRating> = {
       {
         name: "Михаил",
         from: "Россия",
-        text: "Маршрут требует сил, зато виды меняются каждый день. Особенно запомнились озёра и перевал.",
+        text: "Маршрут требует сил, но виды того стоят.",
         isSample: true,
       },
       {

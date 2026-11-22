@@ -672,11 +672,11 @@ function TourBody({
                   "Бул демо-версия үчүн үлгү пикирлер — алар ырасталган кардарлардын пикирлери эмес.",
                 )}
               </p>
-              <div className="mx-auto mt-6 max-w-3xl space-y-4">
+              <div className="mx-auto mt-6 max-w-3xl border border-border bg-card">
                 {rating.reviews.map((review) => (
                   <article
                     key={`${review.name}-${review.from}`}
-                    className="rounded-xl border border-border bg-card p-5"
+                    className="p-5 [&+article]:border-t"
                   >
                     <p className="text-sm leading-relaxed text-muted-foreground">“{review.text}”</p>
                     <p className="mt-4 text-sm font-bold">
