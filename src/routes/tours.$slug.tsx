@@ -672,7 +672,7 @@ function TourBody({
                   "Бул демо-версия үчүн үлгү пикирлер — алар ырасталган кардарлардын пикирлери эмес.",
                 )}
               </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mx-auto mt-6 max-w-3xl space-y-4">
                 {rating.reviews.map((review) => (
                   <article
                     key={`${review.name}-${review.from}`}
