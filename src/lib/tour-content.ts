@@ -714,3 +714,83 @@ export function tourExtras(slug: string, language: "en" | "ru" | "ky" = "en"): T
     return kyrgyzContent[slug] ?? { itinerary: [], whatToBring: kyrgyzBaseKit };
   return content[slug] ?? { itinerary: [], whatToBring: baseKit };
 }
+
+type TourSight = {
+  icon: string;
+  english: string;
+  russian: string;
+  kyrgyz: string;
+};
+
+// Fast visual summary for the tour detail page. This is deliberately concise:
+// it complements the gallery and itinerary rather than repeating them.
+const sightsByTour: Record<string, TourSight[]> = {
+  "ala-archa-day-hike": [
+    { icon: "🌲", english: "Juniper forest", russian: "Арчовый лес", kyrgyz: "Арча токою" },
+    { icon: "🏔", english: "Glacier views", russian: "Виды на ледники", kyrgyz: "Мөңгүлөрдүн көрүнүшү" },
+    { icon: "🌊", english: "Mountain river", russian: "Горная река", kyrgyz: "Тоо суусу" },
+    { icon: "🥾", english: "Valley trail", russian: "Тропа по долине", kyrgyz: "Өрөөн чыйыры" },
+  ],
+  "song-kul-adventure": [
+    { icon: "🏕", english: "Yurt camp", russian: "Юрточный лагерь", kyrgyz: "Боз үй лагери" },
+    { icon: "🐎", english: "Horses", russian: "Лошади", kyrgyz: "Аттар" },
+    { icon: "🌊", english: "Alpine lake", russian: "Высокогорное озеро", kyrgyz: "Бийик тоо көлү" },
+    { icon: "🌄", english: "Jailoo", russian: "Джайлоо", kyrgyz: "Жайлоо" },
+  ],
+  "kel-suu-adventure": [
+    { icon: "🏞", english: "Canyon lake", russian: "Озеро в каньоне", kyrgyz: "Капчыгайдагы көл" },
+    { icon: "🗻", english: "Rock walls", russian: "Скальные стены", kyrgyz: "Аска-зоолор" },
+    { icon: "🚙", english: "Mountain road", russian: "Горная дорога", kyrgyz: "Тоо жолу" },
+    { icon: "⛺", english: "Remote camp", russian: "Удалённый лагерь", kyrgyz: "Алыскы лагерь" },
+  ],
+  "altyn-arashan-escape": [
+    { icon: "♨️", english: "Hot springs", russian: "Горячие источники", kyrgyz: "Ысык булактар" },
+    { icon: "🛖", english: "Mountain guesthouse", russian: "Горный гостевой дом", kyrgyz: "Тоо конок үйү" },
+    { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
+    { icon: "🏔", english: "Peak views", russian: "Виды на вершины", kyrgyz: "Чокулардын көрүнүшү" },
+  ],
+  "jyrgalan-mountain-trek": [
+    { icon: "🌄", english: "Green ridges", russian: "Зелёные хребты", kyrgyz: "Жашыл кырлар" },
+    { icon: "⛺", english: "High camp", russian: "Высокогорный лагерь", kyrgyz: "Бийик лагерь" },
+    { icon: "🌲", english: "Spruce slopes", russian: "Еловые склоны", kyrgyz: "Карагайлуу капталдар" },
+    { icon: "🥾", english: "Mountain pass", russian: "Горный перевал", kyrgyz: "Тоо ашуусу" },
+  ],
+  "issyk-kul-mountain-escape": [
+    { icon: "🌊", english: "Lake shore", russian: "Берег озера", kyrgyz: "Көл жээги" },
+    { icon: "🏜", english: "Red canyon", russian: "Красный каньон", kyrgyz: "Кызыл капчыгай" },
+    { icon: "🏖", english: "Beach stops", russian: "Остановки на пляже", kyrgyz: "Жээктеги эс алуу" },
+    { icon: "🏔", english: "Mountain trails", russian: "Горные тропы", kyrgyz: "Тоо чыйырлары" },
+  ],
+  "chon-kemin-valley-escape": [
+    { icon: "🏡", english: "Family guesthouse", russian: "Семейный гостевой дом", kyrgyz: "Үй-бүлөлүк конок үйү" },
+    { icon: "🌲", english: "Forest walks", russian: "Прогулки по лесу", kyrgyz: "Токойдогу сейил" },
+    { icon: "🌊", english: "Riverside", russian: "Прогулки у реки", kyrgyz: "Дарыя жээгинде сейил" },
+    { icon: "🐎", english: "Pastures", russian: "Пастбища", kyrgyz: "Жайлоолор" },
+  ],
+  "kegety-waterfall-hike": [
+    { icon: "💧", english: "Waterfall", russian: "Водопад", kyrgyz: "Шаркыратма" },
+    { icon: "🌲", english: "Mountain gorge", russian: "Горное ущелье", kyrgyz: "Тоо капчыгайы" },
+    { icon: "🥾", english: "Day hike", russian: "Поход на один день", kyrgyz: "Бир күндүк жөө жүрүш" },
+    { icon: "🧺", english: "Picnic stop", russian: "Пикник", kyrgyz: "Пикник" },
+  ],
+  "suusamyr-jailoo-weekend": [
+    { icon: "🏕", english: "Yurts", russian: "Юрты", kyrgyz: "Боз үйлөр" },
+    { icon: "🐎", english: "Horses", russian: "Лошади", kyrgyz: "Аттар" },
+    { icon: "🌼", english: "Wildflowers", russian: "Полевые цветы", kyrgyz: "Жапайы гүлдөр" },
+    { icon: "🏔", english: "Too-Ashuu pass", russian: "Перевал Тоо-Ашуу", kyrgyz: "Тоо-Ашуу ашуусу" },
+  ],
+  "karakol-lakes-trek": [
+    { icon: "🏞", english: "Alpine lakes", russian: "Высокогорные озёра", kyrgyz: "Бийик тоо көлдөрү" },
+    { icon: "⛺", english: "Trekking camp", russian: "Треккинговый лагерь", kyrgyz: "Треккинг лагери" },
+    { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
+    { icon: "🥾", english: "Multi-day trek", russian: "Многодневный трек", kyrgyz: "Көп күндүк трек" },
+  ],
+};
+
+export function tourSights(slug: string, language: "en" | "ru" | "ky" = "en") {
+  return (sightsByTour[slug] ?? []).map((sight) => ({
+    icon: sight.icon,
+    label:
+      language === "ru" ? sight.russian : language === "ky" ? sight.kyrgyz : sight.english,
+  }));
+}

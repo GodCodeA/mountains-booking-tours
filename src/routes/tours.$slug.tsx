@@ -27,6 +27,7 @@ import {
   CANCELLATION_POLICY_KY,
   CANCELLATION_POLICY_RU,
   tourExtras,
+  tourSights,
 } from "@/lib/tour-content";
 import { reviewTimestamp, siteContent, tourRating } from "@/lib/site-content";
 import { TourRating } from "@/components/tour-rating";
@@ -152,6 +153,7 @@ function TourBody({
   const content = siteContent(language);
   tour = localizeTour(tour, language);
   const extras = tourExtras(tour.slug, language);
+  const sights = tourSights(tour.slug, language);
   const rating = tourRating(tour.slug);
   const mapPoint = tourMapPoint(tour.slug, language);
   const photos = tourGallery(tour.image_key);
@@ -292,6 +294,32 @@ function TourBody({
               </dd>
             </div>
           </dl>
+
+          {sights.length > 0 ? (
+            <section aria-labelledby="what-youll-see">
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 id="what-youll-see" className="font-display text-3xl">
+                  {text("What you'll see", "Что вы увидите", "Эмнени көрөсүз")}
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  {text("Along the route", "По маршруту", "Маршрут боюнча")}
+                </p>
+              </div>
+              <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {sights.map((sight) => (
+                  <li
+                    key={sight.label}
+                    className="flex min-h-20 flex-col justify-between border border-border bg-card p-3"
+                  >
+                    <span className="text-xl" aria-hidden="true">
+                      {sight.icon}
+                    </span>
+                    <span className="mt-2 text-sm font-medium leading-tight">{sight.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
 
           {/* Gallery */}
           <section aria-label={text("Photo gallery", "Галерея", "Сүрөттөр")}>
