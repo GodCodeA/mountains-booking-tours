@@ -83,7 +83,7 @@ function DepartureCalendar() {
   const availableDates = dateKeys.map(dateFromIso);
   const calendarFormatters = {
     formatCaption: (month: Date) => {
-      if (language === "ky") return `${KYRGYZ_MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+      if (language === "ky") return `${KYRGYZ_MONTHS[month.getMonth()]} ${month.getFullYear()} ж.`;
       return month.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
         month: "long",
         year: "numeric",
