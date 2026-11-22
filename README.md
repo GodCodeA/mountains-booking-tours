@@ -13,6 +13,7 @@ A mountain-tour booking platform for a small owner-run tour business in Bishkek,
 ## Main features
 
 - Ten guided sample tours with details, inclusions and pricing
+- Four-question trip finder that recommends up to three tours by time, pace, yurt stay and budget
 - Live availability per departure (fully booked or past dates can't be selected)
 - Four-step booking flow with inline validation
 - Private guest trip page: confirmation, calendar download, packing checklist, map link, request to change/cancel, and a message to the owner

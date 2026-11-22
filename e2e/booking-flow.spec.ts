@@ -103,11 +103,11 @@ test("trip finder narrows the homepage to matching tours", async ({ page }) => {
   await expect(finder).toBeVisible();
   // SSR paints the finder before React hydrates it. Retry the first interaction
   // until its ARIA state changes rather than racing the hydration boundary.
-  for (const name of ["1 day", "Easy", "Under $200"]) {
+  for (const name of ["1 day", "Easy", "No preference", "Under $200"]) {
     const choice = finder.getByRole("button", { name });
     await expect(async () => {
       await choice.click();
-      await expect(choice).toHaveAttribute("aria-pressed", "true");
+      await expect(choice).toBeHidden();
     }).toPass();
   }
 
