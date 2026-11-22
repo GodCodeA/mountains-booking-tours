@@ -30,7 +30,7 @@ const points: Record<string, MapPoint> = {
     longitude: 76.395,
     english: "Kel-Suu Lake",
     russian: "Озеро Кель-Суу",
-    kyrgyz: "Көл-Суу көлү",
+    kyrgyz: "Кел-Суу көлү",
   },
   "altyn-arashan-escape": {
     latitude: 42.353,
