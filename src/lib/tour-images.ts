@@ -8,6 +8,9 @@ import chonKemin from "@/assets/tour-chon-kemin.webp";
 import kegety from "@/assets/tour-kegety.webp";
 import suusamyr from "@/assets/tour-suusamyr.webp";
 import karakolLakes from "@/assets/tour-karakol-lakes.webp";
+import buranaKonorchek from "@/assets/tour-burana-konorchek.webp";
+import jetiOguzBarskoon from "@/assets/tour-jeti-oguz-barskoon.webp";
+import arslanbob from "@/assets/tour-arslanbob.webp";
 import alaArchaTrail from "@/assets/tour-ala-archa-gallery-trail.webp";
 import alaArchaRiver from "@/assets/tour-ala-archa-gallery-river.webp";
 import songKulYurts from "@/assets/tour-song-kul-gallery-yurts.webp";
@@ -40,6 +43,9 @@ const images: Record<string, string> = {
   kegety,
   suusamyr,
   "karakol-lakes": karakolLakes,
+  "burana-konorchek": buranaKonorchek,
+  "jeti-oguz-barskoon": jetiOguzBarskoon,
+  arslanbob,
 };
 
 export function tourImage(key: string): string {
@@ -57,6 +63,9 @@ const galleries: Record<string, string[]> = {
   kegety: [kegety, kegetyWaterfall, kegetyTrail],
   suusamyr: [suusamyr, suusamyrYurts, suusamyrMeadow],
   "karakol-lakes": [karakolLakes, karakolLakesLake, karakolLakesTrail],
+  "burana-konorchek": [buranaKonorchek],
+  "jeti-oguz-barskoon": [jetiOguzBarskoon],
+  arslanbob: [arslanbob],
 };
 
 /**

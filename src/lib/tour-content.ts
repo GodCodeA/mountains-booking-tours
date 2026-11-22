@@ -239,6 +239,30 @@ const content: Record<string, TourExtras> = {
       "Personal sleeping bag",
     ],
   },
+  "burana-konorchek-day": {
+    itinerary: [
+      { time: "08:00", title: "Leave Bishkek", body: "Meet at Ala-Too Square and drive east through the Chuy Valley." },
+      { time: "10:00", title: "Burana and Balasagun", body: "Explore the tower area and its open-air stone collection with the guide." },
+      { time: "13:00", title: "Konorchek canyon", body: "Easy canyon walk, picnic and time for photos among the red cliffs." },
+      { time: "18:00", title: "Back in Bishkek", body: "Return to Ala-Too Square by early evening." },
+    ],
+    whatToBring: baseKit,
+  },
+  "jeti-oguz-barskoon-escape": {
+    itinerary: [
+      { time: "Day 1", title: "Jeti-Oguz red rocks", body: "Start from Karakol, walk beneath the Seven Bulls cliffs and settle into a guesthouse." },
+      { time: "Day 2", title: "Barskoon waterfalls", body: "Morning forest walk to the waterfalls, then return to Karakol in the afternoon." },
+    ],
+    whatToBring: overnightKit,
+  },
+  "arslanbob-walnut-forest": {
+    itinerary: [
+      { time: "Day 1", title: "Osh to Arslanbob", body: "Meet in Osh, drive south-west to the village and meet your host family." },
+      { time: "Day 2", title: "Forest and waterfall", body: "Gentle walks through the walnut forest and to a waterfall viewpoint." },
+      { time: "Day 3", title: "Village morning and return", body: "Free time in the village before the return drive to Osh." },
+    ],
+    whatToBring: overnightKit,
+  },
 };
 
 const russianBaseKit = [
@@ -468,6 +492,30 @@ const russianContent: Record<string, TourExtras> = {
       "Треккинговые палки",
       "Личный спальный мешок",
     ],
+  },
+  "burana-konorchek-day": {
+    itinerary: [
+      { time: "08:00", title: "Выезд из Бишкека", body: "Встречаемся на площади Ала-Тоо и едем на восток по Чуйской долине." },
+      { time: "10:00", title: "Бурана и Баласагун", body: "Осматриваем территорию башни и каменную коллекцию под открытым небом." },
+      { time: "13:00", title: "Каньон Конорчек", body: "Лёгкая прогулка по каньону, пикник и время для фотографий у красных скал." },
+      { time: "18:00", title: "Возвращение в Бишкек", body: "К вечеру возвращаемся на площадь Ала-Тоо." },
+    ],
+    whatToBring: russianBaseKit,
+  },
+  "jeti-oguz-barskoon-escape": {
+    itinerary: [
+      { time: "День 1", title: "Красные скалы Джети-Огуза", body: "Старт из Каракола, прогулка у скал «Семь быков» и размещение в гостевом доме." },
+      { time: "День 2", title: "Водопады Барскоона", body: "Утренняя прогулка по лесу к водопадам и возвращение в Каракол после обеда." },
+    ],
+    whatToBring: russianOvernightKit,
+  },
+  "arslanbob-walnut-forest": {
+    itinerary: [
+      { time: "День 1", title: "Из Оша в Арсланбоб", body: "Встречаемся в Оше, едем в горное село и знакомимся с принимающей семьёй." },
+      { time: "День 2", title: "Лес и водопад", body: "Неспешные прогулки по ореховому лесу и к смотровой точке у водопада." },
+      { time: "День 3", title: "Утро в селе и возвращение", body: "Свободное время в селе перед обратной дорогой в Ош." },
+    ],
+    whatToBring: russianOvernightKit,
   },
 };
 
@@ -702,6 +750,30 @@ const kyrgyzContent: Record<string, TourExtras> = {
       "Жеке уктоочу баштык",
     ],
   },
+  "burana-konorchek-day": {
+    itinerary: [
+      { time: "08:00", title: "Бишкектен чыгуу", body: "Ала-Тоо аянтында жолугуп, Чүй өрөөнү менен чыгышты карай жөнөйбүз." },
+      { time: "10:00", title: "Бурана жана Баласагун", body: "Мунаранын аймагын жана ачык асман алдындагы таш эстеликтерди гид менен көрөбүз." },
+      { time: "13:00", title: "Конорчек капчыгайы", body: "Капчыгайда жеңил сейил, пикник жана кызыл аскаларда сүрөткө түшүүгө убакыт." },
+      { time: "18:00", title: "Бишкекке кайтуу", body: "Кечке жуук Ала-Тоо аянтына кайтабыз." },
+    ],
+    whatToBring: kyrgyzBaseKit,
+  },
+  "jeti-oguz-barskoon-escape": {
+    itinerary: [
+      { time: "1-күн", title: "Жети-Өгүздүн кызыл аскалары", body: "Караколдон баштап, «Жети бука» аскаларынын жанында сейилдеп, конок үйүнө жайгашабыз." },
+      { time: "2-күн", title: "Барскоондун шаркыратмалары", body: "Эртең менен токой аркылуу шаркыратмаларга басып, түштөн кийин Караколго кайтабыз." },
+    ],
+    whatToBring: kyrgyzOvernightKit,
+  },
+  "arslanbob-walnut-forest": {
+    itinerary: [
+      { time: "1-күн", title: "Оштан Арсланбобго", body: "Ошто жолугуп, тоо айылына барабыз жана тосуп алуучу үй-бүлө менен таанышабыз." },
+      { time: "2-күн", title: "Токой жана шаркыратма", body: "Жаңгак токоюнда жана шаркыратмадагы көрүнүш чекитинде жайбаракат сейил." },
+      { time: "3-күн", title: "Айылдагы таң жана кайтуу", body: "Ошко кайтаар алдында айылда бош убакыт болот." },
+    ],
+    whatToBring: kyrgyzOvernightKit,
+  },
 };
 
 export const CANCELLATION_POLICY_KY =
@@ -784,6 +856,24 @@ const sightsByTour: Record<string, TourSight[]> = {
     { icon: "⛺", english: "Trekking camp", russian: "Треккинговый лагерь", kyrgyz: "Треккинг лагери" },
     { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
     { icon: "🥾", english: "Multi-day trek", russian: "Многодневный трек", kyrgyz: "Көп күндүк трек" },
+  ],
+  "burana-konorchek-day": [
+    { icon: "🏛", english: "Burana Tower", russian: "Башня Бурана", kyrgyz: "Бурана мунарасы" },
+    { icon: "🏜", english: "Red canyon", russian: "Красный каньон", kyrgyz: "Кызыл капчыгай" },
+    { icon: "🧺", english: "Picnic stop", russian: "Пикник", kyrgyz: "Пикник" },
+    { icon: "🏔", english: "Valley views", russian: "Виды на долину", kyrgyz: "Өрөөндүн көрүнүшү" },
+  ],
+  "jeti-oguz-barskoon-escape": [
+    { icon: "🪨", english: "Red cliffs", russian: "Красные скалы", kyrgyz: "Кызыл аскалар" },
+    { icon: "💧", english: "Waterfalls", russian: "Водопады", kyrgyz: "Шаркыратмалар" },
+    { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
+    { icon: "🏡", english: "Guesthouse stay", russian: "Ночь в гостевом доме", kyrgyz: "Конок үйүндө түнөө" },
+  ],
+  "arslanbob-walnut-forest": [
+    { icon: "🌳", english: "Walnut forest", russian: "Ореховый лес", kyrgyz: "Жаңгак токою" },
+    { icon: "💧", english: "Waterfall", russian: "Водопад", kyrgyz: "Шаркыратма" },
+    { icon: "🏡", english: "Village guesthouse", russian: "Сельский гостевой дом", kyrgyz: "Айылдык конок үйү" },
+    { icon: "🥾", english: "Forest trail", russian: "Лесная тропа", kyrgyz: "Токой чыйыры" },
   ],
 };
 

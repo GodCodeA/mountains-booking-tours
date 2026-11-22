@@ -81,6 +81,27 @@ const points: Record<string, MapPoint> = {
     russian: "Район Каракольских озёр",
     kyrgyz: "Каракол көлдөрүнүн аймагы",
   },
+  "burana-konorchek-day": {
+    latitude: 42.746,
+    longitude: 75.25,
+    english: "Burana Tower and Konorchek canyon area",
+    russian: "Башня Бурана и район каньона Конорчек",
+    kyrgyz: "Бурана мунарасы жана Конорчек капчыгайынын аймагы",
+  },
+  "jeti-oguz-barskoon-escape": {
+    latitude: 42.322,
+    longitude: 78.008,
+    english: "Jeti-Oguz and Barskoon area",
+    russian: "Район Джети-Огуза и Барскоона",
+    kyrgyz: "Жети-Өгүз жана Барскоон аймагы",
+  },
+  "arslanbob-walnut-forest": {
+    latitude: 41.341,
+    longitude: 72.932,
+    english: "Arslanbob village and walnut forest area",
+    russian: "Село Арсланбоб и район орехового леса",
+    kyrgyz: "Арсланбоб айылы жана жаңгак токоюнун аймагы",
+  },
 };
 
 export function tourMapPoint(slug: string, language: Language) {

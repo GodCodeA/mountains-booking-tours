@@ -429,6 +429,45 @@ export const tourRatings: Record<string, TourRating> = {
     ],
     isSample: true,
   },
+  "burana-konorchek-day": {
+    rating: 4.8,
+    count: 108,
+    reviews: [
+      { name: "Диана", from: "Кыргызстан", text: "Для одного дня идеально: без тяжёлого похода, но и история, и красивые скалы успели посмотреть. В каньоне было очень тихо.", isSample: true },
+      { name: "Бакыт", from: "Кыргызстан", text: "Буранадан кийин Конорчек таптакыр башка дүйнөдөй сезилди. Жөө басуу жеңил, үй-бүлө менен да барса болот экен.", isSample: true },
+      { name: "Ермек", from: "Казахстан", text: "Хорошо собранный маршрут, гид рассказывал не заученно. На пикнике было ветрено, берите тёплый слой.", isSample: true },
+      { name: "Айдана", from: "Кыргызстан", text: "Конорчектин кызыл аскалары сүрөттөгүдөн да кооз экен. Убакыт жетиштүү болду, эч жакка шашкан жокпуз.", isSample: true },
+      { name: "Наталья", from: "Россия", text: "Очень удобный вариант из Бишкека. Всё вовремя и без лишней суеты.", isSample: true },
+      { name: "Oliver", from: "United Kingdom", text: "A surprisingly varied day: archaeology in the morning and a very scenic canyon walk after lunch.", isSample: true },
+    ],
+    isSample: true,
+  },
+  "jeti-oguz-barskoon-escape": {
+    rating: 4.9,
+    count: 126,
+    reviews: [
+      { name: "Камила", from: "Кыргызстан", text: "Джети-Огузду көп көргөм, бирок Барскоон менен кошулганда сапар абдан толук болуптур. Конок үйү да таза, жылуу экен.", isSample: true },
+      { name: "Екатерина", from: "Россия", text: "Скалы впечатляют сразу, а на следующий день были совсем другие пейзажи и водопады. Темп комфортный.", isSample: true },
+      { name: "Азамат", from: "Кыргызстан", text: "Жолдо токтоолор туура тандалыптыр. Экинчи күнү бир аз жамгыр болду, бирок токой андан бетер кооз көрүнүп калды.", isSample: true },
+      { name: "Сергей", from: "Казахстан", text: "Ездили вдвоём, всё понравилось. Особенно вечер в гостевом доме и утренняя прогулка к воде.", isSample: true },
+      { name: "Назгуль", from: "Кыргызстан", text: "Кыска трекке даярданбагандарга да ылайыктуу. Көрүнүштөр абдан сонун, сүрөт көп тарттык.", isSample: true },
+      { name: "Hannah", from: "Germany", text: "Beautiful landscapes without the pressure of a demanding trek. A great two-day introduction to the area.", isSample: true },
+    ],
+    isSample: true,
+  },
+  "arslanbob-walnut-forest": {
+    rating: 4.8,
+    count: 104,
+    reviews: [
+      { name: "Эльвира", from: "Кыргызстан", text: "Арсланбобду биринчи жолу көрдүм. Токой, суу үнү, айылдын маанайы — баары жайдары. Үч күн бат эле өтүп кетти.", isSample: true },
+      { name: "Олег", from: "Россия", text: "Совсем другой Кыргызстан, не похожий на Иссык-Куль. Понравилось, что маршрут не перегружен, можно просто смотреть и гулять.", isSample: true },
+      { name: "Айсулуу", from: "Кыргызстан", text: "Конок үйдөгүлөр абдан меймандос болду. Шаркыратмага чейин жол жеңил, балдар менен да келсе болот деп ойлойм.", isSample: true },
+      { name: "Марина", from: "Узбекистан", text: "Поездка получилась очень уютной. В лесу прохладно даже днём, куртка пригодилась.", isSample: true },
+      { name: "Талант", from: "Кыргызстан", text: "Айылдын жанындагы токойго эртең менен барганыбыз эң жакшы учур болду. Эл аз, аба таза.", isSample: true },
+      { name: "Maya", from: "Singapore", text: "Peaceful, green and very different from the high-mountain tours. The local stay made it special.", isSample: true },
+    ],
+    isSample: true,
+  },
 };
 
 export function tourRating(slug: string) {
