@@ -20,10 +20,15 @@ const REVIEW_MINUTES = ["00", "08", "15", "22", "30", "38", "45", "52"] as const
 
 /** Stable demo review times: March–October avoids the winter season. */
 export function reviewTimestamp(slug: string, index: number): ReviewTimestamp {
-  const hash = Array.from(`${slug}-${index}`).reduce(
-    (total, character) => (total * 31 + character.charCodeAt(0)) >>> 0,
-    0,
-  );
+  let hash = 2166136261;
+  for (const character of `${slug}-${index}`) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 2246822507);
+  hash ^= hash >>> 13;
+  hash >>>= 0;
   const month = REVIEW_MONTHS[hash % REVIEW_MONTHS.length]!;
   const day = ((hash >>> 3) % 27) + 1;
   const hour = 9 + ((hash >>> 7) % 12);
