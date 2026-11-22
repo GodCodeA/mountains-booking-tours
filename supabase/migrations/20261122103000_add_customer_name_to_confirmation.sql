@@ -1,6 +1,9 @@
 -- The confirmation link is a high-entropy, unguessable token. Expose only the
 -- guest's own submitted name so the confirmation can be personalised; contact
 -- details remain private and are never returned by this function.
+-- PostgreSQL requires recreating a function when its OUT/return columns change.
+DROP FUNCTION IF EXISTS public.get_booking_confirmation(text);
+
 CREATE OR REPLACE FUNCTION public.get_booking_confirmation(_reference text)
 RETURNS TABLE (
   reference text,
