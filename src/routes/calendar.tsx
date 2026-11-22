@@ -32,12 +32,16 @@ export const Route = createFileRoute("/calendar")({
 });
 
 function dateFromIso(value: string) {
-  return new Date(`${value}T12:00:00Z`);
+  // React Day Picker works with local calendar dates. Keep the database date
+  // as a local date too, otherwise UTC formatting can move it to the prior
+  // month in Bishkek (for example, 1 November → 31 October UTC).
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year!, month! - 1, day!);
 }
 
 function isoFromDate(value: Date) {
-  return `${value.getUTCFullYear()}-${String(value.getUTCMonth() + 1).padStart(2, "0")}-${String(
-    value.getUTCDate(),
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(
+    value.getDate(),
   ).padStart(2, "0")}`;
 }
 
@@ -83,14 +87,12 @@ function DepartureCalendar() {
       return month.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
         month: "long",
         year: "numeric",
-        timeZone: "UTC",
       });
     },
     formatWeekdayName: (day: Date) => {
       if (language === "ky") return KYRGYZ_WEEKDAYS[day.getDay()]!;
       return day.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
         weekday: "short",
-        timeZone: "UTC",
       });
     },
   };
