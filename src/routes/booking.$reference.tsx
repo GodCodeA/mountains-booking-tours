@@ -133,21 +133,30 @@ function Confirmation() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={copyConfirmationLink}
-          className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
-        >
-          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          {copied ? t("linkCopied") : t("copyLink")}
-        </button>
-        <Link
-          to="/tours"
-          className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
-        >
-          {t("browseTrips")}
-        </Link>
+      <div className="mt-6">
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={copyConfirmationLink}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+          >
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? t("linkCopied") : t("copyLink")}
+          </button>
+          <Link
+            to="/tours"
+            className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
+          >
+            {t("browseTrips")}
+          </Link>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground/65">
+          {text(
+            "Keep this private link to return to your trip details.",
+            "Сохраните эту личную ссылку, чтобы вернуться к деталям поездки.",
+            "Сапардын чоо-жайына кайтуу үчүн бул жеке шилтемени сактап коюңуз.",
+          )}
+        </p>
       </div>
     </div>
   );
