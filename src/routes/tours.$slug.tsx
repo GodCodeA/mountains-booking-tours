@@ -679,12 +679,12 @@ function TourBody({
                       key={`${review.name}-${review.from}`}
                       className="p-5 [&+article]:border-t"
                     >
-                      <p className="text-sm leading-relaxed text-muted-foreground">{review.text}</p>
+                      <p className="text-sm leading-relaxed text-foreground/90">{review.text}</p>
                       <p className="mt-4 text-sm font-bold">
                         {review.name}
-                        <span className="font-normal text-muted-foreground"> · {review.from}</span>
+                        <span className="font-normal text-muted-foreground/80"> · {review.from}</span>
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
+                      <p className="mt-1 text-xs text-muted-foreground/65">
                         {text("Published", "Опубликовано", "Жарыяланды")} ·{" "}
                         {formatDate(publishedAt.date, language)} · {formatTime(publishedAt.time)}
                       </p>
