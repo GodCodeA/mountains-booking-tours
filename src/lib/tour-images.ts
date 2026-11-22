@@ -43,6 +43,12 @@ import tashRabatInterior from "@/assets/tour-tash-rabat-gallery-interior.webp";
 import tashRabatValley from "@/assets/tour-tash-rabat-gallery-valley.webp";
 import kochkorFeltWool from "@/assets/tour-kochkor-felt-gallery-wool.webp";
 import kochkorFeltVillage from "@/assets/tour-kochkor-felt-gallery-village.webp";
+import buranaKonorchekTower from "@/assets/tour-burana-konorchek-gallery-tower.webp";
+import buranaKonorchekCanyon from "@/assets/tour-burana-konorchek-gallery-canyon.webp";
+import jetiOguzBarskoonCliffs from "@/assets/tour-jeti-oguz-barskoon-gallery-cliffs.webp";
+import jetiOguzBarskoonWaterfall from "@/assets/tour-jeti-oguz-barskoon-gallery-waterfall.webp";
+import arslanbobWalnutForest from "@/assets/tour-arslanbob-gallery-walnut-forest.webp";
+import arslanbobWaterfall from "@/assets/tour-arslanbob-gallery-waterfall.webp";
 
 const images: Record<string, string> = {
   "ala-archa": alaArcha,
@@ -79,9 +85,17 @@ const galleries: Record<string, string[]> = {
   kegety: [kegety, kegetyWaterfall, kegetyTrail],
   suusamyr: [suusamyr, suusamyrYurts, suusamyrMeadow],
   "karakol-lakes": [karakolLakes, karakolLakesLake, karakolLakesTrail],
-  "burana-konorchek": [buranaKonorchek],
-  "jeti-oguz-barskoon": [jetiOguzBarskoon],
-  arslanbob: [arslanbob],
+  "burana-konorchek": [
+    buranaKonorchek,
+    buranaKonorchekTower,
+    buranaKonorchekCanyon,
+  ],
+  "jeti-oguz-barskoon": [
+    jetiOguzBarskoon,
+    jetiOguzBarskoonCliffs,
+    jetiOguzBarskoonWaterfall,
+  ],
+  arslanbob: [arslanbob, arslanbobWalnutForest, arslanbobWaterfall],
   "lenin-peak-base-camp": [
     leninPeakBaseCamp,
     leninPeakBaseCampTrail,
