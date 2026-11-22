@@ -41,6 +41,22 @@ function isoFromDate(value: Date) {
   ).padStart(2, "0")}`;
 }
 
+const KYRGYZ_MONTHS = [
+  "январь",
+  "февраль",
+  "март",
+  "апрель",
+  "май",
+  "июнь",
+  "июль",
+  "август",
+  "сентябрь",
+  "октябрь",
+  "ноябрь",
+  "декабрь",
+];
+const KYRGYZ_WEEKDAYS = ["жк.", "дш.", "шш.", "шр.", "бш.", "жм.", "иш."];
+
 function DepartureCalendar() {
   const { language } = useI18n();
   const text = (english: string, russian: string, kyrgyz: string) =>
@@ -61,6 +77,23 @@ function DepartureCalendar() {
   const selectedDepartures = departures.filter((departure) => departure.departure_date === selectedKey);
   const selectedLabel = selectedKey ? formatDate(selectedKey, language) : "";
   const availableDates = dateKeys.map(dateFromIso);
+  const calendarFormatters = {
+    formatCaption: (month: Date) => {
+      if (language === "ky") return `${KYRGYZ_MONTHS[month.getMonth()]} ${month.getFullYear()}`;
+      return month.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+    },
+    formatWeekdayName: (day: Date) => {
+      if (language === "ky") return KYRGYZ_WEEKDAYS[day.getDay()]!;
+      return day.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
+        weekday: "short",
+        timeZone: "UTC",
+      });
+    },
+  };
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
@@ -92,19 +125,7 @@ function DepartureCalendar() {
                   "[&>button]:font-bold [&>button]:text-primary [&>button]:ring-1 [&>button]:ring-primary/40 hover:[&>button]:bg-primary/15",
               }}
               disabled={(date) => !dateKeys.includes(isoFromDate(date))}
-              formatters={{
-                formatCaption: (month) =>
-                  month.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
-                    month: "long",
-                    year: "numeric",
-                    timeZone: "UTC",
-                  }),
-                formatWeekdayName: (day) =>
-                  day.toLocaleDateString(language === "ru" ? "ru-RU" : "en-GB", {
-                    weekday: "short",
-                    timeZone: "UTC",
-                  }),
-              }}
+              formatters={calendarFormatters}
               className="mx-auto w-full [&_.rdp-month]:gap-5 [&_.rdp-weekday]:text-center"
             />
           ) : (
@@ -118,6 +139,7 @@ function DepartureCalendar() {
                   "[&>button]:font-bold [&>button]:text-primary [&>button]:ring-1 [&>button]:ring-primary/40 hover:[&>button]:bg-primary/15",
               }}
               disabled={(date) => !dateKeys.includes(isoFromDate(date))}
+              formatters={calendarFormatters}
               className="mx-auto w-full [&_.rdp-month]:gap-5 [&_.rdp-weekday]:text-center"
             />
           )}

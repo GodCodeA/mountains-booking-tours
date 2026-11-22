@@ -44,7 +44,7 @@ const copy = {
   },
   ru: {
     home: "Главная",
-    calendar: "Жылнаама",
+    calendar: "Календарь",
     tours: "Туры",
     owner: "Кабинет",
     language: "Язык",
@@ -83,7 +83,7 @@ const copy = {
   },
   ky: {
     home: "Башкы бет",
-    calendar: "Календарь",
+    calendar: "Жылнаама",
     tours: "Турлар",
     owner: "Кабинет",
     language: "Тил",
