@@ -75,6 +75,13 @@ Dependency versions are pinned in `bun.lock`; this repository intentionally does
 
 `npm run build`, `npm run typecheck`, `npm test` and `npm run test:e2e` work too if Bun is not installed and dependencies are already available.
 
+## Quality checks
+
+- `bun run lint` checks source quality and formatting.
+- `bun run typecheck` verifies TypeScript without emitting files.
+- `bun run test` runs unit tests for booking validation, capacity, Bishkek-time dates and 48-hour change rules.
+- `bun run test:e2e` runs Playwright flows in Chromium and WebKit: tour selection, booking steps, mocked Turnstile verification, calendar, language switching and responsive layouts.
+
 Create local configuration outside Git. Never put real secrets in source code or a committed `.env` file:
 
 ```dotenv
