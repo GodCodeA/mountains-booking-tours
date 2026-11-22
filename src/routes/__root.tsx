@@ -11,6 +11,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { I18nProvider, type Language } from "@/lib/i18n";
@@ -169,6 +170,7 @@ function RootComponent() {
             <Outlet />
           </main>
           <SiteFooter />
+          <ScrollToTop />
         </div>
       </I18nProvider>
       <Toaster position="top-center" />
