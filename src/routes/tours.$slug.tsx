@@ -679,15 +679,12 @@ function TourBody({
                       key={`${review.name}-${review.from}`}
                       className="p-5 [&+article]:border-t"
                     >
-                      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
-                        <p className="text-sm font-bold">
-                          {review.name}
-                          <span className="font-normal text-muted-foreground/80"> · {review.from}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground/65">
-                          {publishedAt.date.split("-").reverse().join(".")} · {formatTime(publishedAt.time)}
-                        </p>
-                      </div>
+                      <p className="text-sm font-bold">
+                        {review.name}
+                        <span className="font-normal text-muted-foreground/65">
+                          {" "}· {publishedAt.date.split("-").reverse().join(".")} · {formatTime(publishedAt.time)}
+                        </span>
+                      </p>
                       <p className="mt-4 text-sm leading-relaxed text-foreground/90">{review.text}</p>
                     </article>
                   );
