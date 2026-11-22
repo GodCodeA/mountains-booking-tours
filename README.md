@@ -12,7 +12,7 @@ A mountain-tour booking platform for a small owner-run tour business in Bishkek,
 
 ## Main features
 
-- Ten guided sample tours with details, inclusions and pricing
+- Seventeen guided sample tours with details, inclusions and pricing
 - Four-question trip finder that recommends up to three tours by time, pace, yurt stay and budget
 - Live availability per departure (fully booked or past dates can't be selected)
 - Four-step booking flow with inline validation
@@ -43,7 +43,7 @@ No payment is taken online; guests pay on the day.
 
 The language control in the site header switches between English, Russian and Kyrgyz. The selection is stored in the visitor's browser, so it stays selected after navigation and refreshes.
 
-Tour records remain canonical in Supabase in English. Russian and Kyrgyz display copy for the ten current sample tours lives in `src/lib/tour-localization.ts`; homepage guides and FAQ, plus reviews in their authors' original languages, are in `src/lib/site-content.ts`; itinerary and packing-list translations are in `src/lib/tour-content.ts`.
+Tour records remain canonical in Supabase in English. Russian and Kyrgyz display copy for the seventeen current sample tours lives in `src/lib/tour-localization.ts`; homepage guides and FAQ, plus reviews in their authors' original languages, are in `src/lib/site-content.ts`; itinerary and packing-list translations are in `src/lib/tour-content.ts`.
 
 When adding a real tour, add its Russian and Kyrgyz display copy in those files before presenting it as fully localized. Real customer reviews should normally be shown in their original language, with a clearly labelled translation only when one is provided.
 
@@ -68,9 +68,12 @@ bun run build
 bun run lint
 bun run typecheck
 bun run test
+bun run test:e2e
 ```
 
-`npm run build`, `npm run typecheck` and `npm test` work too if Bun is not installed.
+Dependency versions are pinned in `bun.lock`; this repository intentionally does not use `package-lock.json`. Do not add a second lockfile.
+
+`npm run build`, `npm run typecheck`, `npm test` and `npm run test:e2e` work too if Bun is not installed and dependencies are already available.
 
 Create local configuration outside Git. Never put real secrets in source code or a committed `.env` file:
 
