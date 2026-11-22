@@ -473,7 +473,7 @@ export const tourRatings: Record<string, TourRating> = {
     reviews: [
       { name: "Бектур", from: "Кыргызстан", text: "Бул чокуга чыгуу эмес экенин туура түшүндүрүп беришти. Бийиктик олуттуу сезилет, бирок лагердеги көрүнүштөр баарына татыды.", isSample: true },
       { name: "Ирина", from: "Россия", text: "Маршрут сложный именно высотой, не скоростью. Хорошо, что было время на акклиматизацию и без гонки.", isSample: true },
-      { name: "Асел", from: "Кыргызстан", text: "Ачик-Таш өрөөнү өтө кең, тынч жана сулуу экен. Жылуу кийим сөзсүз керек болду.", isSample: true },
+      { name: "Асел", from: "Кыргызстан", text: "Ачык-Таш өрөөнү өтө кең, тынч жана сулуу экен. Жылуу кийим сөзсүз керек болду.", isSample: true },
       { name: "Рустам", from: "Узбекистан", text: "Самая сильная поездка за лето. Требует подготовки, но организация была спокойной и понятной.", isSample: true },
       { name: "Charlotte", from: "France", text: "The altitude made this feel genuinely remote. I appreciated the careful pace and clear briefings.", isSample: true },
     ], isSample: true,

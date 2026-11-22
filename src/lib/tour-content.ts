@@ -838,7 +838,7 @@ const kyrgyzContent: Record<string, TourExtras> = {
   },
   "lenin-peak-base-camp": {
     itinerary: [
-      { time: "1-күн", title: "Оштан Ачик-Ташка", body: "Ошто жолугуп, бийик тоо өрөөнүнө барабыз жана лагерге жайгашабыз." },
+      { time: "1-күн", title: "Оштан Ачык-Ташка", body: "Ошто жолугуп, бийик тоо өрөөнүнө барабыз жана лагерге жайгашабыз." },
       { time: "2–4-күндөр", title: "Бийиктикке көнүү жана сейил", body: "Гид менен кыска сейилдер жана эс алуу бийиктикке көнүүгө жардам берет; план аба ырайына жараша өзгөрөт." },
       { time: "5-күн", title: "Ошко кайтуу", body: "Лагерди жыйнап, кайра Ошко жөнөйбүз." },
     ],
@@ -971,7 +971,7 @@ const sightsByTour: Record<string, TourSight[]> = {
   "lenin-peak-base-camp": [
     { icon: "🏔", english: "Pamir peak views", russian: "Виды на Памир", kyrgyz: "Памир чокуларынын көрүнүшү" },
     { icon: "⛺", english: "High camp", russian: "Высокогорный лагерь", kyrgyz: "Бийик тоо лагери" },
-    { icon: "🌄", english: "Achik-Tash valley", russian: "Долина Ачик-Таш", kyrgyz: "Ачик-Таш өрөөнү" },
+    { icon: "🌄", english: "Achik-Tash valley", russian: "Долина Ачик-Таш", kyrgyz: "Ачык-Таш өрөөнү" },
     { icon: "🥾", english: "Acclimatisation walks", russian: "Акклиматизационные прогулки", kyrgyz: "Бийиктикке көнүү сейилдери" },
   ],
   "sary-chelek-lake-escape": [
