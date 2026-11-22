@@ -69,9 +69,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 142,
     reviews: [
       {
-        name: "Marta",
-        from: "Poland",
-        text: "A brilliant first hike near Bishkek. We stopped more than I expected, which was actually great — no one felt left behind. I was travelling alone and still felt part of the group from the first few minutes. The tea stop with the glacier view was a small thing, but probably my favourite moment of the day.",
+        name: "Айпери",
+        from: "Кыргызстан",
+        text: "Бишкекке жакын жердеги биринчи жөө жүрүшүм абдан жакты. Күтүлгөндөн көбүрөөк токтодук, бирок ошондо эч ким артта калган жок. Жалгыз барсам да, биринчи мүнөттөрдөн тартып өзүмдү топтун бир бөлүгү сездим. Мөңгүнү карап чай ичкен тыныгуу өзгөчө эсимде калды.",
         isSample: true,
       },
       {
@@ -81,9 +81,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Jules",
-        from: "France",
-        text: "Easy to join as a solo traveller. The route had enough challenge, but there was time to stop and enjoy the valley too.",
+        name: "Бектур",
+        from: "Кыргызстан",
+        text: "Жалгыз барууга да ыңгайлуу тур экен. Маршрут кызыктуу, ошол эле учурда өрөөндүн кооздугун көрүп, токтоп эс алууга убакыт болду.",
         isSample: true,
       },
       {
@@ -93,9 +93,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Tom",
-        from: "United States",
-        text: "A thoughtful guide and a genuinely beautiful route. It was the highlight of our short stay in Bishkek.",
+        name: "Владимир",
+        from: "Россия",
+        text: "Внимательный гид и по-настоящему красивый маршрут. Это стало главным впечатлением от нашей короткой поездки в Бишкек.",
         isSample: true,
       },
       {
@@ -112,9 +112,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 96,
     reviews: [
       {
-        name: "Hannah",
-        from: "Australia",
-        text: "The yurt camp, the lake and the long drive over the pass were all memorable. Long day in the car, yes, but totally worth it. We arrived just before sunset and the whole lake looked unreal. The hosts made us feel welcome straight away, even though we spoke almost no Russian or Kyrgyz.",
+        name: "Айсана",
+        from: "Кыргызстан",
+        text: "Боз үй лагери, көл жана ашуу аркылуу узак жол — баары эсте калды. Унаада узак отурдук, бирок толук арзыйт. Күн батардын алдында келдик, көл таптакыр башкача көрүнөт экен. Үй ээлери бизди дароо жылуу тосуп алышты.",
         isSample: true,
       },
       {
@@ -124,9 +124,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Chloe",
-        from: "Canada",
-        text: "The open landscape was extraordinary. Would happily go back.",
+        name: "Мирбек",
+        from: "Кыргызстан",
+        text: "Ачык талаа менен көлдүн көрүнүшү укмуш экен. Дагы баргым келет.",
         isSample: true,
       },
       {
@@ -149,9 +149,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 72,
     reviews: [
       {
-        name: "Nora",
-        from: "Canada",
-        text: "Remote in the best possible way. The permit information was clear beforehand, and every logistics detail was handled calmly. We were a little nervous about the road and border paperwork, but it turned out much easier than expected because the team had sent a clear list in advance.",
+        name: "Элнура",
+        from: "Кыргызстан",
+        text: "Алыс жайгашканы бул жердин эң жакшы жагы экен. Уруксат кагаздары тууралуу маалымат алдын ала так берилди, жол жана уюштуруу да жайбаракат өттү. Чек арадагы документтерден бир аз чочулаганбыз, бирок команда жөнөткөн тизмеден кийин баары күткөндөн жеңил болду.",
         isSample: true,
       },
       {
@@ -161,9 +161,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Ethan",
-        from: "United Kingdom",
-        text: "It is a demanding trip, no point pretending otherwise. But the team explained everything clearly and kept the group together.",
+        name: "Кубаныч",
+        from: "Кыргызстан",
+        text: "Бул оңой тур эмес, муну жашырбай эле коюш керек. Бирок команда баарын так түшүндүрүп, топту бирге кармады.",
         isSample: true,
       },
       {
@@ -186,9 +186,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 118,
     reviews: [
       {
-        name: "Elena",
-        from: "Spain",
-        text: "The valley was wonderfully quiet. And the hot springs after walking all day? Honestly, exactly what our legs needed. We had expected a quick stop, but ended up lingering by the river and changing our plans for the afternoon. No regrets at all.",
+        name: "Назгүл",
+        from: "Кыргызстан",
+        text: "Өрөөн абдан тынч экен. Күн бою баскандан кийин ысык булактар бутка дал келген эс алуу болду. Биз бат эле токтойбуз деп ойлогонбуз, бирок дарыянын жээгинде көпкө отуруп, түштөн кийинки планыбызды өзгөрттүк. Такыр өкүнгөн жокпуз.",
         isSample: true,
       },
       {
@@ -198,9 +198,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Maya",
-        from: "Singapore",
-        text: "Great valley, great springs.",
+        name: "Жибек",
+        from: "Кыргызстан",
+        text: "Өрөөн да, ысык булактар да сонун.",
         isSample: true,
       },
       {
@@ -229,9 +229,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 64,
     reviews: [
       {
-        name: "Owen",
-        from: "Ireland",
-        text: "Three very different days and huge views. The ridge day was tough for me, but completely worth it in the end. Bring layers: we had sun, wind and a little rain on the same day. It never felt unsafe or rushed though, which mattered a lot for our group.",
+        name: "Сергей",
+        from: "Казахстан",
+        text: "Три совершенно разных дня и очень большие виды. День на хребте дался непросто, но в итоге точно того стоил. Советую взять одежду слоями: за один день у нас были солнце, ветер и небольшой дождь. При этом не было ни спешки, ни чувства, что кто-то остаётся без внимания.",
         isSample: true,
       },
       {
@@ -241,9 +241,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Ben",
-        from: "New Zealand",
-        text: "The ridge views were outstanding. Proper mountain trek.",
+        name: "Наргиза",
+        from: "Кыргызстан",
+        text: "Кыркадан ачылган көрүнүштөр абдан күчтүү. Чыныгы тоо треги экен.",
         isSample: true,
       },
       {
@@ -266,9 +266,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 105,
     reviews: [
       {
-        name: "Liam",
-        from: "United Kingdom",
-        text: "Really good balance of lake time, easy walks and mountain views. We never felt like we were rushing from place to place. I liked that every overnight stop had a different feel, so it never became repetitive. The canyon day was a surprise favourite for us.",
+        name: "Каныкей",
+        from: "Кыргызстан",
+        text: "Көл жээгиндеги эс алуу, жеңил басуу жана тоо көрүнүштөрү жакшы айкалышкан. Бир жерден экинчи жерге шашып жаткандай сезилген жок. Ар бир түнөгөн жердин өз маанайы бар экен, ошондуктан сапар кайталанма болгон жок. Бизге капчыгайдагы күн күтүлбөгөндөй эң жакты.",
         isSample: true,
       },
       {
@@ -278,9 +278,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Olivia",
-        from: "United Kingdom",
-        text: "A great introduction to the region. Each day felt different, and there was enough free time to take it all in.",
+        name: "Тилек",
+        from: "Кыргызстан",
+        text: "Аймак менен таанышууга эң сонун сапар. Ар бир күн башкача өттү, көргөндөрдү шашпай кабыл алууга бош убакыт да жетиштүү болду.",
         isSample: true,
       },
       {
@@ -290,9 +290,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Nina",
-        from: "Switzerland",
-        text: "The scenery changed constantly, from shoreline to high valleys. It felt like much more than one trip.",
+        name: "Элина",
+        from: "Кыргызстан",
+        text: "Көл жээгинен бийик өрөөндөргө чейин көрүнүш дайыма өзгөрүп турду. Бир сапар эмес, бир нече саякаттай сезилди.",
         isSample: true,
       },
       {
@@ -309,9 +309,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 58,
     reviews: [
       {
-        name: "Freya",
-        from: "Germany",
-        text: "The family guesthouse made this trip special. Gentle walks, good food and a lovely green valley close to Bishkek. It was exactly what we needed after a few busy days in the city: no pressure to be constantly doing something, just good air and a very warm welcome.",
+        name: "Ольга",
+        from: "Россия",
+        text: "Семейный гостевой дом сделал эту поездку особенной. Неспешные прогулки, хорошая еда и зелёная долина недалеко от Бишкека. После нескольких насыщенных дней в городе нам как раз не хватало такого спокойного отдыха — свежего воздуха и тёплого приёма.",
         isSample: true,
       },
       {
@@ -321,9 +321,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Lea",
-        from: "Germany",
-        text: "The green valley and guesthouse hospitality made for such a calm weekend. Exactly the reset we needed.",
+        name: "Эрмек",
+        from: "Кыргызстан",
+        text: "Жашыл өрөөн жана конок үйдөгү меймандостук дем алышты абдан тынч өткөрүүгө шарт түздү. Дал ушундай эс алуу керек болчу.",
         isSample: true,
       },
       {
@@ -346,9 +346,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 89,
     reviews: [
       {
-        name: "Mia",
-        from: "Singapore",
-        text: "A refreshing day outside the city. The waterfall was beautiful, and the guide shared lots of little local stories too. We didn't know the valley before booking, so those details made the route feel much more personal than simply following a trail.",
+        name: "Айсулуу",
+        from: "Кыргызстан",
+        text: "Шаардын сыртында бир күн өткөрүү абдан сергитти. Шаркыратма кооз, ал эми гид жергиликтүү майда окуяларды да көп айтып берди. Бул өрөөндү мурда билчү эмеспиз, ошондуктан ошол баяндар маршрутту жөн гана жол менен жүрүүдөн алда канча кызыктуу кылды.",
         isSample: true,
       },
       {
@@ -358,9 +358,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Ella",
-        from: "Singapore",
-        text: "Lovely day out. The waterfall was worth it.",
+        name: "Медер",
+        from: "Кыргызстан",
+        text: "Жакшы күн болду. Шаркыратмага жеткенге арзыйт.",
         isSample: true,
       },
       {
@@ -383,9 +383,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 47,
     reviews: [
       {
-        name: "Grace",
-        from: "New Zealand",
-        text: "A peaceful weekend with wide open landscapes and a genuinely warm welcome at the yurt camp. The pass was windy and we were glad we had brought an extra jacket, but the evening in the yurt was so cosy. Waking up to those views felt a bit unreal.",
+        name: "Самат",
+        from: "Кыргызстан",
+        text: "Кең талаалар жана боз үй лагериндеги чын дилден тосуп алуу менен тынч дем алыш болду. Ашууда шамалдуу экен, кошумча күрмө алганыбыз жакшы болуптур. Бирок боз үйдөгү кеч абдан жылуу, эртең мененки көрүнүш болсо жомоктогудай сезилди.",
         isSample: true,
       },
       {
@@ -395,9 +395,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Finn",
-        from: "Ireland",
-        text: "Wide skies, quiet pastures and a really warm yurt-camp welcome. A brilliant weekend out of the city.",
+        name: "Бурул",
+        from: "Кыргызстан",
+        text: "Асман кең, жайыттар тынч, боз үй лагериндеги тосуп алуу абдан жылуу болду. Шаардан чыгып эс алууга мыкты дем алыш экен.",
         isSample: true,
       },
       {
@@ -420,9 +420,9 @@ export const tourRatings: Record<string, TourRating> = {
     count: 53,
     reviews: [
       {
-        name: "Theo",
-        from: "France",
-        text: "The alpine lakes were spectacular, even with the weather changing every five minutes. This is a proper trek though — come prepared. Our boots got properly muddy and the climb was no joke, but the camp evenings and the views made it feel earned. One of the best routes I have done in Central Asia.",
+        name: "Акылай",
+        from: "Кыргызстан",
+        text: "Аба ырайы бат-бат өзгөрсө да, бийик тоодогу көлдөр укмуш болду. Бул чыныгы трек, ошондуктан алдын ала даярдануу керек. Бут кийимибиз ылай болуп, көтөрүлүш оңой болгон жок, бирок лагердеги кечтер менен көрүнүштөр баарына арзытты. Борбордук Азияда барган эң жакшы маршруттарымдын бири.",
         isSample: true,
       },
       {
@@ -432,9 +432,9 @@ export const tourRatings: Record<string, TourRating> = {
         isSample: true,
       },
       {
-        name: "Sven",
-        from: "Sweden",
-        text: "A real trek with dramatic lakes and satisfying climbs. The daily rhythm was well judged from start to finish.",
+        name: "Нурлан",
+        from: "Кыргызстан",
+        text: "Көлдөрү кооз, көтөрүлүштөрү кызыктуу чыныгы трек. Башынан аягына чейин күнүмдүк темп жакшы тандалган.",
         isSample: true,
       },
       {
