@@ -74,12 +74,24 @@ export type Booking = {
 export type BookingConfirmation = {
   reference: string;
   customer_name?: string;
+  departure_id: string;
   guests: number;
   total_price: number;
+  status: "confirmed" | "pending" | "cancelled";
+  tour_id: string;
+  tour_slug: string;
   tour_name: string;
   meeting_point: string;
   image_key: string;
   departure_date: string;
+  departure_time: string;
+};
+
+export type GuestBookingMessage = {
+  id: string;
+  booking_id: string;
+  body: string;
+  created_at: string;
 };
 
 export type DashboardBooking = Booking & { tours: Tour; departures: Departure };
@@ -340,6 +352,125 @@ export const listDashboardBookings = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data ?? []) as DashboardBooking[];
+  });
+
+export const listGuestBookingMessages = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertBookingAdmin(context);
+    const db = await databaseAdmin();
+    const { data, error } = await db
+      .from("booking_guest_messages")
+      .select("id, booking_id, body, created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as GuestBookingMessage[];
+  });
+
+const guestReferenceSchema = z
+  .string()
+  .trim()
+  .regex(/^[A-F0-9]{32,}$/i, "Invalid booking link");
+
+async function bookingByGuestReference(reference: string) {
+  const db = await databaseAdmin();
+  const { data, error } = await db
+    .from("bookings")
+    .select("id, tour_id, departure_id, status")
+    .eq("reference", reference.toUpperCase())
+    .maybeSingle();
+  if (error || !data) throw new Error("Booking not found");
+  return { db, booking: data as Pick<Booking, "id" | "tour_id" | "departure_id" | "status"> };
+}
+
+/** Guest confirmation links are bearer credentials for their own booking only. */
+export const guestCancelBooking = createServerFn({ method: "POST" })
+  .validator((data) => z.object({ reference: guestReferenceSchema }).parse(data))
+  .handler(async ({ data }) => {
+    const { db, booking } = await bookingByGuestReference(data.reference);
+    if (booking.status === "cancelled") return { status: "cancelled" as const };
+    const { data: departure, error } = await db
+      .from("departures")
+      .select("departure_date, departure_time")
+      .eq("id", booking.departure_id)
+      .maybeSingle();
+    if (error || !departure) throw new Error("Departure not found");
+    if (!isBookingChangeAllowed(departure.departure_date, departure.departure_time)) {
+      return { status: "closed" as const };
+    }
+    const { error: updateError } = await db
+      .from("bookings")
+      .update({ status: "cancelled" })
+      .eq("id", booking.id);
+    if (updateError?.message.includes("BOOKING_CHANGE_CLOSED"))
+      return { status: "closed" as const };
+    if (updateError) throw updateError;
+    return { status: "cancelled" as const };
+  });
+
+export const guestRescheduleBooking = createServerFn({ method: "POST" })
+  .validator((data) =>
+    z.object({ reference: guestReferenceSchema, departureId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { db, booking } = await bookingByGuestReference(data.reference);
+    if (booking.status === "cancelled") return { status: "cancelled" as const };
+    if (booking.departure_id === data.departureId) return { status: "unchanged" as const };
+
+    const [{ data: current, error: currentError }, { data: target, error: targetError }] =
+      await Promise.all([
+        db
+          .from("departures")
+          .select("departure_date, departure_time")
+          .eq("id", booking.departure_id)
+          .maybeSingle(),
+        db
+          .from("departures")
+          .select("tour_id, departure_date")
+          .eq("id", data.departureId)
+          .maybeSingle(),
+      ]);
+    if (currentError || targetError || !current || !target || target.tour_id !== booking.tour_id) {
+      throw new Error("Invalid reschedule request");
+    }
+    if (!isBookingChangeAllowed(current.departure_date, current.departure_time)) {
+      return { status: "closed" as const };
+    }
+    if (!isPubliclyBookableDate(target.departure_date)) return { status: "unavailable" as const };
+
+    const { error: updateError } = await db
+      .from("bookings")
+      .update({ departure_id: data.departureId })
+      .eq("id", booking.id);
+    if (updateError?.message.includes("BOOKING_CHANGE_CLOSED"))
+      return { status: "closed" as const };
+    if (updateError?.message.includes("NOT_ENOUGH_SPOTS")) return { status: "full" as const };
+    if (updateError) throw updateError;
+    return { status: "moved" as const };
+  });
+
+export const sendGuestBookingMessage = createServerFn({ method: "POST" })
+  .validator((data) =>
+    z
+      .object({ reference: guestReferenceSchema, body: z.string().trim().min(2).max(1000) })
+      .parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { db, booking } = await bookingByGuestReference(data.reference);
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const { count, error: countError } = await db
+      .from("booking_guest_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("booking_id", booking.id)
+      .gte("created_at", fifteenMinutesAgo);
+    if (countError) throw countError;
+    if ((count ?? 0) >= 3) return { status: "rate_limited" as const };
+    const { error } = await db.from("booking_guest_messages").insert({
+      booking_id: booking.id,
+      body: data.body.trim(),
+    });
+    if (error) throw error;
+    return { status: "sent" as const };
   });
 
 /** Emergency exceptions are visible to owners but stay off the public API. */

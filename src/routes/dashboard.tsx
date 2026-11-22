@@ -42,11 +42,13 @@ import {
   isEmergencyCancellationAvailable,
   listEmergencyCancellationAudit,
   listDashboardBookings,
+  listGuestBookingMessages,
   rescheduleBooking,
   spotsLeft,
   type Booking,
   type Departure,
   type EmergencyCancellationAudit,
+  type GuestBookingMessage,
   type Tour,
 } from "@/lib/bookings";
 import { localizeTour } from "@/lib/tour-localization";
@@ -247,6 +249,7 @@ function OwnerDashboard() {
     localText(language, english, russian, kyrgyz);
   const fetchBookings = useServerFn(listDashboardBookings);
   const fetchEmergencyAudit = useServerFn(listEmergencyCancellationAudit);
+  const fetchGuestMessages = useServerFn(listGuestBookingMessages);
   const runCancel = useServerFn(cancelBooking);
   const {
     data: bookings,
@@ -261,6 +264,10 @@ function OwnerDashboard() {
     queryKey: ["emergency-cancellation-audit"],
     queryFn: async () => fetchEmergencyAudit(await ownerAuthHeaders()),
   });
+  const guestMessages = useQuery({
+    queryKey: ["guest-booking-messages"],
+    queryFn: async () => fetchGuestMessages(await ownerAuthHeaders()),
+  });
   const [tab, setTab] = useState<(typeof tabs)[number]>("Upcoming");
   const [rescheduling, setRescheduling] = useState<Row | null>(null);
   const [emergencyCancelling, setEmergencyCancelling] = useState<Row | null>(null);
@@ -272,6 +279,7 @@ function OwnerDashboard() {
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["dashboard-bookings"] });
     void queryClient.invalidateQueries({ queryKey: ["emergency-cancellation-audit"] });
+    void queryClient.invalidateQueries({ queryKey: ["guest-booking-messages"] });
     void queryClient.invalidateQueries({ queryKey: ["departures"] });
   };
 
@@ -332,6 +340,15 @@ function OwnerDashboard() {
       );
     });
   }, [bookings, dateFilter, search, statusFilter, tab, todays, tourFilter, upcoming]);
+  const messagesByBooking = useMemo(() => {
+    const byBooking = new Map<string, GuestBookingMessage[]>();
+    for (const message of guestMessages.data ?? []) {
+      const current = byBooking.get(message.booking_id) ?? [];
+      current.push(message);
+      byBooking.set(message.booking_id, current);
+    }
+    return byBooking;
+  }, [guestMessages.data]);
 
   async function signOut() {
     setSigningOut(true);
@@ -573,6 +590,28 @@ function OwnerDashboard() {
                 <p className="mt-3 rounded-md bg-secondary p-3 text-sm text-secondary-foreground">
                   {row.notes}
                 </p>
+              ) : null}
+
+              {messagesByBooking.get(row.id)?.length ? (
+                <div className="mt-3 space-y-2 rounded-md border border-primary/25 bg-primary/5 p-3">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                    {text("Guest messages", "Сообщения гостя", "Коноктун билдирүүлөрү")}
+                  </p>
+                  {messagesByBooking.get(row.id)?.map((message) => (
+                    <div
+                      key={message.id}
+                      className="border-t border-primary/15 pt-2 first:border-0 first:pt-0"
+                    >
+                      <p className="text-sm">{message.body}</p>
+                      <time
+                        className="mt-1 block text-xs text-muted-foreground"
+                        dateTime={message.created_at}
+                      >
+                        {formatBishkekDateTime(message.created_at, language)}
+                      </time>
+                    </div>
+                  ))}
+                </div>
               ) : null}
 
               <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">

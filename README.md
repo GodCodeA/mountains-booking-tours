@@ -15,8 +15,8 @@ A mountain-tour booking platform for a small owner-run tour business in Bishkek,
 - Ten guided sample tours with details, inclusions and pricing
 - Live availability per departure (fully booked or past dates can't be selected)
 - Four-step booking flow with inline validation
-- Booking confirmation page with a booking reference
-- Owner dashboard: today / upcoming / all bookings, reschedule and cancel
+- Private guest trip page: confirmation, calendar download, packing checklist, map link, request to change/cancel, and a message to the owner
+- Owner dashboard: today / upcoming / all bookings, reschedule and cancel, plus guest messages
 - English/Russian/Kyrgyz language switcher. It translates navigation, interface copy, guides, FAQ, tour cards, filters, tour details, packing lists, booking flow, confirmation, and owner dashboard; guest reviews remain in each author's original language
 - Dates are formatted in the selected language while all departure logic remains on Bishkek time
 
@@ -56,7 +56,7 @@ After creating the owner account in Supabase Auth, add its UUID in the SQL edito
 INSERT INTO public.admin_users (user_id) VALUES ('owner-auth-user-uuid');
 ```
 
-Public confirmation links use a long random booking reference and reveal only trip details, never contact information.
+Public confirmation links use a long random booking reference and reveal only trip details, never contact information. Treat this URL as a private guest key: it permits the guest to manage only that booking within the 48-hour policy and to send the owner a message. Guest messages are rate-limited and appear in the matching owner booking card; they do not send an email yet.
 
 ## Development
 
@@ -91,6 +91,7 @@ TURNSTILE_SECRET_KEY=0x...
 ## Production checklist
 
 - Apply all migrations in `supabase/migrations` in order.
+- In particular, apply `20261122123000_add_guest_booking_controls.sql` before using guest cancellation, rescheduling or messages.
 - Configure `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and the server-only `SUPABASE_SERVICE_ROLE_KEY` in the deployment environment.
 - Configure the Supabase Auth redirect URL for `https://your-domain/dashboard` and add the owner UUID to `admin_users`.
 - The booking form uses Cloudflare Turnstile with mandatory server-side Siteverify validation, plus a honeypot and a per-email limit of three attempts per 15 minutes.

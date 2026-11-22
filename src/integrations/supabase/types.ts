@@ -133,6 +133,35 @@ export type Database = {
           },
         ];
       };
+      booking_guest_messages: {
+        Row: {
+          booking_id: string;
+          body: string;
+          created_at: string;
+          id: string;
+        };
+        Insert: {
+          booking_id: string;
+          body: string;
+          created_at?: string;
+          id?: string;
+        };
+        Update: {
+          booking_id?: string;
+          body?: string;
+          created_at?: string;
+          id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "booking_guest_messages_booking_id_fkey";
+            columns: ["booking_id"];
+            isOneToOne: false;
+            referencedRelation: "bookings";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       departures: {
         Row: {
           created_at: string;
@@ -241,12 +270,17 @@ export type Database = {
         Returns: {
           customer_name: string;
           departure_date: string;
+          departure_id: string;
+          departure_time: string;
           guests: number;
           image_key: string;
           meeting_point: string;
           reference: string;
+          status: string;
           total_price: number;
+          tour_id: string;
           tour_name: string;
+          tour_slug: string;
         }[];
       };
       is_booking_admin: {
