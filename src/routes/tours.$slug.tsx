@@ -17,19 +17,13 @@ import {
 } from "lucide-react";
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
   CANCELLATION_POLICY,
   CANCELLATION_POLICY_KY,
   CANCELLATION_POLICY_RU,
   tourExtras,
   tourSights,
 } from "@/lib/tour-content";
-import { reviewTimestamp, siteContent, tourRating } from "@/lib/site-content";
+import { reviewTimestamp, tourRating } from "@/lib/site-content";
 import { TourRating } from "@/components/tour-rating";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -128,7 +122,6 @@ const SECTIONS = [
   ["map", "Map"],
   ["availability", "Dates"],
   ["reviews", "Reviews"],
-  ["faq", "FAQ"],
 ] as const;
 
 const stateStyles: Record<AvailabilityState, string> = {
@@ -150,7 +143,6 @@ function TourBody({
   const ru = language === "ru";
   const text = (english: string, russian: string, kyrgyz: string) =>
     localText(language, english, russian, kyrgyz);
-  const content = siteContent(language);
   tour = localizeTour(tour, language);
   const extras = tourExtras(tour.slug, language);
   const sights = tourSights(tour.slug, language);
@@ -254,7 +246,6 @@ function TourBody({
                       map: "Карта",
                       availability: "Даты",
                       reviews: "Отзывы",
-                      faq: "Частые вопросы",
                     }[id] ?? label)
                   : ({
                       overview: "Сереп",
@@ -266,7 +257,6 @@ function TourBody({
                       map: "Карта",
                       availability: "Даталар",
                       reviews: "Пикирлер",
-                      faq: "Көп берилүүчү суроолор",
                     }[id] ?? label)}
             </a>
           ))}
@@ -730,19 +720,6 @@ function TourBody({
             </section>
           ) : null}
 
-          <section id="faq" className="scroll-mt-32">
-            <h2 className="font-display text-4xl">
-              {text("FAQ", "Частые вопросы", "Көп берилүүчү суроолор")}
-            </h2>
-            <Accordion type="single" collapsible className="mt-4">
-              {content.faqs.map((f) => (
-                <AccordionItem key={f.q} value={f.q}>
-                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </section>
         </div>
 
         <aside className="h-fit lg:sticky lg:top-32">
