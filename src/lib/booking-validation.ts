@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Accepts international and local formats: +996 555 000 000, 0555 000 000, etc.
-const phoneRegex = /^\+?[0-9][0-9\s\-().]{5,19}$/;
+const phoneRegex = /^\+[1-9][0-9]{5,14}$/;
 
 export const bookingFormSchema = z.object({
   name: z

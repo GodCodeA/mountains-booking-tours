@@ -6,7 +6,7 @@ import { validateBookingForm, validateField } from "./booking-validation.ts";
 const validValues = {
   name: "Aida Osmonova",
   email: "aida@example.com",
-  phone: "+996 555 123 456",
+  phone: "+996555123456",
   whatsapp: "",
   notes: "Vegetarian meals, please.",
   guests: 2,

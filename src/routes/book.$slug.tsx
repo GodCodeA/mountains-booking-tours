@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Turnstile } from "@/components/turnstile";
+import { PhoneInput } from "@/components/phone-input";
 import {
   availabilityLabel,
   availabilityOf,
@@ -601,11 +602,17 @@ function BookingFlow() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="phone">{text("Phone", "Телефон", "Телефон")}</Label>
-                  <Input
-                    {...inputProps("phone")}
-                    type="tel"
-                    autoComplete="tel"
-                    placeholder="+996 555 000 000"
+                  <PhoneInput
+                    id="phone"
+                    value={phone}
+                    onChange={(value) => change("phone", value)}
+                    onBlur={() => blur("phone")}
+                    language={language}
+                    countryLabel={text("Country and calling code", "Страна и код", "Өлкө жана код")}
+                    placeholder="555 000 000"
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? "phone-error" : undefined}
+                    className={errors.phone ? "border-destructive" : undefined}
                   />
                   <FieldError id="phone-error" message={errors.phone} />
                 </div>
