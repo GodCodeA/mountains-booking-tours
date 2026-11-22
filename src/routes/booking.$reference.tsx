@@ -451,7 +451,11 @@ function Confirmation() {
               className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-semibold hover:bg-secondary"
             >
               <CalendarPlus className="h-4 w-4" />{" "}
-              {text("Add to calendar", "Добавить в календарь", "Жылнаамага кошуу")}
+              {text(
+                "Download calendar event",
+                "Скачать событие в календарь",
+                "Календарга окуяны жүктөө",
+              )}
             </button>
           ) : null}
           {canChange ? (
