@@ -685,8 +685,7 @@ function TourBody({
                         <span className="font-normal text-muted-foreground/80"> · {review.from}</span>
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground/65">
-                        {text("Published", "Опубликовано", "Жарыяланды")} ·{" "}
-                        {formatDate(publishedAt.date, language)} · {formatTime(publishedAt.time)}
+                        {publishedAt.date.split("-").reverse().join(".")} · {formatTime(publishedAt.time)}
                       </p>
                     </article>
                   );
