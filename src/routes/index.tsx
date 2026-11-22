@@ -884,64 +884,6 @@ function Home() {
         </section>
       ) : null}
 
-      <section className="border-y border-border bg-surface">
-        <ScrollReveal className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <SectionHeading
-            eyebrow={text("The team", "Команда", "Команда")}
-            title={text("Your guides", "Ваши гиды", "Сиздин гиддер")}
-          >
-            {text(
-              "A small local team — you'll know who is leading your trip before you arrive.",
-              "Небольшая местная команда: вы заранее знаете, кто ведёт вашу поездку.",
-              "Чакан жергиликтүү команда: сапарыңызды ким жетектээрин алдын ала билесиз.",
-            )}
-          </SectionHeading>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {content.guides.map((g) => (
-              <div key={g.name} className="surface-panel p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/15 font-display text-2xl text-primary">
-                  {g.name[0]}
-                </div>
-                <h3 className="mt-4 text-lg font-bold">{g.name}</h3>
-                <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-                  {g.role}
-                </p>
-                <p className="mt-2 text-sm text-muted-foreground">{g.bio}</p>
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <ScrollReveal>
-          <SectionHeading
-            eyebrow={text("Guest stories", "Отзывы гостей", "Коноктордун пикирлери")}
-            title={text(
-              "What travellers say",
-              "Что говорят путешественники",
-              "Саякатчылар эмне дешет",
-            )}
-          >
-            {text(
-              "Sample reviews for this demo — not verified customers.",
-              "Примеры отзывов для демо-версии, это не подтверждённые клиенты.",
-              "Бул демо-нускадагы мисал пикирлер, алар ырасталган кардарлар эмес.",
-            )}
-          </SectionHeading>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {content.reviews.map((r) => (
-              <figure key={r.name} className="rounded-xl border border-border bg-card p-6">
-                <blockquote className="text-sm leading-relaxed">&ldquo;{r.text}&rdquo;</blockquote>
-                <figcaption className="mt-4 text-xs text-muted-foreground">
-                  <span className="font-bold text-foreground">{r.name}</span> · {r.from} · {r.tour}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </ScrollReveal>
-      </section>
-
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
         <ScrollReveal>
           <SectionHeading
