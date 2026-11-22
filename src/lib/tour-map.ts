@@ -92,7 +92,7 @@ const points: Record<string, MapPoint> = {
     latitude: 42.322,
     longitude: 78.008,
     english: "Jeti-Oguz and Barskoon area",
-    russian: "Район Джети-Огуза и Барскоона",
+    russian: "Район Жети-Огуза и Барскоона",
     kyrgyz: "Жети-Өгүз жана Барскоон аймагы",
   },
   "arslanbob-walnut-forest": {
@@ -100,7 +100,7 @@ const points: Record<string, MapPoint> = {
     longitude: 72.932,
     english: "Arslanbob village and walnut forest area",
     russian: "Село Арсланбоб и район орехового леса",
-    kyrgyz: "Арсланбоб айылы жана жаңгак токоюнун аймагы",
+    kyrgyz: "Арстанбап айылы жана жаңгак токоюнун аймагы",
   },
 };
 
