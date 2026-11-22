@@ -29,6 +29,8 @@ import {
   tourExtras,
 } from "@/lib/tour-content";
 import { siteContent } from "@/lib/site-content";
+import { tourRating } from "@/lib/site-content";
+import { TourRating } from "@/components/tour-rating";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -125,6 +127,7 @@ const SECTIONS = [
   ["meeting", "Meeting point"],
   ["map", "Map"],
   ["availability", "Dates"],
+  ["reviews", "Reviews"],
   ["faq", "FAQ"],
 ] as const;
 
@@ -150,6 +153,7 @@ function TourBody({
   const content = siteContent(language);
   tour = localizeTour(tour, language);
   const extras = tourExtras(tour.slug, language);
+  const rating = tourRating(tour.slug);
   const mapPoint = tourMapPoint(tour.slug, language);
   const photos = tourGallery(tour.image_key);
   const [active, setActive] = useState(0);
@@ -248,6 +252,7 @@ function TourBody({
                       meeting: "Встреча",
                       map: "Карта",
                       availability: "Даты",
+                      reviews: "Отзывы",
                       faq: "Частые вопросы",
                     }[id] ?? label)
                   : ({
@@ -259,6 +264,7 @@ function TourBody({
                       meeting: "Жолугушуу",
                       map: "Карта",
                       availability: "Даталар",
+                      reviews: "Пикирлер",
                       faq: "Көп берилүүчү суроолор",
                     }[id] ?? label)}
             </a>
@@ -645,6 +651,43 @@ function TourBody({
               })}
             </div>
           </section>
+
+          {rating ? (
+            <section id="reviews" className="scroll-mt-32">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-eyebrow">
+                    {text("Sample feedback", "Примерные отзывы", "Үлгү пикирлер")}
+                  </p>
+                  <h2 className="mt-1 font-display text-4xl">
+                    {text("Guest reviews", "Отзывы гостей", "Коноктордун пикирлери")}
+                  </h2>
+                </div>
+                <TourRating rating={rating.rating} count={rating.count} />
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {text(
+                  "Sample reviews for this demo — not verified customers.",
+                  "Примерные отзывы для демо-версии — это не подтверждённые клиенты.",
+                  "Бул демо-версия үчүн үлгү пикирлер — алар ырасталган кардарлардын пикирлери эмес.",
+                )}
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {rating.reviews.map((review) => (
+                  <article
+                    key={`${review.name}-${review.from}`}
+                    className="rounded-xl border border-border bg-card p-5"
+                  >
+                    <p className="text-sm leading-relaxed text-muted-foreground">“{review.text}”</p>
+                    <p className="mt-4 text-sm font-bold">
+                      {review.name}
+                      <span className="font-normal text-muted-foreground"> · {review.from}</span>
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <section id="faq" className="scroll-mt-32">
             <h2 className="font-display text-4xl">

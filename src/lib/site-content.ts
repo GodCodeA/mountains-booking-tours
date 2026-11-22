@@ -5,6 +5,13 @@ import type { Language } from "./i18n";
 
 export type Guide = { name: string; role: string; bio: string; isSample: true };
 export type Review = { name: string; from: string; tour: string; text: string; isSample: true };
+export type TourReview = { name: string; from: string; text: string; isSample: true };
+export type TourRating = {
+  rating: number;
+  count: number;
+  reviews: TourReview[];
+  isSample: true;
+};
 
 export const guides: Guide[] = [
   {
@@ -53,6 +60,205 @@ export const reviews: Review[] = [
     isSample: true,
   },
 ];
+
+// Per-tour ratings and feedback are also SAMPLE/DEMO data. Review language is
+// intentionally preserved: English for international guests and Russian for CIS guests.
+export const tourRatings: Record<string, TourRating> = {
+  "ala-archa-day-hike": {
+    rating: 4.9,
+    count: 142,
+    reviews: [
+      {
+        name: "Marta",
+        from: "Poland",
+        text: "A brilliant first hike near Bishkek. The pace was steady, the views opened up gradually, and the guide made everyone feel included.",
+        isSample: true,
+      },
+      {
+        name: "Илья",
+        from: "Казахстан",
+        text: "Отличный вариант на один день: чёткий тайминг, понятная точка встречи и очень красивые виды на ледники.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "song-kul-adventure": {
+    rating: 4.8,
+    count: 96,
+    reviews: [
+      {
+        name: "Hannah",
+        from: "Australia",
+        text: "The yurt camp, the lake and the long drive over the pass were all memorable. It felt relaxed without being disorganised.",
+        isSample: true,
+      },
+      {
+        name: "Тимур",
+        from: "Узбекистан",
+        text: "Сон-Куль оказался даже красивее фотографий. Ночёвка в юрте и ужин у семьи пастухов — самое сильное впечатление.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "kel-suu-adventure": {
+    rating: 4.9,
+    count: 72,
+    reviews: [
+      {
+        name: "Nora",
+        from: "Canada",
+        text: "Remote in the best possible way. The permit information was clear beforehand, and every logistics detail was handled calmly.",
+        isSample: true,
+      },
+      {
+        name: "Арсен",
+        from: "Кыргызстан",
+        text: "Маршрут непростой, но организован очень аккуратно. Озеро и ущелье стоят долгой дороги.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "altyn-arashan-escape": {
+    rating: 4.8,
+    count: 118,
+    reviews: [
+      {
+        name: "Elena",
+        from: "Spain",
+        text: "The valley felt wonderfully quiet, and the hot springs after the hike were exactly what tired legs needed.",
+        isSample: true,
+      },
+      {
+        name: "Алина",
+        from: "Россия",
+        text: "Очень атмосферный маршрут: домики, река, горячие источники и потрясающая долина. Хочется вернуться ещё раз.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "jyrgalan-mountain-trek": {
+    rating: 4.9,
+    count: 64,
+    reviews: [
+      {
+        name: "Owen",
+        from: "Ireland",
+        text: "Three varied days with huge views and no rushed moments. The ridge day was challenging but completely worth it.",
+        isSample: true,
+      },
+      {
+        name: "Диана",
+        from: "Казахстан",
+        text: "Понравился темп: можно было идти в своём ритме, а гид всё время следил, чтобы группа не растягивалась.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "issyk-kul-mountain-escape": {
+    rating: 4.7,
+    count: 105,
+    reviews: [
+      {
+        name: "Liam",
+        from: "United Kingdom",
+        text: "A very good balance of lake time, easy walks and mountain scenery. Great choice for a first longer trip in Kyrgyzstan.",
+        isSample: true,
+      },
+      {
+        name: "Сабина",
+        from: "Узбекистан",
+        text: "За пять дней увидели совсем разный Иссык-Куль: пляж, каньон, ущелье и горы. Программа не перегружена.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "chon-kemin-valley-escape": {
+    rating: 4.8,
+    count: 58,
+    reviews: [
+      {
+        name: "Freya",
+        from: "Germany",
+        text: "The family guesthouse made this trip special. Gentle walks, good food and a lovely green valley close to Bishkek.",
+        isSample: true,
+      },
+      {
+        name: "Нурбек",
+        from: "Кыргызстан",
+        text: "Спокойная поездка для тех, кто хочет выехать из города без сложного треккинга. Очень уютное место.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "kegety-waterfall-hike": {
+    rating: 4.7,
+    count: 89,
+    reviews: [
+      {
+        name: "Mia",
+        from: "Singapore",
+        text: "A refreshing day outside the city. The waterfall was beautiful, and the guide gave just the right amount of local context.",
+        isSample: true,
+      },
+      {
+        name: "Алексей",
+        from: "Россия",
+        text: "Хороший маршрут на выходной: дорога недолгая, тропа понятная, а у водопада можно спокойно отдохнуть.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "suusamyr-jailoo-weekend": {
+    rating: 4.8,
+    count: 47,
+    reviews: [
+      {
+        name: "Grace",
+        from: "New Zealand",
+        text: "A peaceful weekend with wide open landscapes and a genuinely warm welcome at the yurt camp.",
+        isSample: true,
+      },
+      {
+        name: "Мадина",
+        from: "Казахстан",
+        text: "Идеальный формат на выходные: дорога через перевал уже сама по себе впечатляет, а ночёвка в юрте добавляет атмосферы.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+  "karakol-lakes-trek": {
+    rating: 4.9,
+    count: 53,
+    reviews: [
+      {
+        name: "Theo",
+        from: "France",
+        text: "The alpine lakes were spectacular. This is a proper trek, but the route plan and camp rhythm made it approachable.",
+        isSample: true,
+      },
+      {
+        name: "Жанна",
+        from: "Кыргызстан",
+        text: "Самый красивый многодневный маршрут из тех, что я пробовала. Озёра, лес и высокие перевалы — всё в одной поездке.",
+        isSample: true,
+      },
+    ],
+    isSample: true,
+  },
+};
+
+export function tourRating(slug: string) {
+  return tourRatings[slug];
+}
 
 export const faqs: { q: string; a: string }[] = [
   {

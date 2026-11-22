@@ -6,6 +6,8 @@ import { formatDate, spotsLeft, type Departure, type Tour } from "@/lib/bookings
 import { tourImage } from "@/lib/tour-images";
 import { localizeTour } from "@/lib/tour-localization";
 import { dayLabel, maxGroupSizeLabel, useI18n } from "@/lib/i18n";
+import { tourRating } from "@/lib/site-content";
+import { TourRating } from "@/components/tour-rating";
 
 export function TourCard({
   tour,
@@ -43,6 +45,7 @@ export function TourCard({
   }, [deferImage]);
 
   tour = localizeTour(tour, language);
+  const rating = tourRating(tour.slug);
   const left = nextDeparture ? spotsLeft(nextDeparture) : 0;
   return (
     <Link
@@ -68,6 +71,7 @@ export function TourCard({
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <h3 className="font-display text-2xl">{tour.name}</h3>
+        {rating ? <TourRating rating={rating.rating} count={rating.count} compact /> : null}
         <p className="flex-1 text-sm text-muted-foreground">{tour.summary}</p>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
