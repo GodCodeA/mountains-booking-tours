@@ -79,31 +79,57 @@ function Confirmation() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-14 sm:px-6">
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex items-center gap-3">
         <CheckCircle2 className="h-9 w-9 text-success" />
         <div>
           <p className="text-eyebrow">{bookingMessage}</p>
-          <h1 className="font-display text-5xl">
+          <h1 className="font-display text-4xl sm:text-5xl">
             {text("See you in the mountains", "До встречи в горах", "Тоодо жолугушканча")}
           </h1>
         </div>
       </div>
 
-      <p className="mt-4 text-muted-foreground">
+      <p className="mt-3 text-muted-foreground">
         {t("bookingConfirmed")} {t("saveLink")}
       </p>
 
-      <div className="surface-panel mt-8 overflow-hidden">
+      <div className="mt-4">
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={copyConfirmationLink}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+          >
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? t("linkCopied") : t("copyLink")}
+          </button>
+          <Link
+            to="/tours"
+            className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
+          >
+            {t("browseTrips")}
+          </Link>
+        </div>
+        <p className="mt-1.5 text-xs text-muted-foreground/65">
+          {text(
+            "Keep this private link to return to your trip details.",
+            "Сохраните эту личную ссылку, чтобы вернуться к деталям поездки.",
+            "Сапардын чоо-жайына кайтуу үчүн бул жеке шилтемени сактап коюңуз.",
+          )}
+        </p>
+      </div>
+
+      <div className="surface-panel mt-6 overflow-hidden">
         <img
           src={tourImage(booking.image_key)}
           alt={localizeTourName(booking.tour_name, language)}
           loading="lazy"
           width={1280}
           height={864}
-          className="h-44 w-full object-cover"
+          className="h-36 w-full object-cover sm:h-44"
         />
-        <div className="space-y-4 p-6">
+        <div className="space-y-3 p-5 sm:p-6">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-3xl">
               {localizeTourName(booking.tour_name, language)}
@@ -126,38 +152,13 @@ function Confirmation() {
               {localizeMeetingPoint(booking.meeting_point, language)}
             </span>
           </div>
-          <div className="flex items-baseline justify-between border-t border-border pt-4">
+          <div className="flex items-baseline justify-between border-t border-border pt-3">
             <span className="text-sm text-muted-foreground">{t("totalPayable")}</span>
             <span className="font-display text-4xl">${booking.total_price}</span>
           </div>
         </div>
       </div>
 
-      <div className="mt-6">
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={copyConfirmationLink}
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? t("linkCopied") : t("copyLink")}
-          </button>
-          <Link
-            to="/tours"
-            className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold"
-          >
-            {t("browseTrips")}
-          </Link>
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground/65">
-          {text(
-            "Keep this private link to return to your trip details.",
-            "Сохраните эту личную ссылку, чтобы вернуться к деталям поездки.",
-            "Сапардын чоо-жайына кайтуу үчүн бул жеке шилтемени сактап коюңуз.",
-          )}
-        </p>
-      </div>
     </div>
   );
 }
