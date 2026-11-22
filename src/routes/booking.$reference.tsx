@@ -32,6 +32,9 @@ function Confirmation() {
   const { t, language } = useI18n();
   const text = (english: string, russian: string, kyrgyz: string) =>
     localText(language, english, russian, kyrgyz);
+  const bookingMessage = booking?.customer_name
+    ? `${booking.customer_name}, ${text("you're booked", "вы забронированы", "сиз брондодуңуз")}`
+    : text("You're booked", "Вы забронированы", "Сиз брондодуңуз");
 
   async function copyConfirmationLink() {
     try {
@@ -80,9 +83,7 @@ function Confirmation() {
       <div className="flex items-center gap-3">
         <CheckCircle2 className="h-9 w-9 text-success" />
         <div>
-          <p className="text-eyebrow">
-            {text("You're booked", "Вы забронированы", "Сиз брондодуңуз")}
-          </p>
+          <p className="text-eyebrow">{bookingMessage}</p>
           <h1 className="font-display text-5xl">
             {text("See you in the mountains", "До встречи в горах", "Тоодо жолугушканча")}
           </h1>

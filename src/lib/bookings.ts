@@ -73,6 +73,7 @@ export type Booking = {
 
 export type BookingConfirmation = {
   reference: string;
+  customer_name?: string;
   guests: number;
   total_price: number;
   tour_name: string;

@@ -239,6 +239,7 @@ export type Database = {
       get_booking_confirmation: {
         Args: { _reference: string };
         Returns: {
+          customer_name: string;
           departure_date: string;
           guests: number;
           image_key: string;
