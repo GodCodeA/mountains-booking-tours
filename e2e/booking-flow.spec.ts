@@ -190,7 +190,7 @@ test("guest reaches the verified booking review with an available future date", 
   await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Continue" }).click();
 
-  await page.getByLabel("Full name").fill("Test Guest");
+  await page.getByLabel("Name").fill("Test Guest");
   await page.getByLabel("Email").fill("guest@example.com");
   await page.getByLabel("Phone").fill("+996 555 123 456");
   await page.getByRole("button", { name: "Continue" }).click();

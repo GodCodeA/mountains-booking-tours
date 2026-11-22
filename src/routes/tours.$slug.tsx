@@ -709,17 +709,20 @@ function TourBody({
                       <p className="text-sm font-bold">
                         {review.name}
                         <span className="font-normal text-muted-foreground/65">
-                          {" "}· {publishedAt.date.split("-").reverse().join(".")} · {formatTime(publishedAt.time)}
+                          {" "}
+                          · {publishedAt.date.split("-").reverse().join(".")} ·{" "}
+                          {formatTime(publishedAt.time)}
                         </span>
                       </p>
-                      <p className="mt-4 text-sm leading-relaxed text-foreground/90">{review.text}</p>
+                      <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+                        {review.text}
+                      </p>
                     </article>
                   );
                 })}
               </div>
             </section>
           ) : null}
-
         </div>
 
         <aside className="h-fit lg:sticky lg:top-32">

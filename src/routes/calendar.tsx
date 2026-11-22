@@ -24,7 +24,8 @@ export const Route = createFileRoute("/calendar")({
       { title: "Departure calendar — Ala-Too Adventures" },
       {
         name: "description",
-        content: "Browse upcoming Kyrgyz mountain tour dates, available places and departure times.",
+        content:
+          "Browse upcoming Kyrgyz mountain tour dates, available places and departure times.",
       },
     ],
   }),
@@ -69,16 +70,24 @@ function DepartureCalendar() {
   const departuresQ = useQuery(upcomingDeparturesQuery);
   const [selectedDate, setSelectedDate] = useState<Date>();
 
-  const departures = departuresQ.data ?? [];
-  const toursById = useMemo(() => new Map((toursQ.data ?? []).map((tour) => [tour.id, tour])), [toursQ.data]);
-  const dateKeys = useMemo(() => [...new Set(departures.map((departure) => departure.departure_date))], [departures]);
+  const departures = useMemo(() => departuresQ.data ?? [], [departuresQ.data]);
+  const toursById = useMemo(
+    () => new Map((toursQ.data ?? []).map((tour) => [tour.id, tour])),
+    [toursQ.data],
+  );
+  const dateKeys = useMemo(
+    () => [...new Set(departures.map((departure) => departure.departure_date))],
+    [departures],
+  );
 
   useEffect(() => {
     if (!selectedDate && dateKeys[0]) setSelectedDate(dateFromIso(dateKeys[0]));
   }, [dateKeys, selectedDate]);
 
   const selectedKey = selectedDate ? isoFromDate(selectedDate) : undefined;
-  const selectedDepartures = departures.filter((departure) => departure.departure_date === selectedKey);
+  const selectedDepartures = departures.filter(
+    (departure) => departure.departure_date === selectedKey,
+  );
   const selectedLabel = selectedKey ? formatDate(selectedKey, language) : "";
   const availableDates = dateKeys.map(dateFromIso);
   const calendarFormatters = {
@@ -99,7 +108,9 @@ function DepartureCalendar() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-      <p className="text-eyebrow">{text("Plan by date", "Планируйте по датам", "Дата боюнча пландаңыз")}</p>
+      <p className="text-eyebrow">
+        {text("Plan by date", "Планируйте по датам", "Дата боюнча пландаңыз")}
+      </p>
       <h1 className="mt-3 font-display text-6xl sm:text-7xl">
         {text("Departure calendar", "Календарь выездов", "Чыгуу жылнаамасы")}
       </h1>
@@ -112,7 +123,10 @@ function DepartureCalendar() {
       </p>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-        <section className="surface-panel overflow-hidden p-2 sm:p-4" aria-label={text("Calendar", "Календарь", "Жылнаама")}>
+        <section
+          className="surface-panel overflow-hidden p-2 sm:p-4"
+          aria-label={text("Calendar", "Календарь", "Жылнаама")}
+        >
           {departuresQ.isLoading ? (
             <Skeleton className="h-[350px] w-full" />
           ) : selectedDate ? (
@@ -158,14 +172,20 @@ function DepartureCalendar() {
           <div className="flex items-center gap-3">
             <CalendarDays className="h-5 w-5 text-primary" />
             <div>
-              <p className="text-eyebrow">{text("Selected date", "Выбранная дата", "Тандалган күн")}</p>
-              <h2 className="mt-1 font-display text-4xl">{selectedLabel || text("Choose a date", "Выберите дату", "Күндү тандаңыз")}</h2>
+              <p className="text-eyebrow">
+                {text("Selected date", "Выбранная дата", "Тандалган күн")}
+              </p>
+              <h2 className="mt-1 font-display text-4xl">
+                {selectedLabel || text("Choose a date", "Выберите дату", "Күндү тандаңыз")}
+              </h2>
             </div>
           </div>
 
           <div className="mt-6 space-y-4">
             {departuresQ.isLoading || toursQ.isLoading
-              ? Array.from({ length: 2 }).map((_, index) => <Skeleton key={index} className="h-44 w-full" />)
+              ? Array.from({ length: 2 }).map((_, index) => (
+                  <Skeleton key={index} className="h-44 w-full" />
+                ))
               : selectedDepartures.map((departure) => {
                   const tour = toursById.get(departure.tour_id);
                   if (!tour) return null;
@@ -204,13 +224,18 @@ function DepartureCalendar() {
                         <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
                           <span className="inline-flex items-center gap-1.5">
                             <Clock className="h-4 w-4 text-primary" />
-                            {text("Starts", "Начало", "Башталышы")} {formatTime(departure.departure_time)}
+                            {text("Starts", "Начало", "Башталышы")}{" "}
+                            {formatTime(departure.departure_time)}
                           </span>
                           <span className="inline-flex items-center gap-1.5">
                             <Users className="h-4 w-4 text-primary" />
                             {isFull
                               ? text("Fully booked", "Мест нет", "Орун жок")
-                              : text(`${left} places left`, `Осталось мест: ${left}`, `${left} орун калды`)}
+                              : text(
+                                  `${left} places left`,
+                                  `Осталось мест: ${left}`,
+                                  `${left} орун калды`,
+                                )}
                           </span>
                           <span className="inline-flex items-center gap-1.5">
                             <MapPin className="h-4 w-4 text-primary" />
@@ -244,7 +269,11 @@ function DepartureCalendar() {
                 })}
             {!departuresQ.isLoading && selectedDate && selectedDepartures.length === 0 ? (
               <div className="surface-panel p-8 text-center text-muted-foreground">
-                {text("There are no departures on this date.", "На эту дату выездов нет.", "Бул күнү чыгуу жок.")}
+                {text(
+                  "There are no departures on this date.",
+                  "На эту дату выездов нет.",
+                  "Бул күнү чыгуу жок.",
+                )}
               </div>
             ) : null}
             {!departuresQ.isLoading && departures.length === 0 ? (

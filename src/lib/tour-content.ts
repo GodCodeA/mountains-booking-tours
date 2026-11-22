@@ -241,58 +241,143 @@ const content: Record<string, TourExtras> = {
   },
   "burana-konorchek-day": {
     itinerary: [
-      { time: "08:00", title: "Leave Bishkek", body: "Meet at Ala-Too Square and drive east through the Chuy Valley." },
-      { time: "10:00", title: "Burana and Balasagun", body: "Explore the tower area and its open-air stone collection with the guide." },
-      { time: "13:00", title: "Konorchek canyon", body: "Easy canyon walk, picnic and time for photos among the red cliffs." },
-      { time: "18:00", title: "Back in Bishkek", body: "Return to Ala-Too Square by early evening." },
+      {
+        time: "08:00",
+        title: "Leave Bishkek",
+        body: "Meet at Ala-Too Square and drive east through the Chuy Valley.",
+      },
+      {
+        time: "10:00",
+        title: "Burana and Balasagun",
+        body: "Explore the tower area and its open-air stone collection with the guide.",
+      },
+      {
+        time: "13:00",
+        title: "Konorchek canyon",
+        body: "Easy canyon walk, picnic and time for photos among the red cliffs.",
+      },
+      {
+        time: "18:00",
+        title: "Back in Bishkek",
+        body: "Return to Ala-Too Square by early evening.",
+      },
     ],
     whatToBring: baseKit,
   },
   "jeti-oguz-barskoon-escape": {
     itinerary: [
-      { time: "Day 1", title: "Jeti-Oguz red rocks", body: "Start from Karakol, walk beneath the Seven Bulls cliffs and settle into a guesthouse." },
-      { time: "Day 2", title: "Barskoon waterfalls", body: "Morning forest walk to the waterfalls, then return to Karakol in the afternoon." },
+      {
+        time: "Day 1",
+        title: "Jeti-Oguz red rocks",
+        body: "Start from Karakol, walk beneath the Seven Bulls cliffs and settle into a guesthouse.",
+      },
+      {
+        time: "Day 2",
+        title: "Barskoon waterfalls",
+        body: "Morning forest walk to the waterfalls, then return to Karakol in the afternoon.",
+      },
     ],
     whatToBring: overnightKit,
   },
   "arslanbob-walnut-forest": {
     itinerary: [
-      { time: "Day 1", title: "Osh to Arslanbob", body: "Meet in Osh, drive south-west to the village and meet your host family." },
-      { time: "Day 2", title: "Forest and waterfall", body: "Gentle walks through the walnut forest and to a waterfall viewpoint." },
-      { time: "Day 3", title: "Village morning and return", body: "Free time in the village before the return drive to Osh." },
+      {
+        time: "Day 1",
+        title: "Osh to Arslanbob",
+        body: "Meet in Osh, drive south-west to the village and meet your host family.",
+      },
+      {
+        time: "Day 2",
+        title: "Forest and waterfall",
+        body: "Gentle walks through the walnut forest and to a waterfall viewpoint.",
+      },
+      {
+        time: "Day 3",
+        title: "Village morning and return",
+        body: "Free time in the village before the return drive to Osh.",
+      },
     ],
     whatToBring: overnightKit,
   },
   "lenin-peak-base-camp": {
     itinerary: [
-      { time: "Day 1", title: "Osh to Achik-Tash", body: "Meet in Osh and drive to the high-altitude valley, then settle into camp." },
-      { time: "Days 2–4", title: "Acclimatisation and valley walks", body: "Short, guided hikes and rest time help the group adapt to altitude; plans change with weather." },
+      {
+        time: "Day 1",
+        title: "Osh to Achik-Tash",
+        body: "Meet in Osh and drive to the high-altitude valley, then settle into camp.",
+      },
+      {
+        time: "Days 2–4",
+        title: "Acclimatisation and valley walks",
+        body: "Short, guided hikes and rest time help the group adapt to altitude; plans change with weather.",
+      },
       { time: "Day 5", title: "Return to Osh", body: "Break camp and drive back to Osh." },
     ],
-    whatToBring: [...overnightKit, "Personal sleeping bag rated for cold nights", "Trekking poles", "Warm insulated jacket"],
+    whatToBring: [
+      ...overnightKit,
+      "Personal sleeping bag rated for cold nights",
+      "Trekking poles",
+      "Warm insulated jacket",
+    ],
   },
   "sary-chelek-lake-escape": {
     itinerary: [
-      { time: "Day 1", title: "Osh to Sary-Chelek", body: "Drive west to the reserve area and settle into a village guesthouse." },
-      { time: "Day 2", title: "Lake and forest day", body: "Gentle lakeside and forest walks, with flexible stops for weather and the group." },
-      { time: "Day 3", title: "Return to Osh", body: "Slow breakfast and scenic drive back to Osh." },
+      {
+        time: "Day 1",
+        title: "Osh to Sary-Chelek",
+        body: "Drive west to the reserve area and settle into a village guesthouse.",
+      },
+      {
+        time: "Day 2",
+        title: "Lake and forest day",
+        body: "Gentle lakeside and forest walks, with flexible stops for weather and the group.",
+      },
+      {
+        time: "Day 3",
+        title: "Return to Osh",
+        body: "Slow breakfast and scenic drive back to Osh.",
+      },
     ],
     whatToBring: overnightKit,
   },
   "tash-rabat-caravanserai": {
     itinerary: [
-      { time: "Day 1", title: "Naryn to Tash Rabat", body: "Drive through open valleys, explore the caravanserai and settle into the yurt camp." },
-      { time: "Day 2", title: "Valley morning and return", body: "Easy morning walk before returning to Naryn after lunch." },
+      {
+        time: "Day 1",
+        title: "Naryn to Tash Rabat",
+        body: "Drive through open valleys, explore the caravanserai and settle into the yurt camp.",
+      },
+      {
+        time: "Day 2",
+        title: "Valley morning and return",
+        body: "Easy morning walk before returning to Naryn after lunch.",
+      },
     ],
     whatToBring: overnightKit,
   },
   "kochkor-felt-culture-day": {
     itinerary: [
-      { time: "09:00", title: "Meet in Kochkor", body: "Meet your craft host and hear the plan for the day over tea." },
-      { time: "10:00", title: "Felt workshop", body: "Learn the stages of arranging and rolling a small felt piece with local materials." },
-      { time: "13:00", title: "Lunch and village walk", body: "Share lunch, then take a relaxed walk through the village before the tour finishes." },
+      {
+        time: "09:00",
+        title: "Meet in Kochkor",
+        body: "Meet your craft host and hear the plan for the day over tea.",
+      },
+      {
+        time: "10:00",
+        title: "Felt workshop",
+        body: "Learn the stages of arranging and rolling a small felt piece with local materials.",
+      },
+      {
+        time: "13:00",
+        title: "Lunch and village walk",
+        body: "Share lunch, then take a relaxed walk through the village before the tour finishes.",
+      },
     ],
-    whatToBring: ["Comfortable clothes you do not mind getting wool on", "Reusable water bottle", "Cash in som for optional souvenirs"],
+    whatToBring: [
+      "Comfortable clothes you do not mind getting wool on",
+      "Reusable water bottle",
+      "Cash in som for optional souvenirs",
+    ],
   },
 };
 
@@ -526,58 +611,143 @@ const russianContent: Record<string, TourExtras> = {
   },
   "burana-konorchek-day": {
     itinerary: [
-      { time: "08:00", title: "Выезд из Бишкека", body: "Встречаемся на площади Ала-Тоо и едем на восток по Чуйской долине." },
-      { time: "10:00", title: "Бурана и Баласагун", body: "Осматриваем территорию башни и каменную коллекцию под открытым небом." },
-      { time: "13:00", title: "Каньон Конорчек", body: "Лёгкая прогулка по каньону, пикник и время для фотографий у красных скал." },
-      { time: "18:00", title: "Возвращение в Бишкек", body: "К вечеру возвращаемся на площадь Ала-Тоо." },
+      {
+        time: "08:00",
+        title: "Выезд из Бишкека",
+        body: "Встречаемся на площади Ала-Тоо и едем на восток по Чуйской долине.",
+      },
+      {
+        time: "10:00",
+        title: "Бурана и Баласагун",
+        body: "Осматриваем территорию башни и каменную коллекцию под открытым небом.",
+      },
+      {
+        time: "13:00",
+        title: "Каньон Конорчек",
+        body: "Лёгкая прогулка по каньону, пикник и время для фотографий у красных скал.",
+      },
+      {
+        time: "18:00",
+        title: "Возвращение в Бишкек",
+        body: "К вечеру возвращаемся на площадь Ала-Тоо.",
+      },
     ],
     whatToBring: russianBaseKit,
   },
   "jeti-oguz-barskoon-escape": {
     itinerary: [
-      { time: "День 1", title: "Красные скалы Жети-Огуза", body: "Старт из Каракола, прогулка у скал «Семь быков» и размещение в гостевом доме." },
-      { time: "День 2", title: "Водопады Барскоона", body: "Утренняя прогулка по лесу к водопадам и возвращение в Каракол после обеда." },
+      {
+        time: "День 1",
+        title: "Красные скалы Жети-Огуза",
+        body: "Старт из Каракола, прогулка у скал «Семь быков» и размещение в гостевом доме.",
+      },
+      {
+        time: "День 2",
+        title: "Водопады Барскоона",
+        body: "Утренняя прогулка по лесу к водопадам и возвращение в Каракол после обеда.",
+      },
     ],
     whatToBring: russianOvernightKit,
   },
   "arslanbob-walnut-forest": {
     itinerary: [
-      { time: "День 1", title: "Из Оша в Арсланбоб", body: "Встречаемся в Оше, едем в горное село и знакомимся с принимающей семьёй." },
-      { time: "День 2", title: "Лес и водопад", body: "Неспешные прогулки по ореховому лесу и к смотровой точке у водопада." },
-      { time: "День 3", title: "Утро в селе и возвращение", body: "Свободное время в селе перед обратной дорогой в Ош." },
+      {
+        time: "День 1",
+        title: "Из Оша в Арсланбоб",
+        body: "Встречаемся в Оше, едем в горное село и знакомимся с принимающей семьёй.",
+      },
+      {
+        time: "День 2",
+        title: "Лес и водопад",
+        body: "Неспешные прогулки по ореховому лесу и к смотровой точке у водопада.",
+      },
+      {
+        time: "День 3",
+        title: "Утро в селе и возвращение",
+        body: "Свободное время в селе перед обратной дорогой в Ош.",
+      },
     ],
     whatToBring: russianOvernightKit,
   },
   "lenin-peak-base-camp": {
     itinerary: [
-      { time: "День 1", title: "Из Оша в Ачик-Таш", body: "Встречаемся в Оше, едем в высокогорную долину и размещаемся в лагере." },
-      { time: "Дни 2–4", title: "Акклиматизация и прогулки", body: "Короткие прогулки с гидом и отдых помогают привыкнуть к высоте; план зависит от погоды." },
+      {
+        time: "День 1",
+        title: "Из Оша в Ачик-Таш",
+        body: "Встречаемся в Оше, едем в высокогорную долину и размещаемся в лагере.",
+      },
+      {
+        time: "Дни 2–4",
+        title: "Акклиматизация и прогулки",
+        body: "Короткие прогулки с гидом и отдых помогают привыкнуть к высоте; план зависит от погоды.",
+      },
       { time: "День 5", title: "Возвращение в Ош", body: "Собираем лагерь и едем обратно в Ош." },
     ],
-    whatToBring: [...russianOvernightKit, "Личный спальный мешок для холодных ночей", "Треккинговые палки", "Тёплая утеплённая куртка"],
+    whatToBring: [
+      ...russianOvernightKit,
+      "Личный спальный мешок для холодных ночей",
+      "Треккинговые палки",
+      "Тёплая утеплённая куртка",
+    ],
   },
   "sary-chelek-lake-escape": {
     itinerary: [
-      { time: "День 1", title: "Из Оша на Сары-Челек", body: "Едем на запад в район заповедника и размещаемся в сельском гостевом доме." },
-      { time: "День 2", title: "Озеро и лес", body: "Неспешные прогулки у воды и в лесу, с гибкими остановками по погоде и темпу группы." },
-      { time: "День 3", title: "Возвращение в Ош", body: "Неторопливый завтрак и живописная дорога обратно в Ош." },
+      {
+        time: "День 1",
+        title: "Из Оша на Сары-Челек",
+        body: "Едем на запад в район заповедника и размещаемся в сельском гостевом доме.",
+      },
+      {
+        time: "День 2",
+        title: "Озеро и лес",
+        body: "Неспешные прогулки у воды и в лесу, с гибкими остановками по погоде и темпу группы.",
+      },
+      {
+        time: "День 3",
+        title: "Возвращение в Ош",
+        body: "Неторопливый завтрак и живописная дорога обратно в Ош.",
+      },
     ],
     whatToBring: russianOvernightKit,
   },
   "tash-rabat-caravanserai": {
     itinerary: [
-      { time: "День 1", title: "Из Нарына в Таш-Рабат", body: "Едем через открытые долины, осматриваем караван-сарай и размещаемся в юрточном лагере." },
-      { time: "День 2", title: "Утро в долине и возвращение", body: "Лёгкая утренняя прогулка, затем возвращение в Нарын после обеда." },
+      {
+        time: "День 1",
+        title: "Из Нарына в Таш-Рабат",
+        body: "Едем через открытые долины, осматриваем караван-сарай и размещаемся в юрточном лагере.",
+      },
+      {
+        time: "День 2",
+        title: "Утро в долине и возвращение",
+        body: "Лёгкая утренняя прогулка, затем возвращение в Нарын после обеда.",
+      },
     ],
     whatToBring: russianOvernightKit,
   },
   "kochkor-felt-culture-day": {
     itinerary: [
-      { time: "09:00", title: "Встреча в Кочкоре", body: "Встречаемся с мастером и за чаем обсуждаем план дня." },
-      { time: "10:00", title: "Войлочный мастер-класс", body: "Узнаём этапы раскладки и валяния небольшого изделия из местной шерсти." },
-      { time: "13:00", title: "Обед и прогулка", body: "Домашний обед, затем спокойная прогулка по селу до завершения программы." },
+      {
+        time: "09:00",
+        title: "Встреча в Кочкоре",
+        body: "Встречаемся с мастером и за чаем обсуждаем план дня.",
+      },
+      {
+        time: "10:00",
+        title: "Войлочный мастер-класс",
+        body: "Узнаём этапы раскладки и валяния небольшого изделия из местной шерсти.",
+      },
+      {
+        time: "13:00",
+        title: "Обед и прогулка",
+        body: "Домашний обед, затем спокойная прогулка по селу до завершения программы.",
+      },
     ],
-    whatToBring: ["Удобную одежду, которую не жалко испачкать шерстью", "Многоразовую бутылку для воды", "Наличные сомы на необязательные сувениры"],
+    whatToBring: [
+      "Удобную одежду, которую не жалко испачкать шерстью",
+      "Многоразовую бутылку для воды",
+      "Наличные сомы на необязательные сувениры",
+    ],
   },
 };
 
@@ -814,58 +984,139 @@ const kyrgyzContent: Record<string, TourExtras> = {
   },
   "burana-konorchek-day": {
     itinerary: [
-      { time: "08:00", title: "Бишкектен чыгуу", body: "Ала-Тоо аянтында жолугуп, Чүй өрөөнү менен чыгышты карай жөнөйбүз." },
-      { time: "10:00", title: "Бурана жана Баласагун", body: "Мунаранын аймагын жана ачык асман алдындагы таш эстеликтерди гид менен көрөбүз." },
-      { time: "13:00", title: "Конорчек капчыгайы", body: "Капчыгайда жеңил сейил, пикник жана кызыл аскаларда сүрөткө түшүүгө убакыт." },
+      {
+        time: "08:00",
+        title: "Бишкектен чыгуу",
+        body: "Ала-Тоо аянтында жолугуп, Чүй өрөөнү менен чыгышты карай жөнөйбүз.",
+      },
+      {
+        time: "10:00",
+        title: "Бурана жана Баласагун",
+        body: "Мунаранын аймагын жана ачык асман алдындагы таш эстеликтерди гид менен көрөбүз.",
+      },
+      {
+        time: "13:00",
+        title: "Конорчек капчыгайы",
+        body: "Капчыгайда жеңил сейил, пикник жана кызыл аскаларда сүрөткө түшүүгө убакыт.",
+      },
       { time: "18:00", title: "Бишкекке кайтуу", body: "Кечке жуук Ала-Тоо аянтына кайтабыз." },
     ],
     whatToBring: kyrgyzBaseKit,
   },
   "jeti-oguz-barskoon-escape": {
     itinerary: [
-      { time: "1-күн", title: "Жети-Өгүздүн кызыл аскалары", body: "Караколдон баштап, «Жети бука» аскаларынын жанында сейилдеп, конок үйүнө жайгашабыз." },
-      { time: "2-күн", title: "Барскоондун шаркыратмалары", body: "Эртең менен токой аркылуу шаркыратмаларга басып, түштөн кийин Караколго кайтабыз." },
+      {
+        time: "1-күн",
+        title: "Жети-Өгүздүн кызыл аскалары",
+        body: "Караколдон баштап, «Жети бука» аскаларынын жанында сейилдеп, конок үйүнө жайгашабыз.",
+      },
+      {
+        time: "2-күн",
+        title: "Барскоондун шаркыратмалары",
+        body: "Эртең менен токой аркылуу шаркыратмаларга басып, түштөн кийин Караколго кайтабыз.",
+      },
     ],
     whatToBring: kyrgyzOvernightKit,
   },
   "arslanbob-walnut-forest": {
     itinerary: [
-      { time: "1-күн", title: "Оштан Арстанбапка", body: "Ошто жолугуп, тоо айылына барабыз жана тосуп алуучу үй-бүлө менен таанышабыз." },
-      { time: "2-күн", title: "Токой жана шаркыратма", body: "Жаңгак токоюнда жана Арстанбап шаркыратмаларындагы көрүнүш чекиттеринде жайбаракат сейил." },
-      { time: "3-күн", title: "Айылдагы таң жана кайтуу", body: "Ошко кайтаар алдында айылда бош убакыт болот." },
+      {
+        time: "1-күн",
+        title: "Оштан Арстанбапка",
+        body: "Ошто жолугуп, тоо айылына барабыз жана тосуп алуучу үй-бүлө менен таанышабыз.",
+      },
+      {
+        time: "2-күн",
+        title: "Токой жана шаркыратма",
+        body: "Жаңгак токоюнда жана Арстанбап шаркыратмаларындагы көрүнүш чекиттеринде жайбаракат сейил.",
+      },
+      {
+        time: "3-күн",
+        title: "Айылдагы таң жана кайтуу",
+        body: "Ошко кайтаар алдында айылда бош убакыт болот.",
+      },
     ],
     whatToBring: kyrgyzOvernightKit,
   },
   "lenin-peak-base-camp": {
     itinerary: [
-      { time: "1-күн", title: "Оштан Ачык-Ташка", body: "Ошто жолугуп, бийик тоо өрөөнүнө барабыз жана лагерге жайгашабыз." },
-      { time: "2–4-күндөр", title: "Бийиктикке көнүү жана сейил", body: "Гид менен кыска сейилдер жана эс алуу бийиктикке көнүүгө жардам берет; план аба ырайына жараша өзгөрөт." },
+      {
+        time: "1-күн",
+        title: "Оштан Ачык-Ташка",
+        body: "Ошто жолугуп, бийик тоо өрөөнүнө барабыз жана лагерге жайгашабыз.",
+      },
+      {
+        time: "2–4-күндөр",
+        title: "Бийиктикке көнүү жана сейил",
+        body: "Гид менен кыска сейилдер жана эс алуу бийиктикке көнүүгө жардам берет; план аба ырайына жараша өзгөрөт.",
+      },
       { time: "5-күн", title: "Ошко кайтуу", body: "Лагерди жыйнап, кайра Ошко жөнөйбүз." },
     ],
-    whatToBring: [...kyrgyzOvernightKit, "Суук түнгө ылайыктуу жеке уктоочу баштык", "Треккинг таяктары", "Жылуу калың күрмө"],
+    whatToBring: [
+      ...kyrgyzOvernightKit,
+      "Суук түнгө ылайыктуу жеке уктоочу баштык",
+      "Треккинг таяктары",
+      "Жылуу калың күрмө",
+    ],
   },
   "sary-chelek-lake-escape": {
     itinerary: [
-      { time: "1-күн", title: "Оштан Сары-Челекке", body: "Батышты карай коруктун аймагына барабыз жана айылдагы конок үйүнө жайгашабыз." },
-      { time: "2-күн", title: "Көл жана токой", body: "Көл жээгинде жана токойдо шашылбаган сейил, аба ырайына жана топтун темпине жараша тыныгуулар." },
-      { time: "3-күн", title: "Ошко кайтуу", body: "Жай эртең мененки тамактан кийин кооз жол менен Ошко кайтабыз." },
+      {
+        time: "1-күн",
+        title: "Оштан Сары-Челекке",
+        body: "Батышты карай коруктун аймагына барабыз жана айылдагы конок үйүнө жайгашабыз.",
+      },
+      {
+        time: "2-күн",
+        title: "Көл жана токой",
+        body: "Көл жээгинде жана токойдо шашылбаган сейил, аба ырайына жана топтун темпине жараша тыныгуулар.",
+      },
+      {
+        time: "3-күн",
+        title: "Ошко кайтуу",
+        body: "Жай эртең мененки тамактан кийин кооз жол менен Ошко кайтабыз.",
+      },
     ],
     whatToBring: kyrgyzOvernightKit,
   },
   "tash-rabat-caravanserai": {
     itinerary: [
-      { time: "1-күн", title: "Нарындан Таш-Рабатка", body: "Кең өрөөндөр менен барып, кербен сарайды көрөбүз жана боз үй лагерине жайгашабыз." },
-      { time: "2-күн", title: "Өрөөндөгү таң жана кайтуу", body: "Жеңил эртең мененки сейилден кийин түштөн соң Нарынга кайтабыз." },
+      {
+        time: "1-күн",
+        title: "Нарындан Таш-Рабатка",
+        body: "Кең өрөөндөр менен барып, кербен сарайды көрөбүз жана боз үй лагерине жайгашабыз.",
+      },
+      {
+        time: "2-күн",
+        title: "Өрөөндөгү таң жана кайтуу",
+        body: "Жеңил эртең мененки сейилден кийин түштөн соң Нарынга кайтабыз.",
+      },
     ],
     whatToBring: kyrgyzOvernightKit,
   },
   "kochkor-felt-culture-day": {
     itinerary: [
-      { time: "09:00", title: "Кочкордо жолугушуу", body: "Уста менен таанышып, чай үстүндө күндүн планын угабыз." },
-      { time: "10:00", title: "Кийиз жасоо сабагы", body: "Жергиликтүү материалдар менен кичинекей кийиз буюм жасоонун баскычтарын үйрөнөбүз." },
-      { time: "13:00", title: "Тамак жана айылдагы сейил", body: "Үй тамагынан кийин программа бүткөнгө чейин айылда жайбаракат сейилдейбиз." },
+      {
+        time: "09:00",
+        title: "Кочкордо жолугушуу",
+        body: "Уста менен таанышып, чай үстүндө күндүн планын угабыз.",
+      },
+      {
+        time: "10:00",
+        title: "Кийиз жасоо сабагы",
+        body: "Жергиликтүү материалдар менен кичинекей кийиз буюм жасоонун баскычтарын үйрөнөбүз.",
+      },
+      {
+        time: "13:00",
+        title: "Тамак жана айылдагы сейил",
+        body: "Үй тамагынан кийин программа бүткөнгө чейин айылда жайбаракат сейилдейбиз.",
+      },
     ],
-    whatToBring: ["Жүн тийсе өкүнбөй турган ыңгайлуу кийим", "Кайра колдонулуучу суу бөтөлкөсү", "Кааласаңыз сувенирге накталай сом"],
+    whatToBring: [
+      "Жүн тийсе өкүнбөй турган ыңгайлуу кийим",
+      "Кайра колдонулуучу суу бөтөлкөсү",
+      "Кааласаңыз сувенирге накталай сом",
+    ],
   },
 };
 
@@ -892,7 +1143,12 @@ type TourSight = {
 const sightsByTour: Record<string, TourSight[]> = {
   "ala-archa-day-hike": [
     { icon: "🌲", english: "Juniper forest", russian: "Арчовый лес", kyrgyz: "Арча токою" },
-    { icon: "🏔", english: "Glacier views", russian: "Виды на ледники", kyrgyz: "Мөңгүлөрдүн көрүнүшү" },
+    {
+      icon: "🏔",
+      english: "Glacier views",
+      russian: "Виды на ледники",
+      kyrgyz: "Мөңгүлөрдүн көрүнүшү",
+    },
     { icon: "🌊", english: "Mountain river", russian: "Горная река", kyrgyz: "Тоо суусу" },
     { icon: "🥾", english: "Valley trail", russian: "Тропа по долине", kyrgyz: "Өрөөн чыйыры" },
   ],
@@ -910,45 +1166,100 @@ const sightsByTour: Record<string, TourSight[]> = {
   ],
   "altyn-arashan-escape": [
     { icon: "♨️", english: "Hot springs", russian: "Горячие источники", kyrgyz: "Ысык булактар" },
-    { icon: "🛖", english: "Mountain guesthouse", russian: "Горный гостевой дом", kyrgyz: "Тоо конок үйү" },
+    {
+      icon: "🛖",
+      english: "Mountain guesthouse",
+      russian: "Горный гостевой дом",
+      kyrgyz: "Тоо конок үйү",
+    },
     { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
-    { icon: "🏔", english: "Peak views", russian: "Виды на вершины", kyrgyz: "Чокулардын көрүнүшү" },
+    {
+      icon: "🏔",
+      english: "Peak views",
+      russian: "Виды на вершины",
+      kyrgyz: "Чокулардын көрүнүшү",
+    },
   ],
   "jyrgalan-mountain-trek": [
     { icon: "🌄", english: "Green ridges", russian: "Зелёные хребты", kyrgyz: "Жашыл кырлар" },
     { icon: "⛺", english: "High camp", russian: "Высокогорный лагерь", kyrgyz: "Бийик лагерь" },
-    { icon: "🌲", english: "Spruce slopes", russian: "Еловые склоны", kyrgyz: "Карагайлуу капталдар" },
+    {
+      icon: "🌲",
+      english: "Spruce slopes",
+      russian: "Еловые склоны",
+      kyrgyz: "Карагайлуу капталдар",
+    },
     { icon: "🥾", english: "Mountain pass", russian: "Горный перевал", kyrgyz: "Тоо ашуусу" },
   ],
   "issyk-kul-mountain-escape": [
     { icon: "🌊", english: "Lake shore", russian: "Берег озера", kyrgyz: "Көл жээги" },
     { icon: "🏜", english: "Red canyon", russian: "Красный каньон", kyrgyz: "Кызыл капчыгай" },
-    { icon: "🏖", english: "Beach stops", russian: "Остановки на пляже", kyrgyz: "Жээктеги эс алуу" },
+    {
+      icon: "🏖",
+      english: "Beach stops",
+      russian: "Остановки на пляже",
+      kyrgyz: "Жээктеги эс алуу",
+    },
     { icon: "🏔", english: "Mountain trails", russian: "Горные тропы", kyrgyz: "Тоо чыйырлары" },
   ],
   "chon-kemin-valley-escape": [
-    { icon: "🏡", english: "Family guesthouse", russian: "Семейный гостевой дом", kyrgyz: "Үй-бүлөлүк конок үйү" },
+    {
+      icon: "🏡",
+      english: "Family guesthouse",
+      russian: "Семейный гостевой дом",
+      kyrgyz: "Үй-бүлөлүк конок үйү",
+    },
     { icon: "🌲", english: "Forest walks", russian: "Прогулки по лесу", kyrgyz: "Токойдогу сейил" },
-    { icon: "🌊", english: "Riverside", russian: "Прогулки у реки", kyrgyz: "Дарыя жээгинде сейил" },
+    {
+      icon: "🌊",
+      english: "Riverside",
+      russian: "Прогулки у реки",
+      kyrgyz: "Дарыя жээгинде сейил",
+    },
     { icon: "🐎", english: "Pastures", russian: "Пастбища", kyrgyz: "Жайлоолор" },
   ],
   "kegety-waterfall-hike": [
     { icon: "💧", english: "Waterfall", russian: "Водопад", kyrgyz: "Шаркыратма" },
     { icon: "🌲", english: "Mountain gorge", russian: "Горное ущелье", kyrgyz: "Тоо капчыгайы" },
-    { icon: "🥾", english: "Day hike", russian: "Поход на один день", kyrgyz: "Бир күндүк жөө жүрүш" },
+    {
+      icon: "🥾",
+      english: "Day hike",
+      russian: "Поход на один день",
+      kyrgyz: "Бир күндүк жөө жүрүш",
+    },
     { icon: "🧺", english: "Picnic stop", russian: "Пикник", kyrgyz: "Пикник" },
   ],
   "suusamyr-jailoo-weekend": [
     { icon: "🏕", english: "Yurts", russian: "Юрты", kyrgyz: "Боз үйлөр" },
     { icon: "🐎", english: "Horses", russian: "Лошади", kyrgyz: "Аттар" },
     { icon: "🌼", english: "Wildflowers", russian: "Полевые цветы", kyrgyz: "Жапайы гүлдөр" },
-    { icon: "🏔", english: "Too-Ashuu pass", russian: "Перевал Тоо-Ашуу", kyrgyz: "Тоо-Ашуу ашуусу" },
+    {
+      icon: "🏔",
+      english: "Too-Ashuu pass",
+      russian: "Перевал Тоо-Ашуу",
+      kyrgyz: "Тоо-Ашуу ашуусу",
+    },
   ],
   "karakol-lakes-trek": [
-    { icon: "🏞", english: "Alpine lakes", russian: "Высокогорные озёра", kyrgyz: "Бийик тоо көлдөрү" },
-    { icon: "⛺", english: "Trekking camp", russian: "Треккинговый лагерь", kyrgyz: "Треккинг лагери" },
+    {
+      icon: "🏞",
+      english: "Alpine lakes",
+      russian: "Высокогорные озёра",
+      kyrgyz: "Бийик тоо көлдөрү",
+    },
+    {
+      icon: "⛺",
+      english: "Trekking camp",
+      russian: "Треккинговый лагерь",
+      kyrgyz: "Треккинг лагери",
+    },
     { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
-    { icon: "🥾", english: "Multi-day trek", russian: "Многодневный трек", kyrgyz: "Көп күндүк трек" },
+    {
+      icon: "🥾",
+      english: "Multi-day trek",
+      russian: "Многодневный трек",
+      kyrgyz: "Көп күндүк трек",
+    },
   ],
   "burana-konorchek-day": [
     { icon: "🏛", english: "Burana Tower", russian: "Башня Бурана", kyrgyz: "Бурана мунарасы" },
@@ -960,31 +1271,76 @@ const sightsByTour: Record<string, TourSight[]> = {
     { icon: "🪨", english: "Red cliffs", russian: "Красные скалы", kyrgyz: "Кызыл аскалар" },
     { icon: "💧", english: "Waterfalls", russian: "Водопады", kyrgyz: "Шаркыратмалар" },
     { icon: "🌲", english: "Spruce valley", russian: "Еловая долина", kyrgyz: "Карагайлуу өрөөн" },
-    { icon: "🏡", english: "Guesthouse stay", russian: "Ночь в гостевом доме", kyrgyz: "Конок үйүндө түнөө" },
+    {
+      icon: "🏡",
+      english: "Guesthouse stay",
+      russian: "Ночь в гостевом доме",
+      kyrgyz: "Конок үйүндө түнөө",
+    },
   ],
   "arslanbob-walnut-forest": [
     { icon: "🌳", english: "Walnut forest", russian: "Ореховый лес", kyrgyz: "Жаңгак токою" },
     { icon: "💧", english: "Waterfall", russian: "Водопад", kyrgyz: "Шаркыратма" },
-    { icon: "🏡", english: "Village guesthouse", russian: "Сельский гостевой дом", kyrgyz: "Айылдык конок үйү" },
+    {
+      icon: "🏡",
+      english: "Village guesthouse",
+      russian: "Сельский гостевой дом",
+      kyrgyz: "Айылдык конок үйү",
+    },
     { icon: "🥾", english: "Forest trail", russian: "Лесная тропа", kyrgyz: "Токой чыйыры" },
   ],
   "lenin-peak-base-camp": [
-    { icon: "🏔", english: "Pamir peak views", russian: "Виды на Памир", kyrgyz: "Памир чокуларынын көрүнүшү" },
-    { icon: "⛺", english: "High camp", russian: "Высокогорный лагерь", kyrgyz: "Бийик тоо лагери" },
-    { icon: "🌄", english: "Achik-Tash valley", russian: "Долина Ачик-Таш", kyrgyz: "Ачык-Таш өрөөнү" },
-    { icon: "🥾", english: "Acclimatisation walks", russian: "Акклиматизационные прогулки", kyrgyz: "Бийиктикке көнүү сейилдери" },
+    {
+      icon: "🏔",
+      english: "Pamir peak views",
+      russian: "Виды на Памир",
+      kyrgyz: "Памир чокуларынын көрүнүшү",
+    },
+    {
+      icon: "⛺",
+      english: "High camp",
+      russian: "Высокогорный лагерь",
+      kyrgyz: "Бийик тоо лагери",
+    },
+    {
+      icon: "🌄",
+      english: "Achik-Tash valley",
+      russian: "Долина Ачик-Таш",
+      kyrgyz: "Ачык-Таш өрөөнү",
+    },
+    {
+      icon: "🥾",
+      english: "Acclimatisation walks",
+      russian: "Акклиматизационные прогулки",
+      kyrgyz: "Бийиктикке көнүү сейилдери",
+    },
   ],
   "sary-chelek-lake-escape": [
     { icon: "🌊", english: "Forest lake", russian: "Лесное озеро", kyrgyz: "Токой көлү" },
     { icon: "🌳", english: "Walnut forest", russian: "Ореховый лес", kyrgyz: "Жаңгак токою" },
-    { icon: "🏡", english: "Village stay", russian: "Сельский гостевой дом", kyrgyz: "Айылдык конок үйү" },
+    {
+      icon: "🏡",
+      english: "Village stay",
+      russian: "Сельский гостевой дом",
+      kyrgyz: "Айылдык конок үйү",
+    },
     { icon: "🚐", english: "Scenic road", russian: "Живописная дорога", kyrgyz: "Кооз жол" },
   ],
   "tash-rabat-caravanserai": [
-    { icon: "🕌", english: "Stone caravanserai", russian: "Каменный караван-сарай", kyrgyz: "Таш кербен сарай" },
+    {
+      icon: "🕌",
+      english: "Stone caravanserai",
+      russian: "Каменный караван-сарай",
+      kyrgyz: "Таш кербен сарай",
+    },
     { icon: "🐎", english: "Open valleys", russian: "Открытые долины", kyrgyz: "Кең өрөөндөр" },
     { icon: "🏕", english: "Yurt camp", russian: "Юрточный лагерь", kyrgyz: "Боз үй лагери" },
-    { icon: "🐪", english: "Silk Road history", russian: "История Шёлкового пути", kyrgyz: "Жибек жолунун тарыхы" },
+    {
+      icon: "🐪",
+      english: "Silk Road history",
+      russian: "История Шёлкового пути",
+      kyrgyz: "Жибек жолунун тарыхы",
+    },
   ],
   "kochkor-felt-culture-day": [
     { icon: "🧶", english: "Felt craft", russian: "Войлочное ремесло", kyrgyz: "Кийиз жасоо" },
@@ -997,7 +1353,6 @@ const sightsByTour: Record<string, TourSight[]> = {
 export function tourSights(slug: string, language: "en" | "ru" | "ky" = "en") {
   return (sightsByTour[slug] ?? []).map((sight) => ({
     icon: sight.icon,
-    label:
-      language === "ru" ? sight.russian : language === "ky" ? sight.kyrgyz : sight.english,
+    label: language === "ru" ? sight.russian : language === "ky" ? sight.kyrgyz : sight.english,
   }));
 }
