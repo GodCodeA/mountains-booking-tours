@@ -583,8 +583,8 @@ function BookingFlow() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="name">{text("Full name", "Полное имя", "Толук аты-жөнү")}</Label>
-                  <Input {...inputProps("name")} autoComplete="name" placeholder="Marta Kowalski" />
+                  <Label htmlFor="name">{text("Name", "Имя", "Аты")}</Label>
+                  <Input {...inputProps("name")} autoComplete="name" placeholder="Aigerim" />
                   <FieldError id="name-error" message={errors.name} />
                 </div>
                 <div>

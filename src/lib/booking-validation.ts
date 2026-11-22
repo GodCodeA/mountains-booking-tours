@@ -7,7 +7,7 @@ export const bookingFormSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, "Please enter your full name (at least 2 characters).")
+    .min(2, "Please enter your name (at least 2 characters).")
     .max(100, "Name must be under 100 characters."),
   email: z
     .string()
@@ -37,7 +37,7 @@ export type BookingFormValues = z.infer<typeof bookingFormSchema>;
 export type BookingField = "name" | "email" | "phone" | "whatsapp" | "notes";
 
 const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
-  name: "Укажите полное имя (минимум 2 символа).",
+  name: "Укажите имя (минимум 2 символа).",
   email: "Укажите корректный email.",
   phone: "Укажите корректный номер телефона, например +996 555 000 000.",
   whatsapp: "Укажите корректный номер WhatsApp или оставьте поле пустым.",
@@ -47,7 +47,7 @@ const russianErrors: Record<BookingField | "guests" | "departureId", string> = {
 };
 
 const kyrgyzErrors: Record<BookingField | "guests" | "departureId", string> = {
-  name: "Толук атыңызды жазыңыз (кеминде 2 белги).",
+  name: "Атыңызды жазыңыз (кеминде 2 белги).",
   email: "Туура email дарегин жазыңыз.",
   phone: "Туура телефон номерин жазыңыз, мисалы +996 555 000 000.",
   whatsapp: "Туура WhatsApp номерин жазыңыз же талааны бош калтырыңыз.",
