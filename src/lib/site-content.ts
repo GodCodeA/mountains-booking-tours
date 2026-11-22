@@ -468,6 +468,46 @@ export const tourRatings: Record<string, TourRating> = {
     ],
     isSample: true,
   },
+  "lenin-peak-base-camp": {
+    rating: 4.9, count: 71,
+    reviews: [
+      { name: "Бектур", from: "Кыргызстан", text: "Бул чокуга чыгуу эмес экенин туура түшүндүрүп беришти. Бийиктик олуттуу сезилет, бирок лагердеги көрүнүштөр баарына татыды.", isSample: true },
+      { name: "Ирина", from: "Россия", text: "Маршрут сложный именно высотой, не скоростью. Хорошо, что было время на акклиматизацию и без гонки.", isSample: true },
+      { name: "Асел", from: "Кыргызстан", text: "Ачик-Таш өрөөнү өтө кең, тынч жана сулуу экен. Жылуу кийим сөзсүз керек болду.", isSample: true },
+      { name: "Рустам", from: "Узбекистан", text: "Самая сильная поездка за лето. Требует подготовки, но организация была спокойной и понятной.", isSample: true },
+      { name: "Charlotte", from: "France", text: "The altitude made this feel genuinely remote. I appreciated the careful pace and clear briefings.", isSample: true },
+    ], isSample: true,
+  },
+  "sary-chelek-lake-escape": {
+    rating: 4.8, count: 88,
+    reviews: [
+      { name: "Элмира", from: "Кыргызстан", text: "Көлдүн түсү аябай кооз экен. Кыйын жөө жүрүш жок болгону бизге ылайыктуу болду.", isSample: true },
+      { name: "Андрей", from: "Казахстан", text: "Дорога длинная, но виды по пути и само озеро всё компенсируют. Очень тихое место.", isSample: true },
+      { name: "Назик", from: "Кыргызстан", text: "Конок үйү жөнөкөй, бирок таза болду. Эртең менен көл жээгинде сейилдегенибиз өзгөчө жакты.", isSample: true },
+      { name: "Людмила", from: "Россия", text: "Понравилось, что программа не забита активностями. Можно было спокойно смотреть вокруг.", isSample: true },
+      { name: "Noah", from: "Australia", text: "A peaceful change from the big mountain routes. The forest and lake together were beautiful.", isSample: true },
+    ], isSample: true,
+  },
+  "tash-rabat-caravanserai": {
+    rating: 4.8, count: 102,
+    reviews: [
+      { name: "Тимур", from: "Кыргызстан", text: "Таш-Рабатты кечки жарыкта көргөнүбүз абдан таасирдүү болду. Юртада түнөгөнү да жакшы кошумча экен.", isSample: true },
+      { name: "Оксана", from: "Россия", text: "Истории про караван-сарай слушать было интересно, а вокруг просто бесконечные долины. Очень атмосферно.", isSample: true },
+      { name: "Алина", from: "Кыргызстан", text: "Жол узун болгону менен токтоолор жетиштүү болду. Шаштырбай алып жүрүштү.", isSample: true },
+      { name: "Дамир", from: "Казахстан", text: "Для тех, кто хочет историю и природу без сложного похода — отличный выбор.", isSample: true },
+      { name: "Luca", from: "Italy", text: "The caravanserai is much more striking in person. The yurt night was simple but memorable.", isSample: true },
+    ], isSample: true,
+  },
+  "kochkor-felt-culture-day": {
+    rating: 4.9, count: 64,
+    reviews: [
+      { name: "Айжамал", from: "Кыргызстан", text: "Кийизди кантип жасашарын өз колуң менен көргөн башкача экен. Кичине бөлүгүн өзүбүз да жасап көрдүк.", isSample: true },
+      { name: "Мария", from: "Россия", text: "Очень душевный день. Не нужно никуда спешить, а в конце осталась небольшая вещь, сделанная своими руками.", isSample: true },
+      { name: "Нурбек", from: "Кыргызстан", text: "Тоого чыкпаган, бирок Кыргызстанды сезгиң келген күнгө жакшы формат экен.", isSample: true },
+      { name: "Вера", from: "Казахстан", text: "Обед был вкусный, мастер всё показывал спокойно. Детям тоже было бы интересно.", isSample: true },
+      { name: "Sophie", from: "Canada", text: "A genuinely hands-on cultural day, not just watching from the side. Warm and beautifully paced.", isSample: true },
+    ], isSample: true,
+  },
 };
 
 export function tourRating(slug: string) {

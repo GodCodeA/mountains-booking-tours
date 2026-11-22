@@ -263,6 +263,37 @@ const content: Record<string, TourExtras> = {
     ],
     whatToBring: overnightKit,
   },
+  "lenin-peak-base-camp": {
+    itinerary: [
+      { time: "Day 1", title: "Osh to Achik-Tash", body: "Meet in Osh and drive to the high-altitude valley, then settle into camp." },
+      { time: "Days 2–4", title: "Acclimatisation and valley walks", body: "Short, guided hikes and rest time help the group adapt to altitude; plans change with weather." },
+      { time: "Day 5", title: "Return to Osh", body: "Break camp and drive back to Osh." },
+    ],
+    whatToBring: [...overnightKit, "Personal sleeping bag rated for cold nights", "Trekking poles", "Warm insulated jacket"],
+  },
+  "sary-chelek-lake-escape": {
+    itinerary: [
+      { time: "Day 1", title: "Osh to Sary-Chelek", body: "Drive west to the reserve area and settle into a village guesthouse." },
+      { time: "Day 2", title: "Lake and forest day", body: "Gentle lakeside and forest walks, with flexible stops for weather and the group." },
+      { time: "Day 3", title: "Return to Osh", body: "Slow breakfast and scenic drive back to Osh." },
+    ],
+    whatToBring: overnightKit,
+  },
+  "tash-rabat-caravanserai": {
+    itinerary: [
+      { time: "Day 1", title: "Naryn to Tash Rabat", body: "Drive through open valleys, explore the caravanserai and settle into the yurt camp." },
+      { time: "Day 2", title: "Valley morning and return", body: "Easy morning walk before returning to Naryn after lunch." },
+    ],
+    whatToBring: overnightKit,
+  },
+  "kochkor-felt-culture-day": {
+    itinerary: [
+      { time: "09:00", title: "Meet in Kochkor", body: "Meet your craft host and hear the plan for the day over tea." },
+      { time: "10:00", title: "Felt workshop", body: "Learn the stages of arranging and rolling a small felt piece with local materials." },
+      { time: "13:00", title: "Lunch and village walk", body: "Share lunch, then take a relaxed walk through the village before the tour finishes." },
+    ],
+    whatToBring: ["Comfortable clothes you do not mind getting wool on", "Reusable water bottle", "Cash in som for optional souvenirs"],
+  },
 };
 
 const russianBaseKit = [
@@ -516,6 +547,37 @@ const russianContent: Record<string, TourExtras> = {
       { time: "День 3", title: "Утро в селе и возвращение", body: "Свободное время в селе перед обратной дорогой в Ош." },
     ],
     whatToBring: russianOvernightKit,
+  },
+  "lenin-peak-base-camp": {
+    itinerary: [
+      { time: "День 1", title: "Из Оша в Ачик-Таш", body: "Встречаемся в Оше, едем в высокогорную долину и размещаемся в лагере." },
+      { time: "Дни 2–4", title: "Акклиматизация и прогулки", body: "Короткие прогулки с гидом и отдых помогают привыкнуть к высоте; план зависит от погоды." },
+      { time: "День 5", title: "Возвращение в Ош", body: "Собираем лагерь и едем обратно в Ош." },
+    ],
+    whatToBring: [...russianOvernightKit, "Личный спальный мешок для холодных ночей", "Треккинговые палки", "Тёплая утеплённая куртка"],
+  },
+  "sary-chelek-lake-escape": {
+    itinerary: [
+      { time: "День 1", title: "Из Оша на Сары-Челек", body: "Едем на запад в район заповедника и размещаемся в сельском гостевом доме." },
+      { time: "День 2", title: "Озеро и лес", body: "Неспешные прогулки у воды и в лесу, с гибкими остановками по погоде и темпу группы." },
+      { time: "День 3", title: "Возвращение в Ош", body: "Неторопливый завтрак и живописная дорога обратно в Ош." },
+    ],
+    whatToBring: russianOvernightKit,
+  },
+  "tash-rabat-caravanserai": {
+    itinerary: [
+      { time: "День 1", title: "Из Нарына в Таш-Рабат", body: "Едем через открытые долины, осматриваем караван-сарай и размещаемся в юрточном лагере." },
+      { time: "День 2", title: "Утро в долине и возвращение", body: "Лёгкая утренняя прогулка, затем возвращение в Нарын после обеда." },
+    ],
+    whatToBring: russianOvernightKit,
+  },
+  "kochkor-felt-culture-day": {
+    itinerary: [
+      { time: "09:00", title: "Встреча в Кочкоре", body: "Встречаемся с мастером и за чаем обсуждаем план дня." },
+      { time: "10:00", title: "Войлочный мастер-класс", body: "Узнаём этапы раскладки и валяния небольшого изделия из местной шерсти." },
+      { time: "13:00", title: "Обед и прогулка", body: "Домашний обед, затем спокойная прогулка по селу до завершения программы." },
+    ],
+    whatToBring: ["Удобную одежду, которую не жалко испачкать шерстью", "Многоразовую бутылку для воды", "Наличные сомы на необязательные сувениры"],
   },
 };
 
@@ -774,6 +836,37 @@ const kyrgyzContent: Record<string, TourExtras> = {
     ],
     whatToBring: kyrgyzOvernightKit,
   },
+  "lenin-peak-base-camp": {
+    itinerary: [
+      { time: "1-күн", title: "Оштан Ачик-Ташка", body: "Ошто жолугуп, бийик тоо өрөөнүнө барабыз жана лагерге жайгашабыз." },
+      { time: "2–4-күндөр", title: "Бийиктикке көнүү жана сейил", body: "Гид менен кыска сейилдер жана эс алуу бийиктикке көнүүгө жардам берет; план аба ырайына жараша өзгөрөт." },
+      { time: "5-күн", title: "Ошко кайтуу", body: "Лагерди жыйнап, кайра Ошко жөнөйбүз." },
+    ],
+    whatToBring: [...kyrgyzOvernightKit, "Суук түнгө ылайыктуу жеке уктоочу баштык", "Треккинг таяктары", "Жылуу калың күрмө"],
+  },
+  "sary-chelek-lake-escape": {
+    itinerary: [
+      { time: "1-күн", title: "Оштан Сары-Челекке", body: "Батышты карай коруктун аймагына барабыз жана айылдагы конок үйүнө жайгашабыз." },
+      { time: "2-күн", title: "Көл жана токой", body: "Көл жээгинде жана токойдо шашылбаган сейил, аба ырайына жана топтун темпине жараша тыныгуулар." },
+      { time: "3-күн", title: "Ошко кайтуу", body: "Жай эртең мененки тамактан кийин кооз жол менен Ошко кайтабыз." },
+    ],
+    whatToBring: kyrgyzOvernightKit,
+  },
+  "tash-rabat-caravanserai": {
+    itinerary: [
+      { time: "1-күн", title: "Нарындан Таш-Рабатка", body: "Кең өрөөндөр менен барып, кербен сарайды көрөбүз жана боз үй лагерине жайгашабыз." },
+      { time: "2-күн", title: "Өрөөндөгү таң жана кайтуу", body: "Жеңил эртең мененки сейилден кийин түштөн соң Нарынга кайтабыз." },
+    ],
+    whatToBring: kyrgyzOvernightKit,
+  },
+  "kochkor-felt-culture-day": {
+    itinerary: [
+      { time: "09:00", title: "Кочкордо жолугушуу", body: "Уста менен таанышып, чай үстүндө күндүн планын угабыз." },
+      { time: "10:00", title: "Кийиз жасоо сабагы", body: "Жергиликтүү материалдар менен кичинекей кийиз буюм жасоонун баскычтарын үйрөнөбүз." },
+      { time: "13:00", title: "Тамак жана айылдагы сейил", body: "Үй тамагынан кийин программа бүткөнгө чейин айылда жайбаракат сейилдейбиз." },
+    ],
+    whatToBring: ["Жүн тийсе өкүнбөй турган ыңгайлуу кийим", "Кайра колдонулуучу суу бөтөлкөсү", "Кааласаңыз сувенирге накталай сом"],
+  },
 };
 
 export const CANCELLATION_POLICY_KY =
@@ -874,6 +967,30 @@ const sightsByTour: Record<string, TourSight[]> = {
     { icon: "💧", english: "Waterfall", russian: "Водопад", kyrgyz: "Шаркыратма" },
     { icon: "🏡", english: "Village guesthouse", russian: "Сельский гостевой дом", kyrgyz: "Айылдык конок үйү" },
     { icon: "🥾", english: "Forest trail", russian: "Лесная тропа", kyrgyz: "Токой чыйыры" },
+  ],
+  "lenin-peak-base-camp": [
+    { icon: "🏔", english: "Pamir peak views", russian: "Виды на Памир", kyrgyz: "Памир чокуларынын көрүнүшү" },
+    { icon: "⛺", english: "High camp", russian: "Высокогорный лагерь", kyrgyz: "Бийик тоо лагери" },
+    { icon: "🌄", english: "Achik-Tash valley", russian: "Долина Ачик-Таш", kyrgyz: "Ачик-Таш өрөөнү" },
+    { icon: "🥾", english: "Acclimatisation walks", russian: "Акклиматизационные прогулки", kyrgyz: "Бийиктикке көнүү сейилдери" },
+  ],
+  "sary-chelek-lake-escape": [
+    { icon: "🌊", english: "Forest lake", russian: "Лесное озеро", kyrgyz: "Токой көлү" },
+    { icon: "🌳", english: "Walnut forest", russian: "Ореховый лес", kyrgyz: "Жаңгак токою" },
+    { icon: "🏡", english: "Village stay", russian: "Сельский гостевой дом", kyrgyz: "Айылдык конок үйү" },
+    { icon: "🚐", english: "Scenic road", russian: "Живописная дорога", kyrgyz: "Кооз жол" },
+  ],
+  "tash-rabat-caravanserai": [
+    { icon: "🕌", english: "Stone caravanserai", russian: "Каменный караван-сарай", kyrgyz: "Таш кербен сарай" },
+    { icon: "🐎", english: "Open valleys", russian: "Открытые долины", kyrgyz: "Кең өрөөндөр" },
+    { icon: "🏕", english: "Yurt camp", russian: "Юрточный лагерь", kyrgyz: "Боз үй лагери" },
+    { icon: "🐪", english: "Silk Road history", russian: "История Шёлкового пути", kyrgyz: "Жибек жолунун тарыхы" },
+  ],
+  "kochkor-felt-culture-day": [
+    { icon: "🧶", english: "Felt craft", russian: "Войлочное ремесло", kyrgyz: "Кийиз жасоо" },
+    { icon: "🏠", english: "Village host", russian: "Принимающая семья", kyrgyz: "Үй ээси" },
+    { icon: "🍲", english: "Home-style lunch", russian: "Домашний обед", kyrgyz: "Үй тамагы" },
+    { icon: "🚶", english: "Village walk", russian: "Прогулка по селу", kyrgyz: "Айылдагы сейил" },
   ],
 };
 

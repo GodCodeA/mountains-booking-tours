@@ -11,6 +11,10 @@ import karakolLakes from "@/assets/tour-karakol-lakes.webp";
 import buranaKonorchek from "@/assets/tour-burana-konorchek.webp";
 import jetiOguzBarskoon from "@/assets/tour-jeti-oguz-barskoon.webp";
 import arslanbob from "@/assets/tour-arslanbob.webp";
+import leninPeakBaseCamp from "@/assets/tour-lenin-peak-base-camp.webp";
+import saryChelek from "@/assets/tour-sary-chelek.webp";
+import tashRabat from "@/assets/tour-tash-rabat.webp";
+import kochkorFelt from "@/assets/tour-kochkor-felt.webp";
 import alaArchaTrail from "@/assets/tour-ala-archa-gallery-trail.webp";
 import alaArchaRiver from "@/assets/tour-ala-archa-gallery-river.webp";
 import songKulYurts from "@/assets/tour-song-kul-gallery-yurts.webp";
@@ -46,6 +50,10 @@ const images: Record<string, string> = {
   "burana-konorchek": buranaKonorchek,
   "jeti-oguz-barskoon": jetiOguzBarskoon,
   arslanbob,
+  "lenin-peak-base-camp": leninPeakBaseCamp,
+  "sary-chelek": saryChelek,
+  "tash-rabat": tashRabat,
+  "kochkor-felt": kochkorFelt,
 };
 
 export function tourImage(key: string): string {
@@ -66,6 +74,10 @@ const galleries: Record<string, string[]> = {
   "burana-konorchek": [buranaKonorchek],
   "jeti-oguz-barskoon": [jetiOguzBarskoon],
   arslanbob: [arslanbob],
+  "lenin-peak-base-camp": [leninPeakBaseCamp],
+  "sary-chelek": [saryChelek],
+  "tash-rabat": [tashRabat],
+  "kochkor-felt": [kochkorFelt],
 };
 
 /**

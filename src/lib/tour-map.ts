@@ -102,6 +102,34 @@ const points: Record<string, MapPoint> = {
     russian: "Село Арсланбоб и район орехового леса",
     kyrgyz: "Арстанбап айылы жана жаңгак токоюнун аймагы",
   },
+  "lenin-peak-base-camp": {
+    latitude: 39.495,
+    longitude: 72.913,
+    english: "Lenin Peak base camp area",
+    russian: "Район базового лагеря пика Ленина",
+    kyrgyz: "Ленин чокусунун базалык лагери жайгашкан аймак",
+  },
+  "sary-chelek-lake-escape": {
+    latitude: 41.869,
+    longitude: 71.955,
+    english: "Sary-Chelek Lake",
+    russian: "Озеро Сары-Челек",
+    kyrgyz: "Сары-Челек көлү",
+  },
+  "tash-rabat-caravanserai": {
+    latitude: 40.82,
+    longitude: 75.28,
+    english: "Tash Rabat caravanserai",
+    russian: "Караван-сарай Таш-Рабат",
+    kyrgyz: "Таш-Рабат кербен сарайы",
+  },
+  "kochkor-felt-culture-day": {
+    latitude: 42.215,
+    longitude: 75.757,
+    english: "Kochkor village",
+    russian: "Село Кочкор",
+    kyrgyz: "Кочкор айылы",
+  },
 };
 
 export function tourMapPoint(slug: string, language: Language) {
